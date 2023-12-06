@@ -1,0 +1,38 @@
+# Ignore system files
+*~
+*.diff
+*.patch
+.DS_Store
+.sizecache.json
+.*.swp
+Thumbs.db
+
+# Ignore editor folders
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Ignore logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Ignore dependency folders
+/node_modules
+
+# Ignore Vite-managed folders
+dist
+dist-ssr
+*.local
+
+# Ignore image working files
+*.psd

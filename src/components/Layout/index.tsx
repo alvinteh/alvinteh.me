@@ -1,0 +1,408 @@
+import keyMirror from 'keymirror';
+import React, { useEffect } from 'react';
+import { Link as LinkRR, useLocation, useNavigate } from 'react-router-dom';
+import styled, { createGlobalStyle, keyframes } from 'styled-components';
+
+import { useDispatch, useSelector } from '../../core/hooks';
+import { open, toggle } from '../../slices/nav';
+import { cubicBezier } from '../static';
+
+import NavItemAboutBackground from './images/navitem-about.jpg';
+import NavItemCulinaryBackground from './images/navitem-culinary.jpg';
+import NavItemLiteryBackground from './images/navitem-literary.jpg';
+import NavItemVisualBackground from './images/navitem-visual.jpg';
+import NavItemTechnologyBackground from './images/navitem-technology.jpg';
+
+interface NavItemData {
+  slug: string;
+  text: string;
+  description: string;
+  backgroundImage: string;
+}
+
+type NavItemState = 'DEFAULT' | 'CURRENT' | 'DULLED';
+
+const NavItemStates: Record<string, NavItemState> = keyMirror({
+  DEFAULT: null,
+  CURRENT: null,
+  DULLED: null,
+});
+
+const slideInAnimation = keyframes`
+  0% {
+    transform: translate3d(-100vw, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+`;
+
+const slideOutAnimation = keyframes`
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(100vw, 0, 0);
+  }
+`;
+
+const GlobalStyle = createGlobalStyle`
+  * {
+    margin: 0;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000000;
+    color: #ffffff;
+    font-family: Inter;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1;
+    overscroll-behavior: none;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    text-decoration: none;
+  }
+`;
+
+const Wrapper = styled.div`
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+`;
+
+const NavWrapper = styled.div<{ $isNavOpen: boolean, $isPageOpen: boolean }>`
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: ${(props) => { return (props.$isNavOpen ? 'auto' : 'none'); }};
+  z-index: 2;
+  
+  &::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #1a1a1a;
+    content: "";
+    transform: translate3d(-100vw, 0, 0);
+    z-index: 3;
+    animation: ${slideInAnimation} 800ms ${cubicBezier} 0ms 1 normal forwards,
+      ${slideOutAnimation} 800ms ${cubicBezier} 1200ms 1 normal forwards;
+    animation-play-state: ${(props) => { return (props.$isNavOpen && !props.$isPageOpen ? 'running' : 'paused'); }};
+  }
+`;
+
+const Nav = styled.nav<{ $isNavOpen: boolean }>`
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  filter: blur(${(props) => { return (props.$isNavOpen ? 0 : '0px'); }});
+  opacity: ${(props) => { return (props.$isNavOpen ? 1 : 0); }};
+  transition: ${(props) => {
+    return (props.$isNavOpen ? 'all linear 1ms 800ms' : `all ${cubicBezier} 400ms 800ms`);
+  }};
+
+  &::after {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #202020;
+    content: "";
+    opacity: ${(props) => { return (props.$isNavOpen ? 0 : 0.9); }};
+    transition: opacity ${cubicBezier} 800ms;
+  }
+`;
+
+const NavList = styled.ul`
+  display: flex;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  list-style: none;
+
+  &:hover > *:not(:hover) {
+    &::after {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(1px);
+    }
+  }
+`;
+
+const Link = styled(LinkRR)`
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-top: 80vh;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  z-index: 4;
+`;
+
+const LinkText = styled.span`
+  display: block;
+  margin: 0 0 7px;
+  color: #ffffff;
+  font-size: 2rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+`;
+
+const LinkDescription = styled.span`
+  display: block;
+  color: #ffffff;
+  filter: blur(1rem);
+  font-family: 'Crimson Text', serif;
+  font-size: 1.4rem;
+  font-style: italic;
+  font-weight: 600;
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  transition: transform 1ms 1200ms linear, opacity 400ms 100ms linear, filter 400ms 100ms linear;
+`;
+
+// Note: background images should be at least 768/1037/3226px (cropped/hovered/expanded) * 2160px
+const NavItem = styled.li<{ $slug: string, $backgroundImage: string, $state: NavItemState }>`
+  display: block; 
+  position: relative;
+  height: 100%;
+  flex: ${(props) => { return (props.$state === NavItemStates.CURRENT ? 21 : 1); }};
+  overflow: hidden;
+  background-image: url(${(props) => { return props.$backgroundImage; }});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+  user-select: none;
+  transition: flex ${cubicBezier} 400ms, filter ${cubicBezier} 400ms;
+
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "";
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(0);
+    background: rgba(0, 0, 0, ${(props) => { return (props.$state === NavItemStates.CURRENT ? 0 : 0.2); }});
+    z-index: 3;
+    transition: background-color ${cubicBezier} 1200ms;
+  }
+
+  &:hover {
+    flex: ${(props) => { return (props.$state === NavItemStates.CURRENT ? 21 : 1.3); }};
+
+    &::after {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    & ${LinkDescription} {
+      filter: blur(${(props) => { return props.$state === NavItemStates.DEFAULT ? 0 : '1rem' }});
+      opacity: ${(props) => { return props.$state === NavItemStates.DEFAULT ? 1 : 0 }};
+      transform: translate3d(0, 0, 0);
+      transition: all 400ms ${(props) => { return props.$state === NavItemStates.DEFAULT ? 300 : 0 }}ms;
+    }
+  }
+
+  & ${LinkText} {
+    filter: blur(${(props) => { return props.$state === NavItemStates.DEFAULT ? 0 : '1rem' }});
+    opacity: ${(props) => { return props.$state === NavItemStates.DEFAULT ? 1 : 0 }};
+    transition: all 400ms;
+  }
+`;
+
+const MiscLink = styled.a`
+  display: block;
+  position: absolute;
+  height: 1rem;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  line-height: 1rem;
+  text-transform: uppercase;
+  user-select: none;
+  z-index: 99;
+
+  &:hover {
+    color: #808080;
+  }
+`;
+
+const MenuLink = styled(MiscLink)<{ $isNavOpen: boolean, $isPageOpen: boolean }>`
+  top: 25px;
+  left: 50px;
+  color: rgba(255, 255, 255, ${(props) => { return (props.$isNavOpen ? 0 : 1); }});
+  transition: all cubic-bezier(0.525, 0.06, 0.11, 0.995) 200ms;
+
+  &::after {
+    display: block;
+    position: absolute;
+    top: 0;
+    color: #ffffff;
+    content: "${(props) => { return (props.$isPageOpen ? 'Back' : 'Close'); }}";
+    opacity: ${(props) => { return (props.$isNavOpen ? 1 : 0); }};
+    transition: all cubic-bezier(0.525, 0.06, 0.11, 0.995) 400ms 200ms;
+  }
+
+  &:hover {
+    color: rgba(128, 128, 128, ${(props) => { return (props.$isNavOpen ? 0 : 1); }});
+  }
+`;
+
+const ConnectLink = styled(MiscLink)`
+  top: 25px;
+  right: 50px;
+`;
+
+const Main = styled.main<{ $isPageOpen: boolean, $currentSlugIndex: number }>`
+  position: relative;
+  left: ${(props) => { return (props.$isPageOpen ? props.$currentSlugIndex * 4 : 0); }}%;
+  box-sizing: border-box;
+  padding: 50px 20px 0;
+  width: 84%;
+  z-index: ${(props) => { return (props.$isPageOpen ? 3 : 0); }};
+`;
+
+const navItemDataCollection: NavItemData[] = [
+  {
+    slug: 'about',
+    text: 'About',
+    description: 'Story & Profile',
+    backgroundImage: NavItemAboutBackground,
+  },
+  {
+    slug: 'culinary',
+    text: 'Culinary',
+    description: 'Dining Experiences & Recipes',
+    backgroundImage: NavItemCulinaryBackground,
+  },
+  {
+    slug: 'visual',
+    text: 'Visual',
+    description: 'Still Portraits of the World',
+    backgroundImage: NavItemVisualBackground,
+  },
+  {
+    slug: 'literary',
+    text: 'Literary',
+    description: 'Musings of the Mind',
+    backgroundImage: NavItemLiteryBackground,
+  },
+  {
+    slug: 'technology',
+    text: 'Technology',
+    description: 'Systems Architecture & Code',
+    backgroundImage: NavItemTechnologyBackground,
+  },
+];
+
+const Layout = ({ children }: { children: React.ReactNode }) => {
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const currentSlug: string = location.pathname.substring(1);
+  const isPageOpen: boolean = currentSlug !== '';
+  const isFromInternalNav: boolean = location.state?.isFromInternalNav || false;
+  const isNavOpen: boolean = useSelector((state) => { return state.nav.isOpen; });
+
+  const handleMenuLinkClick = (): void => {    
+    if (isPageOpen) {
+      // Redirect to home page
+      navigate('/', { state: { isFromInternalNav: true }});
+    }
+    else {
+      // Update nav menu state
+      dispatch(toggle());
+      
+      // Restart navigation animations on re-render
+      ((): void => {
+        const navAnimationNames: string[] = [];
+        navAnimationNames.push(slideInAnimation.name);
+        navAnimationNames.push(slideOutAnimation.name);
+    
+        document.getAnimations().forEach((animation: Animation) => {
+          // @ts-expect-error TS incorrectly flags animationName as a non-existent property
+          if (navAnimationNames.includes(animation.animationName as string)) {
+            animation.cancel();
+            animation.play();
+          }
+        });
+      })();
+    }
+  };
+ 
+  const navItems = navItemDataCollection.map((navItemData: NavItemData) => {
+    let state: NavItemState = NavItemStates.DEFAULT;
+
+    if (isPageOpen) {
+      state = currentSlug === navItemData.slug ? NavItemStates.CURRENT : NavItemStates.DULLED;
+    }
+
+    return (
+      <NavItem
+        key={navItemData.slug}
+        $slug={navItemData.slug}
+        $backgroundImage={navItemData.backgroundImage}
+        $state={state}
+      >
+        <Link to={'/' + navItemData.slug}>
+          <LinkText>{navItemData.text}</LinkText>
+          <LinkDescription>{navItemData.description}</LinkDescription>
+        </Link>
+      </NavItem>
+    );
+  });
+
+  const currentSlugIndex: number = navItemDataCollection.findIndex((navItemData: NavItemData) => {
+    return navItemData.slug === currentSlug;
+  });
+
+  useEffect((): void => {
+    if (isPageOpen && !isNavOpen) {
+      dispatch(open());
+    }
+  }, []);
+
+  return (
+    <React.Fragment>
+      <GlobalStyle />
+      <Wrapper>
+        <NavWrapper $isNavOpen={isNavOpen} $isPageOpen={isPageOpen || isFromInternalNav}>
+          <Nav $isNavOpen={isNavOpen}>
+            <NavList>
+              {navItems}
+            </NavList>
+          </Nav>
+        </NavWrapper>
+        <MenuLink onClick={handleMenuLinkClick} $isNavOpen={isNavOpen} $isPageOpen={isPageOpen}>Menu</MenuLink>
+        <ConnectLink>Connect</ConnectLink>
+        <Main $isPageOpen={isPageOpen} $currentSlugIndex={currentSlugIndex}>
+            {children}
+        </Main>
+      </Wrapper>
+    </React.Fragment>
+  );
+};
+
+export default Layout;
