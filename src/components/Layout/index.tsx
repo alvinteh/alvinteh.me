@@ -195,6 +195,11 @@ const NavItem = styled.li<{ $slug: string, $backgroundImage: string, $state: Nav
       background: rgba(0, 0, 0, 0);
     }
 
+    & ${LinkText} {
+      filter: blur(0);
+      color: rgba(255, 255, 255, ${(props) => { return props.$state === NavItemStates.CURRENT ? 0 : 1; }});
+    }
+
     & ${LinkDescription} {
       filter: blur(${(props) => { return props.$state === NavItemStates.DEFAULT ? 0 : '1rem' }});
       opacity: ${(props) => { return props.$state === NavItemStates.DEFAULT ? 1 : 0 }};
@@ -204,9 +209,10 @@ const NavItem = styled.li<{ $slug: string, $backgroundImage: string, $state: Nav
   }
 
   & ${LinkText} {
-    filter: blur(${(props) => { return props.$state === NavItemStates.DEFAULT ? 0 : '1rem' }});
-    opacity: ${(props) => { return props.$state === NavItemStates.DEFAULT ? 1 : 0 }};
-    transition: all 400ms;
+    filter: blur(${(props) => { return props.$state === NavItemStates.DEFAULT ? 0 : '1rem'; }});
+    color: rgba(255, 255, 255, ${(props) => { return props.$state === NavItemStates.DEFAULT ? 1 : 0; }});
+    transform: ${(props) => { return props.$state === NavItemStates.DULLED ? 'rotate(90deg)' : 'none'; }};
+    transition: filter 400ms, color 400ms;
   }
 `;
 
