@@ -72,7 +72,7 @@ const HeroTitle = styled.h1`
 const AnimatedText = styled.span`
   display: block;
   animation: ${moveUpAnimation} 1600ms ease-in-out ${pageTransitionDuration + 400}ms 1 backwards,
-  ${changeTextColorAnimation} 1600ms ease-in-out ${pageTransitionDuration + 400}ms 1 backwards;;
+  ${changeTextColorAnimation} 1600ms ease-in-out ${pageTransitionDuration + 400}ms 1 backwards;
 `;
 
 const Writeup = styled.div`
