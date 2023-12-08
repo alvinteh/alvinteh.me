@@ -73,7 +73,7 @@ const GlobalStyle = createGlobalStyle`
 
 const MiscLink = styled.a`
   display: block;
-  position: absolute;
+  position: fixed;
   height: 1rem;
   color: #ffffff;
   cursor: pointer;
@@ -279,7 +279,7 @@ const Main = styled.main<{ $isPageOpen: boolean, $currentSlugIndex: number }>`
 
 const NavWrapper = styled.div<{ $isNavOpen: boolean, $isPageOpen: boolean }>`
   display: block;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
@@ -442,3 +442,5 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default Layout;
+export type { NavItemData };
+export { navItemDataCollection };

@@ -1,4 +1,7 @@
+import { useLocation } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
+
+import { navItemDataCollection, NavItemData } from '../Layout';
 
 const scrollPromptLeftAnimation = keyframes`
   0% {
@@ -7,10 +10,8 @@ const scrollPromptLeftAnimation = keyframes`
   }
   
   50% {
-    width: 38px;
-		height: 9px;
-    opacity: 0.8;
-    transform: skewY(25deg)  translate3d(7px, -5px, 0);
+    opacity: 0.85;
+    transform: skewY(25deg) scale(0.96) translate3d(2px, -4px, 0);
   }
 
   100% {
@@ -26,10 +27,8 @@ const scrollPromptRightAnimation = keyframes`
   }
   
   50% {
-    width: 38px;
-		height: 9px;
-    opacity: 0.8;
-    transform: skewY(-25deg) translate3d(-7px, -5px, 0);
+    opacity: 0.85;
+    transform: skewY(-25deg) scale(0.96) translate3d(-2px, -4px, 0);
   }
 
   100% {
@@ -67,14 +66,16 @@ const ScrollPromptText = styled.span`
   user-select: none;
 `;
 
-const ScrollPromptWrapper = styled.span`
+const ScrollPromptWrapper = styled.span<{ $positionAdjFactor: number }>`
   display: block;
-  position: absolute;
+  position: fixed;
   bottom: 10px;
-  left: 50%;
+  left: ${(props) => { return 42 + props.$positionAdjFactor * 4; }}%;
   margin-left: -45px;
   width: 90px;
   height: 60px;
+  cursor: pointer;
+  mix-blend-mode: difference;
 
   &::before, &&::after {
     display: block;
@@ -114,7 +115,22 @@ const ScrollPromptWrapper = styled.span`
 `;
 
 const ScrollPrompt = () => {
-  return <ScrollPromptWrapper><ScrollPromptText>Scroll Down</ScrollPromptText></ScrollPromptWrapper>;
+  const location = useLocation();
+
+  const currentSlug: string = location.pathname.substring(1);
+  const currentSlugIndex: number = navItemDataCollection.findIndex((navItemData: NavItemData) => {
+    return navItemData.slug === currentSlug;
+  });
+
+  const handleClick = ():void => {
+    window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+  };
+
+  return (
+    <ScrollPromptWrapper onClick={handleClick} $positionAdjFactor={currentSlugIndex}>
+      <ScrollPromptText>Scroll Down</ScrollPromptText>
+    </ScrollPromptWrapper>
+  );
 };
 
 export default ScrollPrompt;

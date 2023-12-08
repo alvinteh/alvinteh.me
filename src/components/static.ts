@@ -38,6 +38,12 @@ const PageWrapper = styled.div`
   animation: ${fadeInAnimation} 1ms ${cubicBezier} ${pageTransitionDuration}ms 1 backwards;
 `;
 
+const ParallaxPageWrapper = styled.div`
+  position: relative;
+  min-height: 100vh;
+  animation: ${fadeInAnimation} 1ms ${cubicBezier} ${pageTransitionDuration}ms 1 backwards;
+`;
+
 const PageTitle = styled.h1`
   margin: 0 0 10px;
   color: #ffffff;
@@ -50,6 +56,18 @@ const PageTitle = styled.h1`
   animation: ${wipeInAnimation} 1600ms ${cubicBezier} ${pageTransitionDuration}ms 1 backwards;
 `;
 
+const ParallaxScreen = styled.div<{ $backgroundImage?: string }>`
+  position: relative;
+  box-sizing: border-box;
+  padding: 50px 40px 0;
+  height: 100vh;
+  background-image: ${(props) => { return props.$backgroundImage ? `url(${props.$backgroundImage})` : 'none'; }};
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+`;
+
 export {
   cubicBezier,
   fadeInAnimation,
@@ -57,5 +75,7 @@ export {
 
   FullPageWrapper,
   PageWrapper,
-  PageTitle
+  ParallaxPageWrapper,
+  PageTitle,
+  ParallaxScreen
 };
