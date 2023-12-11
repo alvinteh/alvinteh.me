@@ -59,6 +59,10 @@ const BirdContainers = styled.div`
   width: 64%;
   height: 25%;
   container-type: size;
+
+  @media (min-aspect-ratio: 17/9) {
+    height: 10%;
+  }
 `;
 
 const BirdContainer = styled.div`
@@ -190,6 +194,7 @@ const HeroText = styled.div`
   top: 25%;
   left: 50px;
   width: 46%;
+  max-width: 60rem;
 `;
 
 const SiteTitle = styled.h2`
