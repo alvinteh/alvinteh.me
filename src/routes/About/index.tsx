@@ -80,7 +80,8 @@ const Writeup = styled.div`
   top: 52%;
   left: 10%;
   right: 10%;
-  max-width: 80rem;
+  margin: 0 auto;
+  width: 75rem;
   font-family: 'Crimson Text', serif;
   font-size: 2.4rem;
   text-align: center;
