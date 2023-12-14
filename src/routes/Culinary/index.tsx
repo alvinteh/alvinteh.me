@@ -39,6 +39,7 @@ import CDDish17Background from './images/casualdining-dish-17.jpg';
 import CDDish18Background from './images/casualdining-dish-18.jpg';
 import CDDish19Background from './images/casualdining-dish-19.jpg';
 import CDDish20Background from './images/casualdining-dish-20.jpg';
+import DrinksScreenBackground from './images/screen-drinks.jpg'
 
 type Continent = 'ASIA' | 'AFRICA_MID_EAST' | 'NORTH_AMERICA' | 'SOUTH_AMERICA' | 'EUROPE';
 
@@ -550,6 +551,7 @@ const Culinary = () => {
   // Screen refs
   const screen1Ref = useRef<HTMLDivElement>();
   const screen2Ref = useRef<HTMLDivElement>();
+  const screen3Ref = useRef<HTMLDivElement>();
 
   // Fine dining screen refs and nodes
   const fdExploreText = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
@@ -835,6 +837,11 @@ const Culinary = () => {
         <Overlay ref={cdEndOverlay}>
           <CasualDiningEndHeader ref={cdEndHeader}>Had enough food?</CasualDiningEndHeader>
         </Overlay>
+      </ParallaxScreen>
+      <ParallaxScreen
+        ref={screen3Ref as React.MutableRefObject<HTMLDivElement>}
+        $backgroundImage={DrinksScreenBackground}
+      >
       </ParallaxScreen>
       <ScrollPrompt />
     </ParallaxPageWrapper>
