@@ -751,7 +751,7 @@ const Culinary = () => {
         // We can ignore the linting errors as the references will always exist 
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         cdTimeline.from(cdDish.dishRef!.current, {
-          y: '-=110vh',
+          y: '-=130vh',
           rotation: 900 + Math.round(Math.random() * 540) * (Math.random() >= 0.5 ? 1 : 1),
           ease: 'power1.out',
           duration: 1,
