@@ -549,9 +549,9 @@ const getRandomElements = (array: any[], number: number): any[] => {
 
 const Culinary = () => {
   // Screen refs
-  const screen1Ref = useRef<HTMLDivElement>();
-  const screen2Ref = useRef<HTMLDivElement>();
-  const screen3Ref = useRef<HTMLDivElement>();
+  const screen1Ref = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+  const screen2Ref = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+  const screen3Ref = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 
   // Fine dining screen refs and nodes
   const fdExploreText = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
@@ -809,7 +809,7 @@ const Culinary = () => {
         </Quote>
       </ParallaxScreen>
       <ParallaxScreen
-        ref={screen1Ref as React.MutableRefObject<HTMLDivElement>}
+        ref={screen1Ref}
         $backgroundImage={FineDiningScreenBackground}
       >
         <FDHeader ref={fdExploreText}>
@@ -823,7 +823,7 @@ const Culinary = () => {
         </FDHeader>
       </ParallaxScreen>
       <ParallaxScreen
-        ref={screen2Ref as React.MutableRefObject<HTMLDivElement>}
+        ref={screen2Ref}
         $backgroundImage={CasualDiningScreenBackground}
       >
         <CasualDiningHeader>
@@ -839,7 +839,7 @@ const Culinary = () => {
         </Overlay>
       </ParallaxScreen>
       <ParallaxScreen
-        ref={screen3Ref as React.MutableRefObject<HTMLDivElement>}
+        ref={screen3Ref}
         $backgroundImage={DrinksScreenBackground}
       >
       </ParallaxScreen>
