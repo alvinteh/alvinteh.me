@@ -17,6 +17,7 @@ import FDDish6Background from './images/finedining-dish-6.png';
 import FDDish7Background from './images/finedining-dish-7.png';
 import FDDish8Background from './images/finedining-dish-8.png';
 import FDDish9Background from './images/finedining-dish-9.png';
+import FDDish10Background from './images/finedining-dish-10.png';
 import CasualDiningScreenBackground from './images/screen-casualdining.jpg'
 import CDDish1Background from './images/casualdining-dish-1.jpg';
 import CDDish2Background from './images/casualdining-dish-2.jpg';
@@ -212,6 +213,12 @@ const fdDishesFull: Record<string, Dish[]> = {
       name: 'Tender coconut kushiyaki, smoked Nilgiri spices, yuzu rasam',
       restaurant: 'Tresind Studio',
       image: FDDish5Background,
+      imageAspectRatio: 1,
+    },
+    {
+      name: 'River Prawn with pork belly jam, shrimp paste and organic rice',
+      restaurant: 'Le Du',
+      image: FDDish10Background,
       imageAspectRatio: 1,
     },
   ],
