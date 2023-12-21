@@ -679,7 +679,7 @@ const cookDishesFull: Dish[] = [
       imageAspectRatio: 1,
     },
     {
-      name: 'Phở Bò',
+      name: 'Ayam Pelalah',
       restaurant: '',
       image: CookDish8Background,
       imageAspectRatio: 1,
