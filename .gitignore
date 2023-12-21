@@ -35,4 +35,5 @@ dist-ssr
 *.local
 
 # Ignore image working files
+*.ai
 *.psd
