@@ -367,15 +367,16 @@ const CDDishInfo = styled.div`
   position: relative;
   top: 100%;
   margin: 5px auto 0;
-  font-family: Lato, serif;
   font-size: 1.1rem;
   text-align: center;
   opacity: 1;
 `;
 
 const CDDishName = styled.p`
+  font-family: Caveat, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
   color: #303030;
-  text-transform: lowercase;
 `;
 
 const CDDishRestaurant = styled.h4`
