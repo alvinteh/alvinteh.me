@@ -325,7 +325,6 @@ const CasualDiningScreen = () => {
         scrub: true,
         start: 'top top',
         end: `+=${dishes.length * 300 + 4 * 100}`,
-        markers: true,
       }
     });
 

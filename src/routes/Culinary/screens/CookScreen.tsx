@@ -283,7 +283,6 @@ const CookScreen = () => {
         scrub: true,
         start: 'top top',
         end: `+=${dishes.length * 300 + (letterAnimationCount + 4 * 4) * 100}`,
-        markers: true,
       }
     });
 

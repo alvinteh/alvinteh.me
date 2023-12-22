@@ -204,7 +204,6 @@ const FineDiningScreen = () => {
         scrub: true,
         start: 'top top',
         end: `+=${dishes.length * 300 + 7 * 150}`,
-        markers: true,
       }
     });
 
