@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
-import { navItemDataCollection, NavItemData } from '../Layout';
+import { navItemData, NavItemData } from '../Layout/NavItemData';
 
 const scrollPromptLeftAnimation = keyframes`
   0% {
@@ -118,7 +118,7 @@ const ScrollPrompt = () => {
   const location = useLocation();
 
   const currentSlug: string = location.pathname.substring(1);
-  const currentSlugIndex: number = navItemDataCollection.findIndex((navItemData: NavItemData) => {
+  const currentSlugIndex: number = navItemData.findIndex((navItemData: NavItemData) => {
     return navItemData.slug === currentSlug;
   });
 

@@ -6,19 +6,7 @@ import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { useDispatch, useSelector } from '../../core/hooks';
 import { open, toggle } from '../../slices/nav';
 import { cubicBezier } from '../static';
-
-import NavItemAboutBackground from './images/navitem-about.jpg';
-import NavItemCulinaryBackground from './images/navitem-culinary.jpg';
-import NavItemLiteryBackground from './images/navitem-literary.jpg';
-import NavItemVisualBackground from './images/navitem-visual.jpg';
-import NavItemTechnologyBackground from './images/navitem-technology.jpg';
-
-interface NavItemData {
-  slug: string;
-  text: string;
-  description: string;
-  backgroundImage: string;
-}
+import { NavItemData, navItemData } from './NavItemData';
 
 type NavItemState = 'DEFAULT' | 'CURRENT' | 'DULLED';
 
@@ -317,38 +305,6 @@ const Wrapper = styled.div`
   height: 100vh;
 `;
 
-const navItemDataCollection: NavItemData[] = [
-  {
-    slug: 'about',
-    text: 'About',
-    description: 'Story & Profile',
-    backgroundImage: NavItemAboutBackground,
-  },
-  {
-    slug: 'culinary',
-    text: 'Culinary',
-    description: 'Dining Experiences & Recipes',
-    backgroundImage: NavItemCulinaryBackground,
-  },
-  {
-    slug: 'visual',
-    text: 'Visual',
-    description: 'Still Portraits of the World',
-    backgroundImage: NavItemVisualBackground,
-  },
-  {
-    slug: 'literary',
-    text: 'Literary',
-    description: 'Musings of the Mind',
-    backgroundImage: NavItemLiteryBackground,
-  },
-  {
-    slug: 'technology',
-    text: 'Technology',
-    description: 'Systems Architecture & Code',
-    backgroundImage: NavItemTechnologyBackground,
-  },
-];
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
@@ -388,7 +344,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     }
   };
  
-  const navItems = navItemDataCollection.map((navItemData: NavItemData) => {
+  const navItems = navItemData.map((navItemData: NavItemData) => {
     let state: NavItemState = NavItemStates.DEFAULT;
 
     if (isPageOpen) {
@@ -410,7 +366,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     );
   });
 
-  const currentSlugIndex: number = navItemDataCollection.findIndex((navItemData: NavItemData) => {
+  const currentSlugIndex: number = navItemData.findIndex((navItemData: NavItemData) => {
     return navItemData.slug === currentSlug;
   });
 
@@ -442,5 +398,3 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default Layout;
-export type { NavItemData };
-export { navItemDataCollection };
