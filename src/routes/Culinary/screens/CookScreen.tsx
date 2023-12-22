@@ -329,7 +329,7 @@ const CookScreen = () => {
       // We can ignore the linting errors as the references will always exist 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       timeline.from(dish.dishRef!.current, {
-        transform: 'translate3d(0, -90vh, 0)',
+        transform: 'translate3d(0, 90vh, 0)',
         ease: 'power1.out',
         duration: 1,
       });
@@ -345,7 +345,7 @@ const CookScreen = () => {
       // We can ignore the linting errors as the references will always exist 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       timeline.to(dish.dishRef!.current, {
-        transform: 'translate3d(0, 90vh, 0)',
+        transform: 'translate3d(0, -90vh, 0)',
         ease: 'power1.out',
         duration: 1,
       });
