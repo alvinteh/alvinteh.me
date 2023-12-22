@@ -68,6 +68,16 @@ const ParallaxScreen = styled.div<{ $backgroundImage?: string }>`
   overflow: hidden;
 `;
 
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+`;
+
 export {
   cubicBezier,
   fadeInAnimation,
@@ -77,5 +87,7 @@ export {
   PageWrapper,
   ParallaxPageWrapper,
   PageTitle,
-  ParallaxScreen
+  ParallaxScreen,
+
+  Overlay,
 };
