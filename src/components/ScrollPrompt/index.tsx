@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
@@ -66,7 +67,7 @@ const ScrollPromptText = styled.span`
   user-select: none;
 `;
 
-const ScrollPromptWrapper = styled.span<{ $positionAdjFactor: number }>`
+const ScrollPromptWrapper = styled.span<{ $positionAdjFactor: number, $isVisible: boolean }>`
   display: block;
   position: fixed;
   bottom: 10px;
@@ -74,8 +75,10 @@ const ScrollPromptWrapper = styled.span<{ $positionAdjFactor: number }>`
   margin-left: -45px;
   width: 90px;
   height: 60px;
+  opacity: ${(props) => { return props.$isVisible ? 1 : 0; }};
   cursor: pointer;
   mix-blend-mode: difference;
+  transition: opacity 200ms ease-in-out;
 
   &::before, &&::after {
     display: block;
@@ -114,20 +117,44 @@ const ScrollPromptWrapper = styled.span<{ $positionAdjFactor: number }>`
   }
 `;
 
-const ScrollPrompt = () => {
+const ScrollPrompt = ({ pageRef }: { pageRef: React.MutableRefObject<HTMLDivElement> }) => {
   const location = useLocation();
 
   const currentSlug: string = location.pathname.substring(1);
   const currentSlugIndex: number = navItemData.findIndex((navItemData: NavItemData) => {
     return navItemData.slug === currentSlug;
   });
+  const [isVisible, setVisible] = useState(false);
 
-  const handleClick = ():void => {
-    window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+  const handleClick = (): void => {
+    if (isVisible) {
+      window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+    }
   };
 
+  const handleScroll = (): void => {    
+    if (window.innerHeight + window.scrollY >= pageRef.current.scrollHeight) {
+      setVisible(false);
+    }
+    else {
+      setVisible(true);
+    }
+  };
+
+  useEffect((): () => void => {
+    window.addEventListener('scroll', handleScroll);
+
+    return (): void => {
+      window.removeEventListener('scroll', handleScroll);
+    }
+  });
+
   return (
-    <ScrollPromptWrapper onClick={handleClick} $positionAdjFactor={currentSlugIndex}>
+    <ScrollPromptWrapper
+      onClick={handleClick}
+      $positionAdjFactor={currentSlugIndex}
+      $isVisible={isVisible}
+    >
       <ScrollPromptText>Scroll Down</ScrollPromptText>
     </ScrollPromptWrapper>
   );

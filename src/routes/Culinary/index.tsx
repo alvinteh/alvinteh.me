@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import { ParallaxPageWrapper } from '../../components/static';
 import ScrollPrompt from '../../components/ScrollPrompt';
 import CasualDiningScreen from './screens/CasualDiningScreen';
@@ -7,14 +9,16 @@ import FineDiningScreen from './screens/FineDiningScreen';
 import TitleScreen from './screens/TitleScreen';
 
 const Culinary = () => {
+  const pageRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+
   return (
-    <ParallaxPageWrapper>
+    <ParallaxPageWrapper ref={pageRef}>
       <TitleScreen />
       <FineDiningScreen />
       <CasualDiningScreen />
       <DrinksScreen />
       <CookScreen />
-      <ScrollPrompt />
+      <ScrollPrompt pageRef={pageRef} />
     </ParallaxPageWrapper>
   );
 };
