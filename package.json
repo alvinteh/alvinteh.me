@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@gsap/react": "^2.0.2",
     "@reduxjs/toolkit": "^2.0.1",
     "gsap": "npm:gsap-trial@^3.12.4",
     "keymirror": "^0.1.1",
