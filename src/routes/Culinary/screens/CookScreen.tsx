@@ -35,7 +35,7 @@ import Dish14Background from '../images/cook-dish-14.png';
 
 const Header1 = styled(Header1Svg)`
   position: absolute;
-  top: 40vh;
+  top: 35vh;
   left: 50%;
   margin-left: -15vw;
   width: 30vw;
@@ -43,7 +43,7 @@ const Header1 = styled(Header1Svg)`
 
 const Header2 = styled(Header2Svg)`
   position: absolute;
-  top: 40vh;
+  top: 35vh;
   left: 50%;
   margin-left: -30vw;
   width: 60vw;
@@ -51,7 +51,7 @@ const Header2 = styled(Header2Svg)`
 
 const Header3 = styled(Header3Svg)`
   position: absolute;
-  top: 40vh;
+  top: 35vh;
   left: 50%;
   margin-left: -15vw;
   width: 30vw;
@@ -59,10 +59,10 @@ const Header3 = styled(Header3Svg)`
 
 const Header4 = styled(Header4Svg)`
   position: absolute;
-  top: 40vh;
+  top: 35vh;
   left: 50%;
-  margin-left: -31vw;
-  width: 62vw;
+  margin-left: -17vw;
+  width: 34vw;
 `;
 
 const Dishes = styled.ul`
@@ -413,8 +413,13 @@ const CookScreen = () => {
       });
     }
 
+    timeline.to(Header4Ref.current.querySelectorAll('.line1'), {
+      opacity: 0,
+      duration: 1,
+    });
+    
     timeline.to(Header4Ref.current, {
-      transform: 'translate3d(0, -35vh, 0)',
+      transform: 'translate3d(0, -40vh, 0)',
       ease: 'power1.out',
       duration: 4,
     });
@@ -422,7 +427,8 @@ const CookScreen = () => {
     timeline.from(FaqWrapperRef.current, {
       transform: 'translate3d(0, 100%, 0)',
       ease: 'power1.out',
-    });
+      duration: 4,
+    }, '<');
   });
 
   return (
