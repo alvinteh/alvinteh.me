@@ -6,6 +6,7 @@ import { useRef } from 'react';
 import styled from 'styled-components';
 
 import { getRandomElements, randomize } from '../../../utils/ArrayUtils';
+import Accordion, { AccordionItem, AccordionItemContent, AccordionItemHeader } from '../../../components/Accordion';
 import { ParallaxScreen } from '../../../components/static';
 import { Dish } from '../common';
 
@@ -15,6 +16,7 @@ import Header2Svg from '../images/cook-header-2.svg?react';
 import Header3Svg from '../images/cook-header-3.svg?react';
 import Header4Svg from '../images/cook-header-4.svg?react';
 import NoteBackground from '../images/cook-note.png';
+import FaqWrapperBackground from '../images/faq-wrapper.png';
 import Dish1Background from '../images/cook-dish-1.png';
 import Dish2Background from '../images/cook-dish-2.png';
 import Dish3Background from '../images/cook-dish-3.png';
@@ -141,6 +143,34 @@ const DishImage = styled.div<{ $backgroundImage: string }>`
   background-size: contain;
 `;
 
+const FaqWrapper = styled.div`
+  position: relative;
+  top: 15vh;
+  margin: 0 auto;
+  box-sizing: border-box;
+  aspect-ratio: 1460/1760;
+  padding: 12% 8.5% 8% 5.5%;
+  height: 85%;
+  background: url(${FaqWrapperBackground}) top center/cover no-repeat;
+`;
+
+const Faq = styled(AccordionItem)`
+  color: #202020;
+  font-family: Caveat, sans-serif;
+`;
+
+// Note: we set the transforms on child elements to avoid awkward shifts in element position during transitions
+const FaqHeader = styled(AccordionItemHeader)`
+  transform: rotate(-3.3deg);
+`;
+
+// Note: we set the transform origin (and compensating translation) to avoid awkward shifts in element position
+// during transitions
+const FaqContent = styled(AccordionItemContent)`
+  transform: translate3d(0, 1rem, 0) rotate(-3.3deg);
+  transform-origin: 0 0;
+`;
+
 const dishData: Dish[] = [
     {
       name: 'Steak w/ Roast Potatoes',
@@ -235,6 +265,7 @@ const CookScreen = () => {
   const Header2Ref = useRef<SVGSVGElement>() as React.MutableRefObject<SVGSVGElement>;
   const Header3Ref = useRef<SVGSVGElement>() as React.MutableRefObject<SVGSVGElement>;
   const Header4Ref = useRef<SVGSVGElement>() as React.MutableRefObject<SVGSVGElement>;
+  const FaqWrapperRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const DishesRef = useRef<HTMLUListElement>() as React.MutableRefObject<HTMLUListElement>;
   let dishElements: React.ReactNode[];
 
@@ -382,10 +413,15 @@ const CookScreen = () => {
       });
     }
 
-    timeline.to(Header4Ref.current.children, {
-      opacity: 0,
-      ease: 'back.out(1)',
+    timeline.to(Header4Ref.current, {
+      transform: 'translate3d(0, -35vh, 0)',
+      ease: 'power1.out',
       duration: 4,
+    });
+
+    timeline.from(FaqWrapperRef.current, {
+      transform: 'translate3d(0, 100%, 0)',
+      ease: 'power1.out',
     });
   });
 
@@ -398,6 +434,75 @@ const CookScreen = () => {
       </Dishes>
       <Header3 ref={Header3Ref} />
       <Header4 ref={Header4Ref} />
+      <FaqWrapper ref={FaqWrapperRef}>
+        <Accordion>
+          <Faq>
+            <FaqHeader>
+              How did you get tables at those fancy restaurants?
+            </FaqHeader>
+            <FaqContent>
+              No secrets here, I join the line just like most other people. In many cases, this means visiting a 
+              restaurant&apos;s website to check when they release bookings (it&apos;s typically 2 - 3 months) in 
+              advance, and scrambling to secure a table once that happens. For some restaurants, I might waitlist a
+              whole week (and plan travel accordingly) to increase my chances.
+            </FaqContent>
+          </Faq>
+          <Faq>
+            <FaqHeader>
+              There&apos;s a cool place you should check out. How can I make suggestions? 
+            </FaqHeader>
+            <FaqContent>
+              I cannot guarantee I&apos;ll visit your suggested places, but let me know via the contact form! In 
+              addition,  note that just because I have visited a place does not mean I will recommend it.
+            </FaqContent>
+          </Faq>
+          <Faq>
+            <FaqHeader>
+              Do you do reviews, endorsements or sponsored content?
+            </FaqHeader>
+            <FaqContent>
+              No, I do not. Food and drink are a hobby, not a career for me. I&apos;m not an influencer either,
+              and all of my meals and drinks were paid out of my own pocket.
+            </FaqContent>
+          </Faq>
+          <Faq>
+            <FaqHeader>
+              We&apos;ve met and I remember you saying you don&apos;t take fruit, vegetables, or seafood?
+            </FaqHeader>
+            <FaqContent>
+              Good catch! But if you remember, I said <em>generally speaking</em>, I do not take fruits, vegetables
+              and/or seafood. There are a lot of rules and exceptions (e.g. I take strawberry jam, but I do not eat
+              whole strawberries), and it is so complex I often joke that the person who can come up with a ML model
+              that accurately predicts what I take/don&apos;t take can win a Nobel prize. And if you are wondering,
+              fine dining establishments do not get an automatic pass. I have left whole plates of fruit/etc.
+              untouched at 2/3-Michelin starred places. 
+            </FaqContent>
+          </Faq>
+          <Faq>
+            <FaqHeader>
+              What is your favorite food and drink?
+            </FaqHeader>
+            <FaqContent>
+              Food-wise, it is hard for me to pick a single dish, but I am generally down for a good lasagna. Dishes 
+              that are meat and/or cheese heavy (e.g. burgers, BBQ, mac and cheese, carbonara) tend to be among my 
+              favorites too. As for drink, my favorite cocktail is the Pencillin, and I also love Paper Planes and 
+              Pisco Sours.
+            </FaqContent>
+          </Faq>
+          <Faq>
+            <FaqHeader>
+              How did you start cooking?
+            </FaqHeader>
+            <FaqContent>
+              I lamented the lack of quality food in my neighborhood, and since dining out all the time would be too 
+              costly, decided to put on an apron and try my hand at cooking. I watched a number of YouTube channels
+              (<a href="https://www.youtube.com/@JoshuaWeissman">Joshua Weissman</a> is one of my influences) and 
+              slowly but surely worked my way into being a better home cook/baker. (Trust me, there were a lot of 
+              failures I did not post here!)
+            </FaqContent>
+          </Faq>
+        </Accordion>
+      </FaqWrapper>
     </ParallaxScreen>
   );
 };
