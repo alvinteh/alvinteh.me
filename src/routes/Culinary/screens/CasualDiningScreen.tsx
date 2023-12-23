@@ -29,6 +29,7 @@ import Dish17Background from '../images/casualdining-dish-17.jpg';
 import Dish18Background from '../images/casualdining-dish-18.jpg';
 import Dish19Background from '../images/casualdining-dish-19.jpg';
 import Dish20Background from '../images/casualdining-dish-20.jpg';
+import Dish21Background from '../images/casualdining-dish-21.jpg';
 
 const Header = styled.h3`
   position: relative;
@@ -261,6 +262,14 @@ const dishData: Record<string, Dish[]> = {
       imageAspectRatio: 1.33,
     },
   ],
+  [Continents.AFRICA_MID_EAST]: [
+    {
+      name: 'Koshary',
+      restaurant: 'Abou Tarek',
+      image: Dish21Background,
+      imageAspectRatio: 1,
+    },
+  ]
 };
 
 const CasualDiningScreen = () => {
@@ -284,7 +293,7 @@ const CasualDiningScreen = () => {
       const continentDishes: Dish[] = dishData[continent];
       // We can ignore the linting errors as the elements always exist
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      dishes.push(...getRandomElements(continentDishes, 3));
+      dishes.push(...getRandomElements(continentDishes, Math.min(continentDishes.length, 3)));
     }
   
     for (const Dish of dishes) {
@@ -296,6 +305,8 @@ const CasualDiningScreen = () => {
     }
   
     randomize(dishes);
+    // Remove a dish to keep total to 12
+    dishes.pop();
   
     dishElements = dishes.map((dish: Dish): React.ReactNode => {
       return (
