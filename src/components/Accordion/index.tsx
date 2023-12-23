@@ -1,7 +1,14 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { v4 as uuid } from 'uuid';
 
 interface AccordionContext {
+  activeItemId: string,
+  setActiveItemId: (itemId: string) => void,
+}
+
+interface AccordionItemContext {
+  itemId: string,
   isCollapsed: boolean,
   setIsCollapsed: (isCollapsed: boolean) => void
 }
@@ -61,17 +68,67 @@ const AccordionItemContentWrapperElement = styled.div<{ $isCollapsed: boolean }>
 `;
 
 const AccordionContext = createContext<AccordionContext>({
+  activeItemId: '',
+  // We can ignore the linting error as this will be set later
+  // eslint-disable-next-line  @typescript-eslint/no-empty-function
+  setActiveItemId: (): void => {},
+});
+
+const AccordionItemContext = createContext<AccordionItemContext>({
+  itemId: '',
   isCollapsed: true,
   // We can ignore the linting error as this will be set later
   // eslint-disable-next-line  @typescript-eslint/no-empty-function
   setIsCollapsed: (): void => {}
 });
 
+const Accordion = ({ children }: { children: React.ReactNode }) => {
+  const [activeItemId, setActiveItemId] = useState('');
+
+  return (
+    <AccordionContext.Provider value={{ activeItemId, setActiveItemId }}>
+      <AccordionElement>
+        {children}
+      </AccordionElement>
+    </AccordionContext.Provider>
+  );
+};
+
+
+const AccordionItem = ({ className, isCollapsed: isCollapsedDefault = true, children }: {
+  className?: string,
+  isCollapsed?: boolean,
+  children: React.ReactNode,
+}) => {
+  const { activeItemId } = useContext(AccordionContext);
+  const [itemId] = useState(uuid());
+  const [isCollapsed, setIsCollapsed] = useState(isCollapsedDefault);
+
+  useEffect((): void => {
+    if (activeItemId !== itemId) {
+      setIsCollapsed(true);
+    }
+  }, [activeItemId, itemId]);
+
+  return (
+    <AccordionItemContext.Provider value={{ itemId, isCollapsed, setIsCollapsed }}>
+      <AccordionItemElement className={className} $isCollapsed={isCollapsed}>
+          {children}
+      </AccordionItemElement>
+    </AccordionItemContext.Provider>
+  );
+};
+
 const AccordionItemHeader = ({ className, children }: { className?: string, children: React.ReactNode }) => {
-  const { isCollapsed, setIsCollapsed } = useContext(AccordionContext);
+  const { itemId, isCollapsed, setIsCollapsed } = useContext(AccordionItemContext);
+  const { setActiveItemId } = useContext(AccordionContext);
 
   const handleClick = (): void => {
     setIsCollapsed(!isCollapsed);
+
+    if (isCollapsed) {
+      setActiveItemId(itemId);
+    }
   };
 
   return (
@@ -82,7 +139,7 @@ const AccordionItemHeader = ({ className, children }: { className?: string, chil
 };
 
 const AccordionItemContent = ({ className, children }: { className?: string, children: React.ReactNode }) => {
-  const { isCollapsed } = useContext(AccordionContext);
+  const { isCollapsed } = useContext(AccordionItemContext);
 
   return (
     <AccordionItemContentElement className={className} $isCollapsed={isCollapsed}>
@@ -93,29 +150,6 @@ const AccordionItemContent = ({ className, children }: { className?: string, chi
   );
 };
 
-const AccordionItem = ({ className, isCollapsed: isCollapsedDefault = true, children }: {
-  className?: string,
-  isCollapsed?: boolean,
-  children: React.ReactNode,
-}) => {
-  const [isCollapsed, setIsCollapsed] = useState(isCollapsedDefault);
-
-  return (
-    <AccordionContext.Provider value={{ isCollapsed, setIsCollapsed }}>
-      <AccordionItemElement className={className} $isCollapsed={isCollapsed}>
-          {children}
-      </AccordionItemElement>
-    </AccordionContext.Provider>
-  );
-};
-
-const Accordion = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <AccordionElement>
-      {children}
-    </AccordionElement>
-  );
-};
 
 export default Accordion;
 export {
