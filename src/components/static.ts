@@ -56,6 +56,13 @@ const PageTitle = styled.h1`
   animation: ${wipeInAnimation} 1600ms ${cubicBezier} ${pageTransitionDuration}ms 1 backwards;
 `;
 
+const Screen = styled.div`
+  position: relative;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+`;
+
 const ParallaxScreen = styled.div<{ $backgroundImage?: string }>`
   position: relative;
   box-sizing: border-box;
@@ -90,4 +97,5 @@ export {
   ParallaxScreen,
 
   Overlay,
+  Screen,
 };
