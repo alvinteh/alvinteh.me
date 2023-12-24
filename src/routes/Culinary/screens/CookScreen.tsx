@@ -31,7 +31,38 @@ import Dish11Background from '../images/cook-dish-11.png';
 import Dish12Background from '../images/cook-dish-12.png';
 import Dish13Background from '../images/cook-dish-13.png';
 import Dish14Background from '../images/cook-dish-14.png';
-
+import ExtraBakeDish1Background from '../images/cook-extra-bake-dish-1.jpg';
+import ExtraBakeDish2Background from '../images/cook-extra-bake-dish-2.jpg';
+import ExtraBakeDish3Background from '../images/cook-extra-bake-dish-3.jpg';
+import ExtraBakeDish4Background from '../images/cook-extra-bake-dish-4.jpg';
+import ExtraBakeDish5Background from '../images/cook-extra-bake-dish-5.jpg';
+import ExtraBakeDish6Background from '../images/cook-extra-bake-dish-6.jpg';
+import ExtraBakeDish7Background from '../images/cook-extra-bake-dish-7.jpg';
+import ExtraBakeDish8Background from '../images/cook-extra-bake-dish-8.jpg';
+import ExtraBakeDish9Background from '../images/cook-extra-bake-dish-9.jpg';
+import ExtraBakeDish10Background from '../images/cook-extra-bake-dish-10.jpg';
+import ExtraBakeDish11Background from '../images/cook-extra-bake-dish-11.jpg';
+import ExtraBakeDish12Background from '../images/cook-extra-bake-dish-12.jpg';
+import ExtraBakeDish13Background from '../images/cook-extra-bake-dish-13.jpg';
+import ExtraBakeDish14Background from '../images/cook-extra-bake-dish-14.jpg';
+import ExtraBakeDish15Background from '../images/cook-extra-bake-dish-15.jpg';
+import ExtraBakeDish16Background from '../images/cook-extra-bake-dish-16.jpg';
+import ExtraCookDish1Background from '../images/cook-extra-cook-dish-1.jpg';
+import ExtraCookDish2Background from '../images/cook-extra-cook-dish-2.jpg';
+import ExtraCookDish3Background from '../images/cook-extra-cook-dish-3.jpg';
+import ExtraCookDish4Background from '../images/cook-extra-cook-dish-4.jpg';
+import ExtraCookDish5Background from '../images/cook-extra-cook-dish-5.jpg';
+import ExtraCookDish6Background from '../images/cook-extra-cook-dish-6.jpg';
+import ExtraCookDish7Background from '../images/cook-extra-cook-dish-7.jpg';
+import ExtraCookDish8Background from '../images/cook-extra-cook-dish-8.jpg';
+import ExtraCookDish9Background from '../images/cook-extra-cook-dish-9.jpg';
+import ExtraCookDish10Background from '../images/cook-extra-cook-dish-10.jpg';
+import ExtraCookDish11Background from '../images/cook-extra-cook-dish-11.jpg';
+import ExtraCookDish12Background from '../images/cook-extra-cook-dish-12.jpg';
+import ExtraCookDish13Background from '../images/cook-extra-cook-dish-13.jpg';
+import ExtraCookDish14Background from '../images/cook-extra-cook-dish-14.jpg';
+import ExtraCookDish15Background from '../images/cook-extra-cook-dish-15.jpg';
+import ExtraCookDish16Background from '../images/cook-extra-cook-dish-16.jpg';
 
 const Header1 = styled(Header1Svg)`
   position: absolute;
@@ -141,6 +172,74 @@ const DishImage = styled.div<{ $backgroundImage: string }>`
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
+`;
+
+const ExtraDishes = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+`;
+
+const ExtraDish = styled.li<{ $backgroundImage: string }>`
+  position: absolute;
+  margin: 0;
+  border: solid 10px #ffffff;
+  border-bottom-width: calc(10px + 1.6rem);
+  padding: 0;
+  width: 14vw;
+  height: 14vw;
+  background-image: url(${(props) => { return props.$backgroundImage; }});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-shadow: 3px 3px 3px #303030;
+
+  &:nth-child(1) {
+    top: 22vh;
+    left: 12vw;
+    transform: rotate(-8deg);
+  }
+
+  &:nth-child(2) {
+    top: 11vh;
+    left: 28vw;
+    transform: rotate(-1deg);
+  }
+
+  &:nth-child(3) {
+    top: 18vh;
+    left: 44vw;
+    transform: rotate(3.5deg);
+  }
+
+  &:nth-child(4) {
+    top: 55vh;
+    left: 18vw;
+    transform: rotate(-11deg);
+  }
+
+  &:nth-child(5) {
+    top: 50vh;
+    left: 35vw;
+    transform: rotate(-1deg);
+  }
+
+  &:nth-child(6) {
+    top: 54vh;
+    left: 52vw;
+    transform: rotate(8deg);
+  }
+`;
+
+const ExtraDishName = styled.div`
+  margin-top: 14vw;
+  padding: 0.3rem 0 0.1rem;
+  color: #303030;
+  font-family: Caveat, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.2rem;
+  text-align: center;
 `;
 
 const FaqWrapper = styled.div`
@@ -258,25 +357,229 @@ const dishData: Dish[] = [
     },
 ];
 
+const extraBakeDishData: Dish[] = [
+  {
+    name: 'Raspberry Chocolate Cake',
+    restaurant: '',
+    image: ExtraBakeDish1Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'Chocolate Babka',
+    restaurant: '',
+    image: ExtraBakeDish2Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'Nutella-stuffed Chocolate Cookies',
+    restaurant: '',
+    image: ExtraBakeDish3Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'Kueh Lapis',
+    restaurant: '',
+    image: ExtraBakeDish4Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'Cinnamon Roll',
+    restaurant: '',
+    image: ExtraBakeDish5Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'Blondie',
+    restaurant: '',
+    image: ExtraBakeDish6Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'Key Lime Pie',
+    restaurant: '',
+    image: ExtraBakeDish7Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'Mixed Berry Shortcake Pie',
+    restaurant: '',
+    image: ExtraBakeDish8Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'Marble Cake',
+    restaurant: '',
+    image: ExtraBakeDish9Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'Chocolate Rainbow Cake w/ Berries',
+    restaurant: '',
+    image: ExtraBakeDish10Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'New York Cheesecake',
+    restaurant: '',
+    image: ExtraBakeDish11Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'Chocolate Fraisier Cake',
+    restaurant: '',
+    image: ExtraBakeDish12Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'Marble Chocolate Madeleine',
+    restaurant: '',
+    image: ExtraBakeDish13Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'Blueberry Muffin',
+    restaurant: '',
+    image: ExtraBakeDish14Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'Sea Salt Chocolate Cookies',
+    restaurant: '',
+    image: ExtraBakeDish15Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'Hokkaido Milk Bun',
+    restaurant: '',
+    image: ExtraBakeDish16Background,
+    imageAspectRatio: 1,
+  },
+];
+
+const extraCookDishData: Dish[] = [
+  {
+    name: 'Chicken Tikka Masala',
+    restaurant: '',
+    image: ExtraCookDish1Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'Dum Biryani',
+    restaurant: '',
+    image: ExtraCookDish2Background,
+    imageAspectRatio: 1,
+  },
+  {
+    name: 'Blueberry Pancakes',
+    restaurant: '',
+    image: ExtraCookDish3Background,
+    imageAspectRatio: 1,
+  }, 
+  {
+    name: 'Breakfast Hash',
+    restaurant: '',
+    image: ExtraCookDish4Background,
+    imageAspectRatio: 1,
+  }, 
+  {
+    name: 'Steak Diane',
+    restaurant: '',
+    image: ExtraCookDish5Background,
+    imageAspectRatio: 1,
+  }, 
+  {
+    name: 'Yangnyeom + Dakgangjeong Chikin',
+    restaurant: '',
+    image: ExtraCookDish6Background,
+    imageAspectRatio: 1,
+  }, 
+  {
+    name: 'Double Bacon Cheeseburger',
+    restaurant: '',
+    image: ExtraCookDish7Background,
+    imageAspectRatio: 1,
+  }, 
+  {
+    name: 'Pho Bo',
+    restaurant: '',
+    image: ExtraCookDish8Background,
+    imageAspectRatio: 1,
+  }, 
+  {
+    name: 'Japanese-style Gyoza',
+    restaurant: '',
+    image: ExtraCookDish9Background,
+    imageAspectRatio: 1,
+  }, 
+  {
+    name: 'Tamagoyaki',
+    restaurant: '',
+    image: ExtraCookDish10Background,
+    imageAspectRatio: 1,
+  }, 
+  {
+    name: 'Rendang Daging',
+    restaurant: '',
+    image: ExtraCookDish11Background,
+    imageAspectRatio: 1,
+  }, 
+  {
+    name: 'Souffle Pancakes',
+    restaurant: '',
+    image: ExtraCookDish12Background,
+    imageAspectRatio: 1,
+  }, 
+  {
+    name: 'Beef Stew',
+    restaurant: '',
+    image: ExtraCookDish13Background,
+    imageAspectRatio: 1,
+  }, 
+  {
+    name: 'Jerk Chicken',
+    restaurant: '',
+    image: ExtraCookDish14Background,
+    imageAspectRatio: 1,
+  }, 
+  {
+    name: 'Philly Cheesesteak',
+    restaurant: '',
+    image: ExtraCookDish15Background,
+    imageAspectRatio: 1,
+  }, 
+  {
+    name: 'Ramdon',
+    restaurant: '',
+    image: ExtraCookDish16Background,
+    imageAspectRatio: 1,
+  }, 
+]
+
 const CookScreen = () => {
   // Screen refs and nodes
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
-  const Header1Ref = useRef<SVGSVGElement>() as React.MutableRefObject<SVGSVGElement>;
-  const Header2Ref = useRef<SVGSVGElement>() as React.MutableRefObject<SVGSVGElement>;
-  const Header3Ref = useRef<SVGSVGElement>() as React.MutableRefObject<SVGSVGElement>;
-  const Header4Ref = useRef<SVGSVGElement>() as React.MutableRefObject<SVGSVGElement>;
-  const FaqWrapperRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
-  const DishesRef = useRef<HTMLUListElement>() as React.MutableRefObject<HTMLUListElement>;
+  const header1Ref = useRef<SVGSVGElement>() as React.MutableRefObject<SVGSVGElement>;
+  const header2Ref = useRef<SVGSVGElement>() as React.MutableRefObject<SVGSVGElement>;
+  const header3Ref = useRef<SVGSVGElement>() as React.MutableRefObject<SVGSVGElement>;
+  const header4Ref = useRef<SVGSVGElement>() as React.MutableRefObject<SVGSVGElement>;
+  const faqWrapperRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+  const dishesRef = useRef<HTMLUListElement>() as React.MutableRefObject<HTMLUListElement>;
+  const extraDishesRef = useRef<HTMLUListElement>() as React.MutableRefObject<HTMLUListElement>;
+
   let dishElements: React.ReactNode[];
+  let extraDishElements: React.ReactNode[];
 
   // Screen data
   let dishes: Dish[] = [];
+  let extraDishes: Dish[] = [];
 
   gsap.registerPlugin(DrawSVGPlugin, ScrollTrigger);
 
   // Initialize dish elements
   ((): void => {
     dishes = getRandomElements(dishData, 5) as Dish[];
+    extraDishes = getRandomElements(extraBakeDishData, 3) as Dish[];
+    extraDishes = extraDishes.concat(getRandomElements(extraCookDishData, 3) as Dish[]);
 
     for (const dish of dishes) {
       // We can ignore the linting errors as the elements always exist
@@ -286,8 +589,17 @@ const CookScreen = () => {
       dish.dishInfoRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
     }
 
+    for (const extraDish of extraDishes) {
+      // We can ignore the linting errors as the elements always exist
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      extraDish.dishRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      extraDish.dishInfoRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+    }
+
     randomize(dishes);
-  
+    randomize(extraDishes);
+
     dishElements = dishes.map((dish: Dish): React.ReactNode => {
       return (
         <Dish
@@ -298,14 +610,26 @@ const CookScreen = () => {
         </Dish>
       );
     });
+
+    extraDishElements = extraDishes.map((extraDish: Dish): React.ReactNode => {
+      return (
+        <ExtraDish
+          key={extraDish.name}
+          ref={extraDish.dishRef as React.MutableRefObject<HTMLLIElement>}
+          $backgroundImage={extraDish.image}
+        >
+          <ExtraDishName ref={extraDish.dishInfoRef}>{extraDish.name}</ExtraDishName>
+        </ExtraDish>
+      );
+    });
   })();
 
   // Screen animation
   useGSAP((): void => {
-    const letterAnimationCount: number = (Header1Ref.current.children.length
-      + Header2Ref.current.children.length
-      + Header3Ref.current.children.length
-      + Header4Ref.current.children.length) / 2;
+    const letterAnimationCount: number = (header1Ref.current.children.length
+      + header2Ref.current.children.length
+      + header3Ref.current.children.length
+      + header4Ref.current.children.length) / 2;
     
     const timeline = gsap.timeline({
       scrollTrigger: {
@@ -313,11 +637,11 @@ const CookScreen = () => {
         pin: true,
         scrub: true,
         start: 'top top',
-        end: `+=${dishes.length * 300 + (letterAnimationCount + 4 * 4) * 100}`,
+        end: `+=${dishes.length * 300 + extraDishes.length * 200 + (letterAnimationCount + 4 * 4) * 100}`,
       }
     });
 
-    for (const path of Header1Ref.current.children) {
+    for (const path of header1Ref.current.children) {
       timeline.fromTo(path, {
         drawSVG: '0%',
       },
@@ -327,13 +651,13 @@ const CookScreen = () => {
       });
     }
 
-    timeline.to(Header1Ref.current.children, {
+    timeline.to(header1Ref.current.children, {
       opacity: 0,
       ease: 'back.out(1)',
       duration: 4,
     });
 
-    for (const path of Header2Ref.current.children) {
+    for (const path of header2Ref.current.children) {
       timeline.fromTo(path, {
         drawSVG: '0%',
       },
@@ -343,13 +667,13 @@ const CookScreen = () => {
       });
     }
 
-    timeline.to(Header2Ref.current.children, {
+    timeline.to(header2Ref.current.children, {
       opacity: 0,
       ease: 'back.out(1)',
       duration: 4,
     });
 
-    timeline.from(DishesRef.current, {
+    timeline.from(dishesRef.current, {
       transform: 'translate3d(30vw, 0, 0)',
       ease: 'power.out',
       duration: 1,
@@ -381,13 +705,13 @@ const CookScreen = () => {
       });
     }
 
-    timeline.to(DishesRef.current, {
+    timeline.to(dishesRef.current, {
       transform: 'translate3d(30vw, 0, 0)',
       ease: 'power.out',
       duration: 1,
     });
 
-    for (const path of Header3Ref.current.children) {
+    for (const path of header3Ref.current.children) {
       timeline.fromTo(path, {
         drawSVG: '0%',
       },
@@ -397,13 +721,41 @@ const CookScreen = () => {
       });
     }
 
-    timeline.to(Header3Ref.current.children, {
+    timeline.to(header3Ref.current.children, {
       opacity: 0,
       ease: 'back.out(1)',
       duration: 4,
     });
 
-    for (const path of Header4Ref.current.children) {
+    for (const extraDish of extraDishes) {
+      // We can ignore the linting errors as the references will always exist 
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      timeline.from(extraDish.dishRef!.current, {
+        top: '100vh',
+        left: 'calc(50% - 7vw - 10px)',
+        ease: 'power1.out',
+        duration: 1,
+      });
+    }
+
+    timeline.to(header3Ref.current, {
+      // Do nothing to simulate a "pause"
+      duration: 1,
+    });
+
+    for (let i = extraDishes.length - 1; i >= 0; i--) {
+      // We can ignore the linting errors as the references will always exist 
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      timeline.to(extraDishes[i].dishRef!.current, {
+        top: '100vh',
+        left: 'calc(50% - 7vw - 10px)',
+        transform: 'rotate(0)',
+        ease: 'power1.out',
+        duration: 0.5,
+      });
+    }
+
+    for (const path of header4Ref.current.children) {
       timeline.fromTo(path, {
         drawSVG: '0%',
       },
@@ -413,18 +765,18 @@ const CookScreen = () => {
       });
     }
 
-    timeline.to(Header4Ref.current.querySelectorAll('.line1'), {
+    timeline.to(header4Ref.current.querySelectorAll('.line1'), {
       opacity: 0,
       duration: 1,
     });
     
-    timeline.to(Header4Ref.current, {
+    timeline.to(header4Ref.current, {
       transform: 'translate3d(0, -40vh, 0)',
       ease: 'power1.out',
       duration: 4,
     });
 
-    timeline.from(FaqWrapperRef.current, {
+    timeline.from(faqWrapperRef.current, {
       transform: 'translate3d(0, 100%, 0)',
       ease: 'power1.out',
       duration: 4,
@@ -433,14 +785,17 @@ const CookScreen = () => {
 
   return (
     <ParallaxScreen ref={screenRef} $backgroundImage={ScreenBackground}>
-      <Header1 ref={Header1Ref} />
-      <Header2 ref={Header2Ref} />
-      <Dishes ref={DishesRef}>
+      <Header1 ref={header1Ref} />
+      <Header2 ref={header2Ref} />
+      <Dishes ref={dishesRef}>
         {dishElements}
       </Dishes>
-      <Header3 ref={Header3Ref} />
-      <Header4 ref={Header4Ref} />
-      <FaqWrapper ref={FaqWrapperRef}>
+      <Header3 ref={header3Ref} />
+      <ExtraDishes ref={extraDishesRef}>
+        {extraDishElements}
+      </ExtraDishes>
+      <Header4 ref={header4Ref} />
+      <FaqWrapper ref={faqWrapperRef}>
         <Accordion>
           <Faq>
             <FaqHeader>
