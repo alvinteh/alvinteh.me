@@ -105,10 +105,10 @@ const DishInfo = styled.div`
 `;
 
 const DishName = styled.p`
+  color: #303030;
   font-family: Caveat, sans-serif;
   font-size: 1.3rem;
   font-weight: 600;
-  color: #303030;
 `;
 
 const DishRestaurant = styled.h4`
