@@ -1,4 +1,3 @@
-import { IconDefinition } from '@fortawesome/pro-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components';
@@ -6,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { APIProvider, Map, AdvancedMarker, useMapsLibrary } from '@vis.gl/react-google-maps';
 
 import { Screen } from '../../../components/static';
-import cuisineIconMap from './map-icon-data';
+import cuisineMarkerStyleMap, { MarkerStyle } from './map-icon-data';
 import rawPlaces from './map-data.json';
 
 interface Place {
@@ -44,10 +43,11 @@ const Header = styled.h3`
   text-transform: uppercase;
 `;
 
-const MapMarker = styled.div`
+const MapMarker = styled.div<{ $backgroundColor: string }>`
   border-radius: 50%;
   padding: 0.3rem;
-  background: #202020;
+  background: ${(props) => { return props.$backgroundColor; }};
+  color: #ffffff;
 `;
 
 const places: Place[] = (rawPlaces as unknown) as Place[];
@@ -64,7 +64,7 @@ const InteractiveMap = () => {
     }
 
     setPlaceElements(places.map((place: Place): React.ReactNode => {
-      const iconDefinition: IconDefinition = cuisineIconMap[place.cuisine];
+      const markerStyle: MarkerStyle = cuisineMarkerStyleMap[place.cuisine];
 
       return (
         <AdvancedMarker
@@ -72,8 +72,8 @@ const InteractiveMap = () => {
           position={place.position}
           title={place.name}
         >
-          <MapMarker>
-            <FontAwesomeIcon icon={iconDefinition} fixedWidth />
+          <MapMarker $backgroundColor={markerStyle.backgroundColor}>
+            <FontAwesomeIcon icon={markerStyle.icon} fixedWidth />
           </MapMarker>
         </AdvancedMarker>
       );
