@@ -370,7 +370,7 @@
   },
   {
     "name": "Clinton St. Baking Company",
-    "cuisine": "Cafe",
+    "cuisine": "Pancakes",
     "price": 2,
     "position": {
       "lat": 40.721264,
@@ -406,7 +406,7 @@
   },
   {
     "name": "Katz's Delicatessen",
-    "cuisine": "Cafe",
+    "cuisine": "Pastrami",
     "price": 2,
     "position": {
       "lat": 40.7223184,
@@ -523,7 +523,7 @@
   },
   {
     "name": "Eileen's Special Cheesecake",
-    "cuisine": "Dessert",
+    "cuisine": "Cake",
     "price": 2,
     "position": {
       "lat": 40.721531,
@@ -685,7 +685,7 @@
   },
   {
     "name": "Fat Chow",
-    "cuisine": "Asian",
+    "cuisine": "Southeast Asian",
     "price": 2,
     "position": {
       "lat": -8.718388,
@@ -1117,7 +1117,7 @@
   },
   {
     "name": "Rokkasen",
-    "cuisine": "Yakiniku/Shabu Shabu",
+    "cuisine": "Yakiniku",
     "price": 3,
     "position": {
       "lat": 35.6933679,
@@ -2593,7 +2593,7 @@
   },
   {
     "name": "Jeh O Chula",
-    "cuisine": "Tom Yum Goong",
+    "cuisine": "Tom Yum Kung",
     "price": 1,
     "position": {
       "lat": 13.7424996,
@@ -2611,7 +2611,7 @@
   },
   {
     "name": "Phed Mark",
-    "cuisine": "Thai",
+    "cuisine": "Pad Kra Pow",
     "price": 1,
     "position": {
       "lat": 13.7202176,
