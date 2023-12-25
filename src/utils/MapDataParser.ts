@@ -58,7 +58,7 @@ const main = async (mapKmlUrl: string, destinationFilePath: string): Promise<voi
   // Transform data
   console.log(`Transforming map data ${kmlPlacemarks.length}...`);
   const placemarks: Placemark[] = kmlPlacemarks.map((kmlPlacemark: KmlPlacemark): Placemark => {
-    const [latString, lngString] = kmlPlacemark.Point.coordinates.split(',');
+    const [lngString, latString] = kmlPlacemark.Point.coordinates.split(',');
     const placemarkDataPoints: KmlData[] = kmlPlacemark.ExtendedData.Data;
     let cuisine = '';
     let price = 0; 
