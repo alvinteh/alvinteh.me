@@ -6,6 +6,7 @@ import CasualDiningScreen from './screens/CasualDiningScreen';
 import CookScreen from './screens/CookScreen';
 import DrinksScreen from './screens/DrinksScreen';
 import FineDiningScreen from './screens/FineDiningScreen';
+import MapScreen from './screens/MapScreen';
 import TitleScreen from './screens/TitleScreen';
 
 const Culinary = () => {
@@ -17,6 +18,7 @@ const Culinary = () => {
       <FineDiningScreen />
       <CasualDiningScreen />
       <DrinksScreen />
+      <MapScreen />
       <CookScreen />
       <ScrollPrompt pageRef={pageRef} />
     </ParallaxPageWrapper>
