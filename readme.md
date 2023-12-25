@@ -26,4 +26,6 @@ v2 of my personal website, hosted at [https://alvinteh.me](https://alvinteh.me).
 
 ## Remarks
 
-This package uses [Vite](https://vitejs.dev/). It also provides a `lint` command to ensure code means style and quality guidelines.
+- This package uses [Vite](https://vitejs.dev/).
+- It also provides a `lint` command to ensure code means style and quality guidelines.
+- This package also includes a utility script `src/utils/MapDataParse.ts` that can be used to convert KML data from Google My Maps to a JSON file for use by the website. To run that script, configure `VITE_GOOGLE_MAPS_KML_URL` in the `.env` file (obtain the URL by using the "Export to KML/KMZ" feature in Google My Maps while enabling the "Keep data up to date with network link KML (only usable online)." option), and then run `npx vite-node src/utils/MapDataParser.ts`.
