@@ -88,6 +88,15 @@ const InteractiveMap = () => {
       center={MAP_CENTER}
       disableDefaultUI={true}
       keyboardShortcuts={false}
+      restriction={{
+        latLngBounds: {
+          north: 85,
+          south: -85,
+          west: -180,
+          east: 180,
+        },
+        strictBounds: true,
+      }}
       zoom={2.5}
       zoomControl={true}
     >
