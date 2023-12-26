@@ -317,8 +317,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const currentSlug: string = location.pathname.substring(1);
-  const isPageOpen: boolean = currentSlug !== '';
+  const currentPage: string = location.pathname.substring(1).split('/')[0];
+  const isPageOpen: boolean = currentPage !== '';
   // React Router has state typed as any; we have assertations as a failsafe
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const isFromInternalNav: boolean = location.state?.isFromInternalNav as boolean || false;
@@ -354,7 +354,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     let state: NavItemState = NavItemStates.DEFAULT;
 
     if (isPageOpen) {
-      state = currentSlug === navItemData.slug ? NavItemStates.CURRENT : NavItemStates.DULLED;
+      state = currentPage === navItemData.slug ? NavItemStates.CURRENT : NavItemStates.DULLED;
     }
 
     return (
@@ -372,8 +372,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     );
   });
 
-  const currentSlugIndex: number = navItemData.findIndex((navItemData: NavItemData) => {
-    return navItemData.slug === currentSlug;
+  const currentPageIndex: number = navItemData.findIndex((navItemData: NavItemData) => {
+    return navItemData.slug === currentPage;
   });
 
   useEffect((): void => {
@@ -398,7 +398,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         </NavWrapper>
         <MenuLink onClick={handleMenuLinkClick} $isNavOpen={isNavOpen} $isPageOpen={isPageOpen}>Menu</MenuLink>
         <ConnectLink>Connect</ConnectLink>
-        <Main $isPageOpen={isPageOpen} $currentSlugIndex={currentSlugIndex}>
+        <Main $isPageOpen={isPageOpen} $currentSlugIndex={currentPageIndex}>
             {children}
         </Main>
       </Wrapper>
