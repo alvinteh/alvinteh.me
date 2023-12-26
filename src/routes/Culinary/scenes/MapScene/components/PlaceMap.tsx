@@ -3,15 +3,13 @@ import { v4 as uuid } from 'uuid';
 import { Map, useMapsLibrary } from '@vis.gl/react-google-maps';
 
 import { Place } from '../types';
-import rawPlaces from '../data/map-data.json';
 import PlaceMapContext from './PlaceMapContext';
 import PlaceMarker from './PlaceMarker';
 
-const places: Place[] = (rawPlaces as unknown) as Place[];
 // Points to L'Antica Pizzeria de Michele in Napoli, roughly in the middle of the map
 const MAP_CENTER = { lat: 40.8497563, lng: 14.2633002 };
 
-const PlaceMap = () => {
+const PlaceMap = ({ places }: { places: Place[] }) => {
   const coreLibrary = useMapsLibrary('core');
   const [activePlaceMarkerId, setActivePlaceMarkerId] = useState('');
   const [placeMarkerElements, setPlaceMarkerElements] = useState<React.ReactNode[]>([]);

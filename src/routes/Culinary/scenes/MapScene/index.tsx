@@ -3,6 +3,8 @@ import { APIProvider } from '@vis.gl/react-google-maps';
 
 import Screen from '../../../../components/Screen';
 import PlaceMap from './components/PlaceMap';
+import rawPlaces from './data/map-data.json';
+import { Place } from './types';
 
 const FlexWrapper = styled.div`
   display: flex;
@@ -32,16 +34,18 @@ const Header = styled.h3`
   text-transform: uppercase;
 `;
 
+const places: Place[] = (rawPlaces as unknown) as Place[];
+
 const MapScene = () => {
   return (
     <Screen title="Food & Drink Experiences">
       <FlexWrapper>
         <ContentPanel>
-          <Header>Where can I try them?</Header>
+          <Header>Explore Places</Header>
         </ContentPanel>
         <MapPanel>
           <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string}>
-            <PlaceMap />
+            <PlaceMap places={places} />
           </APIProvider>
         </MapPanel>
       </FlexWrapper>
