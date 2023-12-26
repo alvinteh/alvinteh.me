@@ -59,7 +59,6 @@ const InfoLink = styled.a`
   }
 `;
 
-
 const PlaceMarker = ({ place }: { place: Place }) => {
   const { activePlaceMarkerId, setActivePlaceMarkerId } = useContext(PlaceMapContext);
   const [placeMarkerId] = useState(uuid());
