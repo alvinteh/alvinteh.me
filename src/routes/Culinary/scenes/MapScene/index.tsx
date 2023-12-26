@@ -5,6 +5,7 @@ import Screen from '../../../../components/Screen';
 import PlaceMap from './components/PlaceMap';
 import rawPlaces from './data/map-data.json';
 import { Place } from './types';
+import PlacePanel from './components/PlacePanel';
 
 const FlexWrapper = styled.div`
   display: flex;
@@ -35,6 +36,7 @@ const Header = styled.h3`
 `;
 
 const places: Place[] = (rawPlaces as unknown) as Place[];
+places.sort((a: Place, b: Place): number => { return (a.name < b.name ? -1 : 1); })
 
 const MapScene = () => {
   return (
@@ -42,6 +44,7 @@ const MapScene = () => {
       <FlexWrapper>
         <ContentPanel>
           <Header>Explore Places</Header>
+          <PlacePanel places={places} />
         </ContentPanel>
         <MapPanel>
           <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string}>

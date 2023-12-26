@@ -22,7 +22,7 @@ const PlaceMap = ({ places }: { places: Place[] }) => {
     setPlaceMarkerElements(places.map((place: Place): React.ReactNode => {
       return <PlaceMarker key={uuid()} place={place} />;
     }));
-  }, [coreLibrary]);
+  }, [places, coreLibrary]);
 
   return (
     <PlaceMapContext.Provider value={{ activePlaceMarkerId, setActivePlaceMarkerId }}>
