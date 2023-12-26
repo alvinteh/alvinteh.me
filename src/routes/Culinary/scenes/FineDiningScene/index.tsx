@@ -5,7 +5,7 @@ import { useRef } from 'react';
 import styled from 'styled-components';
 
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
-import { ParallaxScreen } from '../../../../components/static';
+import ParallaxScreen from '../../../../components/ParallaxScreen';
 import { Continents, Dish } from '../../common';
 
 import SceneBackground from './images/scene-finedining.jpg'
@@ -255,7 +255,11 @@ const FineDiningScene = () => {
   });
 
   return (
-    <ParallaxScreen ref={screenRef} $backgroundImage={SceneBackground}>
+    <ParallaxScreen
+      innerRef={screenRef}
+      backgroundImage={SceneBackground}
+      title="Fine Dining Experiences"
+    >
       <Header ref={exploreTextRef}>
         <span>Exploring</span>
         <span>the</span>

@@ -5,7 +5,8 @@ import { useRef } from 'react';
 import styled from 'styled-components';
 
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
-import { Overlay, ParallaxScreen } from '../../../../components/static';
+import ParallaxScreen from '../../../../components/ParallaxScreen';
+import { Overlay } from '../../../../components/static';
 import { Continents, Dish } from '../../common';
 
 import SceneBackground from './images/screen-casualdining.jpg'
@@ -395,7 +396,11 @@ const CasualDiningScene = () => {
   });
 
   return (
-    <ParallaxScreen ref={screenRef} $backgroundImage={SceneBackground}>
+    <ParallaxScreen
+      innerRef={screenRef}
+      backgroundImage={SceneBackground}
+      title="Casual Dining & Street Food Experiences"
+    >
       <Header>
         <HeaderS1 ref={headerS1Ref}>Casual</HeaderS1>
         <HeaderS2 ref={headerS2Ref}>is sometimes</HeaderS2>

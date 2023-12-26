@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link as LinkRR } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
@@ -8,6 +9,7 @@ import {
   fadeInAnimation,
   pageTransitionDuration
 } from '../../components/static';
+import { setPageTitle } from '../../utils/PageUtils';
 
 import HeroMask from './images/hero-mask.png';
 
@@ -132,6 +134,10 @@ const Link = styled(LinkRR)`
   text-transform: uppercase;
   transition: all 250ms ease-out;
 
+  &:visited {
+    color: #aaffff;
+  }
+
   &::after {
     display: block;
     position: absolute;
@@ -155,6 +161,10 @@ const Link = styled(LinkRR)`
 `;
 
 const About = () => {
+  useEffect((): void => {
+    setPageTitle('About');
+  });
+
   return (
     <PageWrapper>
       <PageTitle>About</PageTitle>

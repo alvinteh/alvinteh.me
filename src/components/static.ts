@@ -56,25 +56,6 @@ const PageTitle = styled.h1`
   animation: ${wipeInAnimation} 1600ms ${cubicBezier} ${pageTransitionDuration}ms 1 backwards;
 `;
 
-const Screen = styled.div`
-  position: relative;
-  padding: 0;
-  height: 100vh;
-  overflow: hidden;
-`;
-
-const ParallaxScreen = styled.div<{ $backgroundImage?: string }>`
-  position: relative;
-  box-sizing: border-box;
-  padding: 50px 40px 0;
-  height: 100vh;
-  background-image: ${(props) => { return props.$backgroundImage ? `url(${props.$backgroundImage})` : 'none'; }};
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  overflow: hidden;
-`;
-
 const Overlay = styled.div`
   position: absolute;
   top: 0;
@@ -94,8 +75,6 @@ export {
   PageWrapper,
   ParallaxPageWrapper,
   PageTitle,
-  ParallaxScreen,
 
   Overlay,
-  Screen,
 };

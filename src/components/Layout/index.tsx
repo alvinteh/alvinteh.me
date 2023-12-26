@@ -6,6 +6,7 @@ import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { useDispatch, useSelector } from '../../core/hooks';
 import { open, toggle } from '../../slices/nav';
 import { cubicBezier } from '../static';
+import { setPageTitle } from '../../utils/PageUtils';
 import { NavItemData, navItemData } from './NavItemData';
 
 type NavItemState = 'DEFAULT' | 'CURRENT' | 'DULLED';
@@ -378,6 +379,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   useEffect((): void => {
     if (isPageOpen && !isNavOpen) {
       dispatch(open());
+    }
+    else if (!isPageOpen) {
+      setPageTitle('');
     }
   });
 

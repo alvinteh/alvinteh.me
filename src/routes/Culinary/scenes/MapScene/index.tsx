@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { APIProvider } from '@vis.gl/react-google-maps';
 
-import { Screen } from '../../../../components/static';
+import Screen from '../../../../components/Screen';
 import PlaceMap from './components/PlaceMap';
 
 const FlexWrapper = styled.div`
@@ -34,7 +34,7 @@ const Header = styled.h3`
 
 const MapScene = () => {
   return (
-    <Screen>
+    <Screen title="Food & Drink Experiences">
       <FlexWrapper>
         <ContentPanel>
           <Header>Where can I try them?</Header>

@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { dishData, extraBakeDishData, extraCookDishData } from './data/dish-data';
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
 import Accordion, { AccordionItem, AccordionItemContent, AccordionItemHeader } from '../../../../components/Accordion';
-import { ParallaxScreen } from '../../../../components/static';
+import ParallaxScreen from '../../../../components/ParallaxScreen';
 import { Dish } from '../../common';
 
 import SceneBackground from './images/scene-cook.jpg'
@@ -455,7 +455,11 @@ const CookScene = () => {
   });
 
   return (
-    <ParallaxScreen ref={screenRef} $backgroundImage={SceneBackground}>
+    <ParallaxScreen
+      innerRef={screenRef}
+      backgroundImage={SceneBackground}
+      title="Cooks & Bakes"
+    >
       <Header1 ref={header1Ref} />
       <Header2 ref={header2Ref} />
       <Dishes ref={dishesRef}>

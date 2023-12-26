@@ -1,6 +1,7 @@
 import styled, { keyframes } from 'styled-components';
 
-import { PageTitle, ParallaxScreen, pageTransitionDuration } from '../../../../components/static';
+import ParallaxScreen from '../../../../components/ParallaxScreen';
+import { PageTitle, pageTransitionDuration } from '../../../../components/static';
 
 const revealAnimation = keyframes`
   0% {
@@ -99,7 +100,9 @@ const QuoteAuthor = styled.div`
 
 const TitleScene = () => {
   return (
-    <ParallaxScreen>
+    <ParallaxScreen
+      title=""
+    >
       <PageTitle>Culinary</PageTitle>
       <Quote>
         <QuoteText>
