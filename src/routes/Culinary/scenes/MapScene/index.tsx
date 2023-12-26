@@ -1,24 +1,8 @@
-import { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components';
-import { v4 as uuid } from 'uuid';
-import {
-  AdvancedMarker,
-  APIProvider,
-  Map,
-  useMapsLibrary,
-} from '@vis.gl/react-google-maps';
+import { APIProvider } from '@vis.gl/react-google-maps';
 
 import { Screen } from '../../../../components/static';
-import cuisineMarkerStyleMap, { MarkerStyle } from './data/map-icon-data';
-import rawPlaces from './data/map-data.json';
-
-interface Place {
-  name: string;
-  cuisine: string;
-  cost: number;
-  position: google.maps.LatLngLiteral;
-}
+import PlaceMap from './components/PlaceMap';
 
 const FlexWrapper = styled.div`
   display: flex;
@@ -48,79 +32,16 @@ const Header = styled.h3`
   text-transform: uppercase;
 `;
 
-const MapMarker = styled.div<{ $backgroundColor: string }>`
-  border-radius: 50%;
-  padding: 0.3rem;
-  background: ${(props) => { return props.$backgroundColor; }};
-  color: #ffffff;
-`;
-
-const places: Place[] = (rawPlaces as unknown) as Place[];
-// Points to L'Antica Pizzeria de Michele in Napoli, roughly in the middle of the map
-const MAP_CENTER = { lat: 40.8497563, lng: 14.2633002 };
-
-const InteractiveMap = () => {
-  const coreLibrary = useMapsLibrary('core');
-  const [placeElements, setPlaceElements] = useState<React.ReactNode[]>([]);
-
-  useEffect((): void => {
-    if (!coreLibrary) {
-      return;
-    }
-
-    setPlaceElements(places.map((place: Place): React.ReactNode => {
-      const markerStyle: MarkerStyle = cuisineMarkerStyleMap[place.cuisine];
-
-      return (
-        <AdvancedMarker
-          key={uuid()}
-          position={place.position}
-          title={place.name}
-        >
-          <MapMarker $backgroundColor={markerStyle.backgroundColor}>
-            <FontAwesomeIcon icon={markerStyle.icon} fixedWidth />
-          </MapMarker>
-        </AdvancedMarker>
-      );
-    }));
-
-    new google.maps.Marker
-  }, [coreLibrary]);
-
-  return (
-    <Map
-      mapId={import.meta.env.VITE_GOOGLE_MAPS_MAP_ID as string}
-      center={MAP_CENTER}
-      disableDefaultUI={true}
-      keyboardShortcuts={false}
-      restriction={{
-        latLngBounds: {
-          north: 85,
-          south: -85,
-          west: -180,
-          east: 180,
-        },
-        strictBounds: true,
-      }}
-      zoom={2.5}
-      zoomControl={true}
-    >
-      {placeElements}
-    </Map>
-  );
-};
-
 const MapScene = () => {
   return (
     <Screen>
       <FlexWrapper>
         <ContentPanel>
           <Header>Where can I try them?</Header>
-
         </ContentPanel>
         <MapPanel>
           <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string}>
-            <InteractiveMap />
+            <PlaceMap />
           </APIProvider>
         </MapPanel>
       </FlexWrapper>
