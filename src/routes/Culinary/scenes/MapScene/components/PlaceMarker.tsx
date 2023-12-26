@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { faMapLocationDot } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
@@ -16,8 +17,49 @@ const MarkerBackground = styled.div<{ $backgroundColor: string }>`
 `;
 
 const InfoDetails = styled.div`
+  padding: 0.2rem;
   color: #202020;
+  font-family: Lato, sans-serif;
 `;
+
+const PlaceName = styled.h4`
+  margin: 0 0 0.1rem;
+  font-size: 1rem;
+  font-weight: 600;
+`;
+
+const InfoCuisine = styled.span`
+  margin-right: 0.25rem;
+
+  &::after {
+    position: relative;
+    top: -0.1rem;
+    content: "•";
+    padding-left: 0.3rem;
+    font-size: 0.5rem;
+  }
+`;
+
+const InfoPrice = styled.span`
+  color: #303030;
+`;
+
+const InfoLink = styled.a`
+  display: inline-block;
+  margin: 1.5rem 0 0;
+  border: solid 1px #5080c0;
+  padding: 0.3rem 0.5rem;
+  color: #5080b0;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &:hover {
+    background: #5080c0;
+    color: #ffffff;    
+  }
+`;
+
 
 const PlaceMarker = ({ place }: { place: Place }) => {
   const { activePlaceMarkerId, setActivePlaceMarkerId } = useContext(PlaceMapContext);
@@ -26,6 +68,8 @@ const PlaceMarker = ({ place }: { place: Place }) => {
   const [markerRef, markerElement] = useAdvancedMarkerRef();
 
   const markerStyle: MarkerStyle = cuisineMarkerStyleMap[place.cuisine];
+  const googleMapsUrl = `https://www.google.com/maps/search/${place.name}/` 
+    + `@${place.position.lat},${place.position.lng},15z`;
 
   const handleClick = (shouldOpenWindow: boolean): void => {
     setIsInfoWindowOpen(shouldOpenWindow);
@@ -55,13 +99,15 @@ const PlaceMarker = ({ place }: { place: Place }) => {
       {isInfoWindowOpen && (
         <InfoWindow
           anchor={markerElement}
-          maxWidth={150}
+          maxWidth={250}
           onCloseClick={(): void => { handleClick(false); }}
         >
           <InfoDetails>
-            Cuisine: {place.cuisine}
+            <PlaceName>{place.name}</PlaceName>
+            <InfoCuisine>{place.cuisine}</InfoCuisine>
+            <InfoPrice>{'$'.repeat(place.price)}</InfoPrice>
             <br />
-            Cost: {place.price}
+            <InfoLink href={googleMapsUrl} rel="external" target="_blank">View in Google Maps</InfoLink>
           </InfoDetails>
         </InfoWindow>
       )}
