@@ -4,21 +4,21 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useRef } from 'react';
 import styled from 'styled-components';
 
-import { getRandomElements, randomize } from '../../../utils/ArrayUtils';
-import { ParallaxScreen } from '../../../components/static';
-import { Continents, Dish } from '../common';
+import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
+import { ParallaxScreen } from '../../../../components/static';
+import { Continents, Dish } from '../../common';
 
-import ScreenBackground from '../images/screen-finedining.jpg'
-import Dish1Background from '../images/finedining-dish-1.png';
-import Dish2Background from '../images/finedining-dish-2.png';
-import Dish3Background from '../images/finedining-dish-3.png';
-import Dish4Background from '../images/finedining-dish-4.png';
-import Dish5Background from '../images/finedining-dish-5.png';
-import Dish6Background from '../images/finedining-dish-6.png';
-import Dish7Background from '../images/finedining-dish-7.png';
-import Dish8Background from '../images/finedining-dish-8.png';
-import Dish9Background from '../images/finedining-dish-9.png';
-import Dish10Background from '../images/finedining-dish-10.png';
+import SceneBackground from './images/scene-finedining.jpg'
+import Dish1Background from './images/finedining-dish-1.png';
+import Dish2Background from './images/finedining-dish-2.png';
+import Dish3Background from './images/finedining-dish-3.png';
+import Dish4Background from './images/finedining-dish-4.png';
+import Dish5Background from './images/finedining-dish-5.png';
+import Dish6Background from './images/finedining-dish-6.png';
+import Dish7Background from './images/finedining-dish-7.png';
+import Dish8Background from './images/finedining-dish-8.png';
+import Dish9Background from './images/finedining-dish-9.png';
+import Dish10Background from './images/finedining-dish-10.png';
 
 const Header = styled.h3`
   position: absolute;
@@ -146,7 +146,7 @@ const dishData: Record<string, Dish[]> = {
   ],
 };
 
-const FineDiningScreen = () => {
+const FineDiningScene = () => {
   // Screen refs and nodes
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const exploreTextRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
@@ -255,7 +255,7 @@ const FineDiningScreen = () => {
   });
 
   return (
-    <ParallaxScreen ref={screenRef} $backgroundImage={ScreenBackground}>
+    <ParallaxScreen ref={screenRef} $backgroundImage={SceneBackground}>
       <Header ref={exploreTextRef}>
         <span>Exploring</span>
         <span>the</span>
@@ -269,4 +269,4 @@ const FineDiningScreen = () => {
   );
 };
 
-export default FineDiningScreen;
+export default FineDiningScene;

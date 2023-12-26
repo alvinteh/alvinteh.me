@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 
-import { PageTitle, ParallaxScreen, pageTransitionDuration } from '../../../components/static';
+import { PageTitle, ParallaxScreen, pageTransitionDuration } from '../../../../components/static';
 
 const revealAnimation = keyframes`
   0% {
@@ -97,7 +97,7 @@ const QuoteAuthor = styled.div`
   ${changeTextColorAnimation} 1200ms ease-in-out ${pageTransitionDuration + 2500}ms 1 backwards;
 `;
 
-const TitleScreen = () => {
+const TitleScene = () => {
   return (
     <ParallaxScreen>
       <PageTitle>Culinary</PageTitle>
@@ -118,4 +118,4 @@ const TitleScreen = () => {
   );
 };
 
-export default TitleScreen;
+export default TitleScene;

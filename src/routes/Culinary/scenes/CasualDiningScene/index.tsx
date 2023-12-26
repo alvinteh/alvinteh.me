@@ -4,32 +4,32 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useRef } from 'react';
 import styled from 'styled-components';
 
-import { getRandomElements, randomize } from '../../../utils/ArrayUtils';
-import { Overlay, ParallaxScreen } from '../../../components/static';
-import { Continents, Dish } from '../common';
+import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
+import { Overlay, ParallaxScreen } from '../../../../components/static';
+import { Continents, Dish } from '../../common';
 
-import ScreenBackground from '../images/screen-casualdining.jpg'
-import Dish1Background from '../images/casualdining-dish-1.jpg';
-import Dish2Background from '../images/casualdining-dish-2.jpg';
-import Dish3Background from '../images/casualdining-dish-3.jpg';
-import Dish4Background from '../images/casualdining-dish-4.jpg';
-import Dish5Background from '../images/casualdining-dish-5.jpg';
-import Dish6Background from '../images/casualdining-dish-6.jpg';
-import Dish7Background from '../images/casualdining-dish-7.jpg';
-import Dish8Background from '../images/casualdining-dish-8.jpg';
-import Dish9Background from '../images/casualdining-dish-9.jpg';
-import Dish10Background from '../images/casualdining-dish-10.jpg';
-import Dish11Background from '../images/casualdining-dish-11.jpg';
-import Dish12Background from '../images/casualdining-dish-12.jpg';
-import Dish13Background from '../images/casualdining-dish-13.jpg';
-import Dish14Background from '../images/casualdining-dish-14.jpg';
-import Dish15Background from '../images/casualdining-dish-15.jpg';
-import Dish16Background from '../images/casualdining-dish-16.jpg';
-import Dish17Background from '../images/casualdining-dish-17.jpg';
-import Dish18Background from '../images/casualdining-dish-18.jpg';
-import Dish19Background from '../images/casualdining-dish-19.jpg';
-import Dish20Background from '../images/casualdining-dish-20.jpg';
-import Dish21Background from '../images/casualdining-dish-21.jpg';
+import SceneBackground from './images/screen-casualdining.jpg'
+import Dish1Background from './images/casualdining-dish-1.jpg';
+import Dish2Background from './images/casualdining-dish-2.jpg';
+import Dish3Background from './images/casualdining-dish-3.jpg';
+import Dish4Background from './images/casualdining-dish-4.jpg';
+import Dish5Background from './images/casualdining-dish-5.jpg';
+import Dish6Background from './images/casualdining-dish-6.jpg';
+import Dish7Background from './images/casualdining-dish-7.jpg';
+import Dish8Background from './images/casualdining-dish-8.jpg';
+import Dish9Background from './images/casualdining-dish-9.jpg';
+import Dish10Background from './images/casualdining-dish-10.jpg';
+import Dish11Background from './images/casualdining-dish-11.jpg';
+import Dish12Background from './images/casualdining-dish-12.jpg';
+import Dish13Background from './images/casualdining-dish-13.jpg';
+import Dish14Background from './images/casualdining-dish-14.jpg';
+import Dish15Background from './images/casualdining-dish-15.jpg';
+import Dish16Background from './images/casualdining-dish-16.jpg';
+import Dish17Background from './images/casualdining-dish-17.jpg';
+import Dish18Background from './images/casualdining-dish-18.jpg';
+import Dish19Background from './images/casualdining-dish-19.jpg';
+import Dish20Background from './images/casualdining-dish-20.jpg';
+import Dish21Background from './images/casualdining-dish-21.jpg';
 
 const Header = styled.h3`
   position: relative;
@@ -272,7 +272,7 @@ const dishData: Record<string, Dish[]> = {
   ]
 };
 
-const CasualDiningScreen = () => {
+const CasualDiningScene = () => {
   // Screen refs and nodes
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const headerS1Ref = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
@@ -395,7 +395,7 @@ const CasualDiningScreen = () => {
   });
 
   return (
-    <ParallaxScreen ref={screenRef} $backgroundImage={ScreenBackground}>
+    <ParallaxScreen ref={screenRef} $backgroundImage={SceneBackground}>
       <Header>
         <HeaderS1 ref={headerS1Ref}>Casual</HeaderS1>
         <HeaderS2 ref={headerS2Ref}>is sometimes</HeaderS2>
@@ -411,4 +411,4 @@ const CasualDiningScreen = () => {
   );
 };
 
-export default CasualDiningScreen;
+export default CasualDiningScene;

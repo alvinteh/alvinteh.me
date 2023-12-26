@@ -2,11 +2,16 @@ import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
-import { APIProvider, Map, AdvancedMarker, useMapsLibrary } from '@vis.gl/react-google-maps';
+import {
+  AdvancedMarker,
+  APIProvider,
+  Map,
+  useMapsLibrary,
+} from '@vis.gl/react-google-maps';
 
-import { Screen } from '../../../components/static';
-import cuisineMarkerStyleMap, { MarkerStyle } from './map-icon-data';
-import rawPlaces from './map-data.json';
+import { Screen } from '../../../../components/static';
+import cuisineMarkerStyleMap, { MarkerStyle } from './data/map-icon-data';
+import rawPlaces from './data/map-data.json';
 
 interface Place {
   name: string;
@@ -105,7 +110,7 @@ const InteractiveMap = () => {
   );
 };
 
-const MapScreen = () => {
+const MapScene = () => {
   return (
     <Screen>
       <FlexWrapper>
@@ -123,4 +128,4 @@ const MapScreen = () => {
   );
 };
 
-export default MapScreen;
+export default MapScene;

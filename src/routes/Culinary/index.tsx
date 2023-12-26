@@ -2,24 +2,24 @@ import { useRef } from 'react';
 
 import { ParallaxPageWrapper } from '../../components/static';
 import ScrollPrompt from '../../components/ScrollPrompt';
-import CasualDiningScreen from './screens/CasualDiningScreen';
-import CookScreen from './screens/CookScreen';
-import DrinksScreen from './screens/DrinksScreen';
-import FineDiningScreen from './screens/FineDiningScreen';
-import MapScreen from './screens/MapScreen';
-import TitleScreen from './screens/TitleScreen';
+import CasualDiningScene from './scenes/CasualDiningScene';
+import CookScene from './scenes/CookScene';
+import DrinksScene from './scenes/DrinksScene';
+import FineDiningScene from './scenes/FineDiningScene';
+import MapScene from './scenes/MapScene';
+import TitleScene from './scenes/TitleScene';
 
 const Culinary = () => {
   const pageRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 
   return (
     <ParallaxPageWrapper ref={pageRef}>
-      <TitleScreen />
-      <FineDiningScreen />
-      <CasualDiningScreen />
-      <DrinksScreen />
-      <MapScreen />
-      <CookScreen />
+      <TitleScene />
+      <FineDiningScene />
+      <CasualDiningScene />
+      <DrinksScene />
+      <MapScene />
+      <CookScene />
       <ScrollPrompt pageRef={pageRef} />
     </ParallaxPageWrapper>
   );
