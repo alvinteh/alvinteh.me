@@ -55,7 +55,12 @@ const GlobalStyle = createGlobalStyle`
   }
 
   a {
+    color: #5080c0;
     text-decoration: none;
+
+    &:visited {
+      color: #5080c0;
+    }
   }
 `;
 
