@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import { faMapLocationDot } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
