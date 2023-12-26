@@ -1,15 +1,15 @@
 import { createContext } from 'react';
 
 interface PlaceMapContext {
-  activePlaceMarkerId: string,
-  setActivePlaceMarkerId: (placeMarkerId: string) => void,
+  activePlaceId: string,
+  setActivePlaceId: (placeId: string) => void,
 }
 
 const PlaceMapContext = createContext<PlaceMapContext>({
-  activePlaceMarkerId: '',
+  activePlaceId: '',
   // We can ignore the linting error as this will be set later
   // eslint-disable-next-line  @typescript-eslint/no-empty-function
-  setActivePlaceMarkerId: (): void => {},
+  setActivePlaceId: (): void => {},
 });
 
 export type { PlaceMapContext };

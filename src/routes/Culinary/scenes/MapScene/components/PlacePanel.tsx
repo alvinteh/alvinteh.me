@@ -1,12 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useContext } from 'react';
 import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
 
-import { Place } from '../types';
 import cuisineMarkerStyleMap, { MarkerStyle } from '../data/map-icon-data';
+import { Place } from '../types';
+import PlaceMapContext from './PlaceMapContext';
 
 const Places = styled.ul`
-  margin: 2rem 0 0;
+  margin: 4rem 0 0;
   border-top: solid 1px #ffffff;
   border-bottom: solid 1px #ffffff;
   padding: 1rem 0;
@@ -60,11 +62,19 @@ const PlacePrice = styled.span`
 `;
 
 const PlacePanel = ({ places }: { places: Place[] }) => {
+  const { setActivePlaceId } = useContext(PlaceMapContext);
+
+  const handleClick = (placeId: string): void => {
+    setActivePlaceId(placeId);
+  }
+
   const placeElements: React.ReactNode[] = places.map((place: Place): React.ReactNode => {
     const markerStyle: MarkerStyle = cuisineMarkerStyleMap[place.cuisine];
 
     return (
-      <Place key={uuid()}>
+      // We can ignore linting errors as we populate place IDs before use
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      <Place key={uuid()} onClick={():void => { handleClick(place.id!); }}>
         <PlaceIcon><FontAwesomeIcon icon={markerStyle.icon} fixedWidth /></PlaceIcon>
         <PlaceName>{place.name} <PlaceCuisine>{place.cuisine}</PlaceCuisine></PlaceName> 
         <PlacePrice>{'$'.repeat(place.price)}</PlacePrice>

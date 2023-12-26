@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components';
-import { v4 as uuid } from 'uuid';
 import { AdvancedMarker, InfoWindow, useAdvancedMarkerRef } from '@vis.gl/react-google-maps';
 
 import { Place } from '../types';
@@ -60,8 +59,7 @@ const InfoLink = styled.a`
 `;
 
 const PlaceMarker = ({ place }: { place: Place }) => {
-  const { activePlaceMarkerId, setActivePlaceMarkerId } = useContext(PlaceMapContext);
-  const [placeMarkerId] = useState(uuid());
+  const { activePlaceId, setActivePlaceId } = useContext(PlaceMapContext);
   const [isInfoWindowOpen, setIsInfoWindowOpen] = useState(false);
   const [markerRef, markerElement] = useAdvancedMarkerRef();
 
@@ -73,19 +71,24 @@ const PlaceMarker = ({ place }: { place: Place }) => {
     setIsInfoWindowOpen(shouldOpenWindow);
 
     if (shouldOpenWindow) {
-      setActivePlaceMarkerId(placeMarkerId);
+      // We can ignore linting errors as we populate place IDs before use
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      setActivePlaceId(place.id!);
     }
   }
 
   useEffect((): void => {
-    if (activePlaceMarkerId !== placeMarkerId) {
+    if (activePlaceId !== place.id) {
       setIsInfoWindowOpen(false);
     }
-  }, [activePlaceMarkerId, placeMarkerId]);
+    else if (activePlaceId === place.id) {
+      setIsInfoWindowOpen(true);
+    }
+  }, [activePlaceId, place.id]);
 
   return (
     <AdvancedMarker
-      key={placeMarkerId}
+      key={place.id}
       ref={markerRef}
       position={place.position}
       title={place.name}
