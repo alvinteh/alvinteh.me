@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useContext } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { v4 as uuid } from 'uuid';
 
 import cuisineMarkerStyleMap, { MarkerStyle } from '../data/map-icon-data';
 import { Place } from '../types';
@@ -17,10 +16,11 @@ const Places = styled.ul`
   overflow: scroll;
 `;
 
-const Place = styled.li`
+const Place = styled.li<{ $isActive: boolean }>`
   display: flex;
   margin: 0;
   padding: 0.5rem 0.3rem;
+  background: ${(props) => { return props.$isActive ? '#404040' : 'none'; }};
   cursor: pointer;
   line-height: 1.3rem;
   overflow: hidden;
@@ -61,25 +61,45 @@ const PlacePrice = styled.span`
   text-align: right;
 `;
 
+const PlaceItem = ({ place }: { place: Place }) => {
+  const { activePlaceId, setActivePlaceId } = useContext(PlaceMapContext);
+  const [isActive, setIsActive] = useState(false);
+  const placeRef = useRef<HTMLLIElement>() as React.MutableRefObject<HTMLLIElement>;
+
+  const handleClick = (): void => {
+    // We can ignore linting errors as we populate place IDs before use
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion  
+    setActivePlaceId(place.id!);
+  };
+
+  useEffect((): void => {
+    if (activePlaceId === place.id) {
+      placeRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'start',
+      });
+      setIsActive(true);
+    }
+    else {
+      setIsActive(false);
+    }
+  }, [activePlaceId, place.id]);
+
+  const markerStyle: MarkerStyle = cuisineMarkerStyleMap[place.cuisine];
+
+  return (
+    <Place ref={placeRef} $isActive={isActive} onClick={():void => { handleClick(); }}>
+      <PlaceIcon><FontAwesomeIcon icon={markerStyle.icon} fixedWidth /></PlaceIcon>
+      <PlaceName>{place.name} <PlaceCuisine>{place.cuisine}</PlaceCuisine></PlaceName> 
+      <PlacePrice>{'$'.repeat(place.price)}</PlacePrice>
+    </Place>
+  )
+};
+
 const PlacePanel = ({ places }: { places: Place[] }) => {
-  const { setActivePlaceId } = useContext(PlaceMapContext);
-
-  const handleClick = (placeId: string): void => {
-    setActivePlaceId(placeId);
-  }
-
   const placeElements: React.ReactNode[] = places.map((place: Place): React.ReactNode => {
-    const markerStyle: MarkerStyle = cuisineMarkerStyleMap[place.cuisine];
-
-    return (
-      // We can ignore linting errors as we populate place IDs before use
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      <Place key={uuid()} onClick={():void => { handleClick(place.id!); }}>
-        <PlaceIcon><FontAwesomeIcon icon={markerStyle.icon} fixedWidth /></PlaceIcon>
-        <PlaceName>{place.name} <PlaceCuisine>{place.cuisine}</PlaceCuisine></PlaceName> 
-        <PlacePrice>{'$'.repeat(place.price)}</PlacePrice>
-      </Place>
-    );
+    return <PlaceItem key={place.id} place={place} />;
   });
 
   return (
