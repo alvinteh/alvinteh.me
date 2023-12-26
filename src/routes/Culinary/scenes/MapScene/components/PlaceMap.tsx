@@ -24,8 +24,6 @@ const PlaceMap = () => {
     setPlaceMarkerElements(places.map((place: Place): React.ReactNode => {
       return <PlaceMarker key={uuid()} place={place} />;
     }));
-
-    new google.maps.Marker
   }, [coreLibrary]);
 
   return (
