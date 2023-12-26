@@ -528,7 +528,7 @@ const CookScene = () => {
             <FaqContent>
               I lamented the lack of quality food in my neighborhood, and since dining out all the time would be too 
               costly, decided to put on an apron and try my hand at cooking. I watched a number of YouTube channels
-              (<a href="https://www.youtube.com/@JoshuaWeissman">Joshua Weissman</a> is one of my influences) and 
+              (<a href="https://www.joshuaweissman.com/" rel="external" target="_blank">Joshua Weissman</a> is one of my influences) and 
               slowly but surely worked my way into being a better home cook/baker. (Trust me, there were a lot of 
               failures I did not post here!)
             </FaqContent>
