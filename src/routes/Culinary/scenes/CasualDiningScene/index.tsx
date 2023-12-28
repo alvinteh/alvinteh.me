@@ -410,7 +410,7 @@ const CasualDiningScene = () => {
         {dishElements}
       </Dishes>
       <Overlay ref={endOverlayRef}>
-        <EndHeader ref={endHeaderRef}>it's not just food</EndHeader>
+        <EndHeader ref={endHeaderRef}>It&apos;s not just food</EndHeader>
       </Overlay>
     </ParallaxScreen>
   );
