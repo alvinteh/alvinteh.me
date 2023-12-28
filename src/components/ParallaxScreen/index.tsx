@@ -3,8 +3,6 @@ import ScreenBase from '../ScreenBase';
 
 const ParallaxScreenWrapper = styled.div<{ $backgroundImage?: string }>`
   position: relative;
-  box-sizing: border-box;
-  padding: 50px 40px 0;
   height: 100vh;
   background-image: ${(props) => { return props.$backgroundImage ? `url(${props.$backgroundImage})` : 'none'; }};
   background-position: center;

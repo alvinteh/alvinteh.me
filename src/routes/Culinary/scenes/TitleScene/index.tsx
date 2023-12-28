@@ -1,7 +1,7 @@
 import styled, { keyframes } from 'styled-components';
 
 import ParallaxScreen from '../../../../components/ParallaxScreen';
-import { PageTitle, pageTransitionDuration } from '../../../../components/static';
+import { PageTitle, PageWrapper, pageTransitionDuration } from '../../../../components/static';
 
 const revealAnimation = keyframes`
   0% {
@@ -103,20 +103,22 @@ const TitleScene = () => {
     <ParallaxScreen
       title=""
     >
-      <PageTitle>Culinary</PageTitle>
-      <Quote>
-        <QuoteText>
-          <span>Food, </span>
-          <span>for </span> 
-          <span>me, </span> 
-          <span>has </span>
-          <span>always </span>
-          <span>been </span>
-          <span>an </span>
-          <span>adventure.</span>
-        </QuoteText>
-        <QuoteAuthor>Anthony Bourdain</QuoteAuthor>
-      </Quote>
+      <PageWrapper>
+        <PageTitle>Culinary</PageTitle>
+        <Quote>
+          <QuoteText>
+            <span>Food, </span>
+            <span>for </span> 
+            <span>me, </span> 
+            <span>has </span>
+            <span>always </span>
+            <span>been </span>
+            <span>an </span>
+            <span>adventure.</span>
+          </QuoteText>
+          <QuoteAuthor>Anthony Bourdain</QuoteAuthor>
+        </Quote>
+      </PageWrapper>
     </ParallaxScreen>
   );
 };

@@ -196,11 +196,12 @@ const ExtraDishName = styled.div`
   font-weight: 600;
   line-height: 1.2rem;
   text-align: center;
+  white-space: nowrap;
 `;
 
 const FaqWrapper = styled.div`
   position: relative;
-  top: 15vh;
+  top: 18vh;
   margin: 0 auto;
   box-sizing: border-box;
   aspect-ratio: 1460/1760;

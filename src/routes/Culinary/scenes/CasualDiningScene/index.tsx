@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
-import { Overlay } from '../../../../components/static';
+import { Overlay, PageWrapper } from '../../../../components/static';
 import { Continents, Dish } from '../../common';
 
 import SceneBackground from './images/screen-casualdining.jpg'
@@ -71,7 +71,7 @@ const HeaderS3 = styled.span`
 const Dishes = styled.ul`
   display: flex;
   position: relative;
-  margin: calc(-50px - 9vw) 0 0;
+  margin: calc(-50px - 12vw) 0 0;
   padding: 0;
   flex-wrap: wrap;
   width: calc(72vw + 80px);
@@ -82,7 +82,7 @@ const Dishes = styled.ul`
 const Dish = styled.li<{ $backgroundImage: string, $aspectRatio: number, $jitterY: number, $rotation: number }>`
   position: relative;
   top: ${(props) => { return props.$jitterY; }}rem;
-  margin: -80px 0 0;
+  margin: -6vw 0 0;
   border: solid 10px #ffffff;
   border-bottom-width: 50px;
   padding: 0;
@@ -401,14 +401,16 @@ const CasualDiningScene = () => {
       backgroundImage={SceneBackground}
       title="Casual Dining & Street Food Experiences"
     >
-      <Header>
-        <HeaderS1 ref={headerS1Ref}>Casual</HeaderS1>
-        <HeaderS2 ref={headerS2Ref}>is sometimes</HeaderS2>
-        <HeaderS3 ref={headerS3Ref}>where the fun&apos;s at</HeaderS3>
-      </Header>
-      <Dishes>
-        {dishElements}
-      </Dishes>
+      <PageWrapper>
+        <Header>
+          <HeaderS1 ref={headerS1Ref}>Casual</HeaderS1>
+          <HeaderS2 ref={headerS2Ref}>is sometimes</HeaderS2>
+          <HeaderS3 ref={headerS3Ref}>where the fun&apos;s at</HeaderS3>
+        </Header>
+        <Dishes>
+          {dishElements}
+        </Dishes>
+      </PageWrapper>
       <Overlay ref={endOverlayRef}>
         <EndHeader ref={endHeaderRef}>It&apos;s not just food</EndHeader>
       </Overlay>
