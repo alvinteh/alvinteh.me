@@ -33,7 +33,7 @@ const Place = styled.li<{ $isActive: boolean }>`
 const PlaceIcon = styled.span`
   display: block;
   width: 1.2rem;
-  font-size: 1rem;
+  font-size: 0.9rem;
   text-align: center;
 `;
 
@@ -42,22 +42,21 @@ const PlaceName = styled.span`
   flex-grow: 1;
   padding-left: 0.5rem;
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
 
 const PlaceCuisine = styled.span`
-  display: span;
   font-family: Lato, sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
 `;
 
 const PlacePrice = styled.span`
   width: 3rem;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   text-align: right;
 `;
 
