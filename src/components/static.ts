@@ -1,5 +1,7 @@
 import styled, { keyframes } from 'styled-components';
 
+import { screenSizes } from '../utils/StyleUtils';
+
 const cubicBezier = 'cubic-bezier(0.525, 0.06, 0.11, 0.995)';
 const pageTransitionDuration = 400;
 
@@ -47,13 +49,17 @@ const ParallaxPageWrapper = styled.div`
 const PageTitle = styled.h1`
   margin: 0 0 10px;
   color: #ffffff;
-  font-size: 5rem;
+  font-size: 3rem;
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 600;
   opacity: 0.85;
   overflow: hidden;
   text-transform: uppercase;
   animation: ${wipeInAnimation} 1600ms ${cubicBezier} ${pageTransitionDuration}ms 1 backwards;
+
+  @media ${screenSizes.desktopM} {
+    font-size: 5rem;
+  }
 `;
 
 const Overlay = styled.div`

@@ -9,6 +9,7 @@ import {
   pageTransitionDuration
 } from '../../../../components/static';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
+import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
 
 import HeroMask from './images/hero-mask.png';
 
@@ -40,15 +41,23 @@ const HeroTitle = styled.h1`
   left: 0;
   box-sizing: border-box;
   margin: 0;
-  padding: 15% 0 0;
+  padding: 27.5vh 0 0;
   width:  84vw;
   height: 100vh;
   color: rgba(255, 255, 255, 0.5);
-  font-size: 16rem;
+  font-size: 10rem;
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 600;
   text-align: center;
   text-transform: uppercase;
+
+  @media ${screenSizes.desktopM} {
+    font-size: 16rem;
+  }
+
+  @media ${aspectRatios.a21x9} {
+    padding-top: 18.5vh;
+  }
 
   &::after {
     display: block;
@@ -82,14 +91,19 @@ const Writeup = styled.div`
   left: 10%;
   right: 10%;
   margin: 0 auto;
-  width: 75rem;
+  width: 80%;
+  max-width: 75rem;
   font-family: 'Crimson Text', serif;
-  font-size: 2.4rem;
+  font-size: 1.8rem;
   text-align: center;
   z-index: 99;
   mix-blend-mode: difference;
   animation: ${fadeInAnimation} 1600ms ease-in-out ${pageTransitionDuration + 2000}ms 1 backwards,
     ${moveUpAnimation} 1600ms ease-in-out ${pageTransitionDuration + 2000}ms 1 backwards;
+  
+  @media ${screenSizes.desktopM} {
+    font-size: 2.4rem;
+  }
 `;
 
 const PromptText = styled.span`
@@ -111,6 +125,14 @@ const Activities = styled.ul`
   z-index: 99;
   animation: ${fadeInAnimation} 1200ms ease-in-out ${pageTransitionDuration + 3600}ms 1 backwards,
     ${moveUpAnimation} 1200ms ease-in-out ${pageTransitionDuration + 3600}ms 1 backwards;
+
+  @media ${screenSizes.desktopS} {
+    bottom: 15%;
+  }
+
+  @media ${screenSizes.desktopM} {
+    bottom: 20%;
+  }
 `;
 
 const Activity = styled.li`
@@ -119,8 +141,14 @@ const Activity = styled.li`
   flex: 1;
   text-align: center;
 
-  &:nth-child(2) {
-    margin-right: 30%;
+  @media ${screenSizes.tablet} {
+    margin-right: 1rem;
+  }
+
+  @media ${screenSizes.desktopS} {
+    &:nth-child(2) {
+      margin-right: 30%;
+    }
   }
 `;
 
