@@ -2,6 +2,7 @@ import styled, { keyframes } from 'styled-components';
 
 import ParallaxScreen from '../../../../components/ParallaxScreen';
 import { PageTitle, PageWrapper, pageTransitionDuration } from '../../../../components/static';
+import { screenSizes } from '../../../../utils/StyleUtils';
 
 const revealAnimation = keyframes`
   0% {
@@ -31,10 +32,19 @@ const changeTextColorAnimation = keyframes`
 
 const Quote = styled.blockquote`
   position: relative;
-  top: 25vh;
+  top: 20vh;
   margin: 0 5% 0 auto;
   max-width: 60rem;
   text-align: right;
+
+  @media ${screenSizes.desktopM} {
+    top: 25vh;
+  }
+
+  @media ${screenSizes.desktopL} {
+    top: 30vh;
+    max-width: 70rem;
+  }
 `;
 
 const QuoteText = styled.div`
@@ -43,6 +53,10 @@ const QuoteText = styled.div`
   font-size: 5.5rem;
   font-weight: 600;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+
+  @media ${screenSizes.desktopL} {
+    font-size: 6.5rem;
+  }
 
   &::before {
     content: open-quote;
