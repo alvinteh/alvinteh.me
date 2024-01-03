@@ -7,6 +7,7 @@ import { v4 as uuid } from 'uuid';
 import { APIProvider } from '@vis.gl/react-google-maps';
 
 import ParallaxScreen from '../../../../components/ParallaxScreen';
+import { screenSizes } from '../../../../utils/StyleUtils';
 import PlaceMap from './components/PlaceMap';
 import PlaceMapContext from './components/PlaceMapContext';
 import PlacePanel from './components/PlacePanel';
@@ -84,24 +85,31 @@ const FlexWrapper = styled.div`
 const ContentPanel = styled.div`
   box-sizing: border-box;
   padding: 50px 20px;
-  width: 25%;
-  max-width: 30rem;
+  width: clamp(18rem, 25%, 30rem);
   min-height: 100%;
   background: #202020;
 `;
 
 const MapPanel = styled.div`
+  flex-grow: 1;
   width: 75%;
   min-height: 100%;
-  background: #ff0000;
 `;
 
 const MapSubscreenHeader = styled.h3`
   color: #ffffff;
   font-family: 'Barlow Condensed', serif;
-  font-size: 2.75rem;
+  font-size: 1.75rem;
   font-weight: 600;
   text-transform: uppercase;
+
+  @media ${screenSizes.desktopM} {
+    font-size: 2.5rem;
+  }
+
+  @media ${screenSizes.desktopL} {
+    font-size: 3rem;
+  }
 `;
 
 const places: Place[] = (rawPlaces as unknown) as Place[];
