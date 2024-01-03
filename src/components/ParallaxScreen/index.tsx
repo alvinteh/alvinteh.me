@@ -11,15 +11,20 @@ const ParallaxScreenWrapper = styled.div<{ $backgroundImage?: string }>`
   overflow: hidden;
 `;
 
-const ParallaxScreen = ({ innerRef, children, backgroundImage, title }: {
-  innerRef?: React.MutableRefObject<HTMLDivElement>
+const ParallaxScreen = ({ innerRef, className, children, backgroundImage, title }: {
+  innerRef?: React.MutableRefObject<HTMLDivElement>,
+  className?: string,
   children?: React.ReactNode,
   backgroundImage?: string, 
   title: string
 }) => {
   return (
     <ScreenBase title={title}>
-      <ParallaxScreenWrapper ref={innerRef} $backgroundImage={backgroundImage}>
+      <ParallaxScreenWrapper
+        ref={innerRef}
+        className={className ?? ''}
+        $backgroundImage={backgroundImage}
+        >
           {children}
       </ParallaxScreenWrapper>
     </ScreenBase>

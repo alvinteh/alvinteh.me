@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import styled from 'styled-components';
 
 import { randomize } from '../../../../utils/ArrayUtils';
+import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
 
 import SceneBackground from './images/scene-drinks.jpg'
@@ -22,6 +23,10 @@ interface Drink {
   drinkRef?: React.MutableRefObject<HTMLDivElement>;
   drinkInfoRef?: React.MutableRefObject<HTMLDivElement>;
 }
+
+const DrinksParallaxScreen = styled(ParallaxScreen)`
+  background-position: center bottom;
+`;
 
 const Header = styled.h3`
   position: absolute;
@@ -45,9 +50,20 @@ const Drinks = styled.ul`
 const Drink = styled.li`
   position: absolute;
   bottom: 3vh;
-  right: 5vw; 
+  right: 4vw; 
   width: 18vw;
   aspect-ratio: 0.778;
+
+  @media ${screenSizes.tablet} {
+    right: 2vw;
+    width: 30vw;
+  }
+
+  @media ${aspectRatios.a21x9} {
+    width: 14vw;
+    bottom: 1vh;
+    right: 2vw;
+  }
 `;
 
 const DrinkImage = styled.div<{ $backgroundImage: string }>`
@@ -153,7 +169,9 @@ const DrinksScene = () => {
       return (
         <Drink key={drink.bar}>
           <DrinkImage
-            ref={drink.drinkRef as React.MutableRefObject<HTMLLIElement>}
+            // We can ignore the linting errors as the references always exist
+            // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
+            ref={drink.drinkRef as React.MutableRefObject<HTMLDivElement>}
             $backgroundImage={drink.image}
           />
           <DrinkInfo ref={drink.drinkInfoRef}>
@@ -198,16 +216,16 @@ const DrinksScene = () => {
       const drinkBarElement = drink.drinkInfoRef!.current;
 
       timeline
-      .from(drinkElement, { transform: 'translate3d(30vw, 0, 0)', duration: 1, })
+      .from(drinkElement, { transform: 'translate3d(35vw, 0, 0)', duration: 1, })
       .from(drinkBarElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)', duration: 1, })
       .to(drinkElement, {})
-      .to(drinkElement, { transform: 'translate3d(30vw, 0, 0)', duration: 1, })
+      .to(drinkElement, { transform: 'translate3d(35vw, 0, 0)', duration: 1, })
       .to(drinkBarElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)', duration: 1, }, '<');
     }
   });
 
   return (
-    <ParallaxScreen
+    <DrinksParallaxScreen
       innerRef={screenRef}
       backgroundImage={SceneBackground}
       title="Cocktail Bar Experiences"
@@ -223,7 +241,7 @@ const DrinksScene = () => {
       <Drinks>
         {drinkElements}
       </Drinks>
-    </ParallaxScreen>
+    </DrinksParallaxScreen>
   );
 };
 
