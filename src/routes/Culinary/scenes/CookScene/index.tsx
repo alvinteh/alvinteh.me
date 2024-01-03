@@ -9,6 +9,7 @@ import { dishData, extraBakeDishData, extraCookDishData } from './data/dish-data
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
 import Accordion, { AccordionItem, AccordionItemContent, AccordionItemHeader } from '../../../../components/Accordion';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
+import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
 import { Dish } from '../../common';
 
 import SceneBackground from './images/scene-cook.jpg'
@@ -26,6 +27,11 @@ const Header1 = styled(Header1Svg)`
   left: 50%;
   margin-left: -15vw;
   width: 30vw;
+
+  @media ${aspectRatios.a21x9}, ${screenSizes.desktopXL} {
+    width: 20vw;
+    margin-left: -10vw;
+  }
 `;
 
 const Header2 = styled(Header2Svg)`
@@ -34,6 +40,11 @@ const Header2 = styled(Header2Svg)`
   left: 50%;
   margin-left: -30vw;
   width: 60vw;
+
+  @media ${aspectRatios.a21x9}, ${screenSizes.desktopXL} {
+    width: 40vw;
+    margin-left: -20vw;
+  }
 `;
 
 const Header3 = styled(Header3Svg)`
@@ -42,6 +53,11 @@ const Header3 = styled(Header3Svg)`
   left: 50%;
   margin-left: -15vw;
   width: 30vw;
+
+  @media ${aspectRatios.a21x9}, ${screenSizes.desktopXL} {
+    width: 20vw;
+    margin-left: -10vw;
+  }
 `;
 
 const Header4 = styled(Header4Svg)`
@@ -50,6 +66,11 @@ const Header4 = styled(Header4Svg)`
   left: 50%;
   margin-left: -17vw;
   width: 34vw;
+
+  @media ${aspectRatios.a21x9}, ${screenSizes.desktopXL} {
+    width: 22vw;
+    margin-left: -11vw;
+  }
 `;
 
 const Dishes = styled.ul`
@@ -58,10 +79,27 @@ const Dishes = styled.ul`
   right: 1.5vw;
   margin: 0;
   padding: 5vw 2vw 1vw;
-  width: 16vw;
-  height: 15vw;
+  width: clamp(160px, 16vw, 240px);
+  aspect-ratio: 15/16;
   background: url(${NoteBackground}) center/cover no-repeat;
   list-style: none;
+
+  @media ${screenSizes.tablet} {
+    padding-top: 6.5vw;
+  }
+
+  @media ${screenSizes.desktopS} {
+    width: 15vw;
+  }
+
+  @media ${screenSizes.desktopM} {
+    padding: 5vw 1vw 1vw;
+    width: clamp(160px, 16vw, 240px);
+  }
+
+  @media ${aspectRatios.a21x9} {
+    padding-top: 3vw;
+  }
 `;
 
 const Dish = styled.li`
@@ -93,10 +131,26 @@ const DishName = styled.div`
   position: relative;
   color: #202020;
   font-family: Caveat, sans-serif;
-  font-size: 1.3rem;
+  font-size: 1rem;
   font-weight: 600;
-  line-height: 1.4rem;
+  line-height: 1.1rem;
   transform: rotate(-7deg);
+  white-space: nowrap;
+
+  @media ${screenSizes.desktopS} {
+    font-size: 1.1rem;
+    line-height: 1.2rem;
+  }
+
+  @media ${screenSizes.desktopM} {
+    font-size: 1.3rem;
+    line-height: 1.4rem;
+  }
+
+  @media ${screenSizes.desktopL} {
+    font-size: 1.4rem;
+    line-height: 1.5rem;
+  }
 
   &::before {
     content: "- ";
@@ -119,21 +173,30 @@ const DishName = styled.div`
 const DishImage = styled.div<{ $backgroundImage: string }>`
   position: absolute;
   top: 50%;
-  left: -100%;
+  left: calc(100% + 1.5vw - 42vw - 31vh);
   margin-top: -34vh;
-  margin-left: -31vh;
   width: 62vh;
-  height: 62vh;
+  aspect-ratio: 1;
   background-image: url(${(props) => { return props.$backgroundImage; }});
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
+
+  @media ${screenSizes.tablet} {
+    left: calc(100% + 1.5vw - 50vw - 18vh);
+    width: 36vh;
+    margin-top: -18vh;
+  }
 `;
 
 const ExtraDishes = styled.ul`
   margin: 0;
   padding: 0;
   list-style: none;
+
+  @media ${screenSizes.desktopS} ${aspectRatios.a16x19} {
+    margin-left: 5vw;
+  }
 `;
 
 const ExtraDish = styled.li<{ $backgroundImage: string }>`
@@ -150,34 +213,65 @@ const ExtraDish = styled.li<{ $backgroundImage: string }>`
   background-size: cover;
   box-shadow: 3px 3px 3px #303030;
 
+  @media ${screenSizes.tablet} {
+    width: 20vw;
+    height: 20vw;
+  }
+
+  @media ${aspectRatios.a21x9} {
+    width: 12vw;
+    height: 12vw;
+  }
+
   &:nth-child(1) {
     top: 22vh;
     left: 12vw;
     transform: rotate(-8deg);
+
+    @media ${screenSizes.tablet} {
+      left: 8vw;
+    }
   }
 
   &:nth-child(2) {
     top: 11vh;
     left: 28vw;
     transform: rotate(-1deg);
+
+    @media ${screenSizes.tablet} {
+      top: 16vh;
+    }
   }
 
   &:nth-child(3) {
     top: 18vh;
     left: 44vw;
     transform: rotate(3.5deg);
+
+    @media ${screenSizes.tablet} {
+      top: 20vh;
+      left: 52vw;
+    }
   }
 
   &:nth-child(4) {
     top: 55vh;
     left: 18vw;
     transform: rotate(-11deg);
+
+    @media ${screenSizes.tablet} {
+      left: 9vw;
+    }
   }
 
   &:nth-child(5) {
     top: 50vh;
     left: 35vw;
     transform: rotate(-1deg);
+
+    @media ${screenSizes.tablet} {
+      left: 30vw;
+    }
   }
 
   &:nth-child(6) {
@@ -192,11 +286,28 @@ const ExtraDishName = styled.div`
   padding: 0.3rem 0 0.1rem;
   color: #303030;
   font-family: Caveat, sans-serif;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
   line-height: 1.2rem;
   text-align: center;
   white-space: nowrap;
+
+  @media ${screenSizes.tablet} {
+    margin-top: 20vw;
+  }
+
+  @media ${screenSizes.desktopM} {
+    font-size: 1.2rem;
+  }
+
+  @media ${screenSizes.desktopL} {
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+  }
+
+  @media ${aspectRatios.a21x9} {
+    margin-top: 12vw;
+  }
 `;
 
 const FaqWrapper = styled.div`
@@ -208,6 +319,20 @@ const FaqWrapper = styled.div`
   padding: 12% 8.5% 8% 5.5%;
   height: 85%;
   background: url(${FaqWrapperBackground}) top center/cover no-repeat;
+
+  @media ${screenSizes.tablet} {
+    top: 35vh;
+    padding: 17.5% 12.5% 10% 8.5%;
+    height: 65%;
+  }
+
+  @media ${aspectRatios.a21x9} {
+    padding: 6% 5% 5% 3%;
+  }
+
+  @media ${screenSizes.desktopXL} {
+    padding: 10% 7% 5% 4%;
+  }
 `;
 
 const Faq = styled(AccordionItem)`
@@ -218,6 +343,12 @@ const Faq = styled(AccordionItem)`
 // Note: we set the transforms on child elements to avoid awkward shifts in element position during transitions
 const FaqHeader = styled(AccordionItemHeader)`
   transform: rotate(-3.3deg);
+
+  @media ${screenSizes.desktopL} {
+    font-size: 1.6rem;
+    line-height: 1.8rem;
+    min-height: 1.8rem;
+  }
 `;
 
 // Note: we set the transform origin (and compensating translation) to avoid awkward shifts in element position
@@ -225,6 +356,12 @@ const FaqHeader = styled(AccordionItemHeader)`
 const FaqContent = styled(AccordionItemContent)`
   transform: translate3d(0, 1rem, 0) rotate(-3.3deg);
   transform-origin: 0 0;
+
+  @media ${screenSizes.desktopL} {
+    transform: translate3d(0, 2rem, 0) rotate(-3.3deg);
+    font-size: 1.6rem;
+    line-height: 1.8rem;
+  }
 `;
 
 const CookScene = () => {
@@ -298,6 +435,7 @@ const CookScene = () => {
 
   // Screen animation
   useGSAP((): void => {
+    const isPortrait = window.innerHeight > window.innerWidth;
     const letterAnimationCount: number = (header1Ref.current.children.length
       + header2Ref.current.children.length
       + header3Ref.current.children.length
@@ -371,7 +509,7 @@ const CookScene = () => {
       // We can ignore the linting errors as the references will always exist 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       timeline.to(dish.dishRef!.current, {
-        transform: 'translate3d(0, -90vh, 0)',
+        transform: 'translate3d(0, -100vh, 0)',
         ease: 'power1.out',
         duration: 1,
       });
@@ -403,7 +541,7 @@ const CookScene = () => {
       // We can ignore the linting errors as the references will always exist 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       timeline.from(extraDish.dishRef!.current, {
-        top: '100vh',
+        top: '105vh', // Leave additional allowance given the rotation
         left: 'calc(50% - 7vw - 10px)',
         ease: 'power1.out',
         duration: 1,
@@ -443,7 +581,7 @@ const CookScene = () => {
     });
     
     timeline.to(header4Ref.current, {
-      transform: 'translate3d(0, -40vh, 0)',
+      transform: `translate3d(0, -${isPortrait ? 20 : 40}vh, 0)`,
       ease: 'power1.out',
       duration: 4,
     });
