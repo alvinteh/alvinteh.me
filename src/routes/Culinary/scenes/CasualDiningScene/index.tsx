@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import styled from 'styled-components';
 
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
+import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
 import { Overlay, PageWrapper } from '../../../../components/static';
 import { Continents, Dish } from '../../common';
@@ -71,12 +72,20 @@ const HeaderS3 = styled.span`
 const Dishes = styled.ul`
   display: flex;
   position: relative;
-  margin: calc(-50px - 12vw) 0 0;
+  margin: calc(-50px - 12vw) auto 0;
   padding: 0;
   flex-wrap: wrap;
   width: calc(72vw + 80px);
   height: 54vw;
   list-style: none;
+
+  @media ${screenSizes.tablet} {
+    width: calc(54vw + 60px);
+  }
+
+  @media ${screenSizes.desktopL} {
+    margin-top: calc(-50px - 6vw);
+  }
 `;
 
 const Dish = styled.li<{ $backgroundImage: string, $aspectRatio: number, $jitterY: number, $rotation: number }>`
@@ -94,6 +103,10 @@ const Dish = styled.li<{ $backgroundImage: string, $aspectRatio: number, $jitter
   background-size: cover;
   box-shadow: 3px 3px 3px #303030;
   transform: rotate(${(props) => { return props.$rotation; }}deg);
+
+  @media ${aspectRatios.a21x9} {
+    width: 14vw;
+  }
 `;
 
 const DishInfo = styled.div`
@@ -290,11 +303,13 @@ const CasualDiningScene = () => {
 
   // Initialize dish elements
   ((): void => {
+    const isUltrawide = window.innerWidth / window.innerHeight > 21 / 9;
+
     for (const continent of Object.keys(dishData)) {
       const continentDishes: Dish[] = dishData[continent];
       // We can ignore the linting errors as the elements always exist
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      dishes.push(...getRandomElements(continentDishes, Math.min(continentDishes.length, 3)));
+      dishes.push(...getRandomElements(continentDishes, Math.min(continentDishes.length, isUltrawide ? 4: 3)));
     }
   
     for (const Dish of dishes) {
@@ -306,8 +321,8 @@ const CasualDiningScene = () => {
     }
   
     randomize(dishes);
-    // Remove a dish to keep total to 12
-    dishes.pop();
+    // Remove a dish to keep total to 15/12
+    dishes.splice(0, isUltrawide ? 2 : 1);
   
     dishElements = dishes.map((dish: Dish): React.ReactNode => {
       return (
