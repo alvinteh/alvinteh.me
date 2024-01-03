@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
 import { Continents, Dish } from '../../common';
+import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
 
 import SceneBackground from './images/scene-finedining.jpg'
 import Dish1Background from './images/finedining-dish-1.png';
@@ -49,17 +50,25 @@ const Dish = styled.li<{ $backgroundImage: string }>`
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
+
+  @media ${aspectRatios.a16x9} {
+    bottom: -48vh;
+  }
 `;
 
 const DishInfo = styled.div`
   position: relative;
   top: 100%;
-  margin: 50px auto 0;
+  margin: 10px auto 0;
   font-family: 'Crimson Text', serif;
   font-size: 1.4rem;
   text-align: center;
   text-transform: lowercase;
   opacity: 1;
+
+  @media ${screenSizes.desktopM} {
+    margin-top: 50px;
+  }
 `;
 
 const DishName = styled.p`
