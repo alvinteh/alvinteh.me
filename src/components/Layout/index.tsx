@@ -48,7 +48,7 @@ const GlobalStyle = createGlobalStyle`
     background: #000000;
     color: #ffffff;
     font-family: Inter;
-    font-size: 1rem;
+    font-size: 16px;
     font-weight: 500;
     line-height: 1;
     overscroll-behavior: none;
