@@ -1,10 +1,11 @@
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import styled from 'styled-components';
 
 import ParallaxScreen from '../../../../components/ParallaxScreen';
+import PageContext from '../../../../utils/PageContext';
+import { animationDurations } from '../../../../utils/ParallaxUtils';
 
 import ScreenBackground from './images/screen-background.jpg';
 import Subscreen1Background from './images/subscreen-1.jpg';
@@ -93,8 +94,10 @@ const EndHeader = styled(HeaderBase)`
   width: 60rem;
 `;
 
-const WorldScene = () => {
-  // Screen refs and nodes
+const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
+  const { registerScene } = useContext(PageContext);
+
+  // Screen refs
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const startHeaderRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
   const headerRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
@@ -103,19 +106,9 @@ const WorldScene = () => {
   const endHeaderRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
   const subscreenRefs: React.MutableRefObject<HTMLDivElement[]> = useRef<HTMLDivElement[]>([]);
 
-  gsap.registerPlugin(ScrollTrigger);
-
   // Screen animation
   useGSAP((): void => {
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: screenRef.current,
-        pin: true,
-        scrub: true,
-        start: 'top top',
-        end: `+=${(subscreenRefs.current.length * 2 + startHeaderRef.current.children.length + 3) * 300}`,
-      }
-    });
+    const timeline = gsap.timeline({});
 
     for (let i = 0, startHeaderSpanCount = startHeaderRef.current.children.length; i < startHeaderSpanCount; i++) {
       timeline.from(startHeaderRef.current.children[i], {
@@ -123,7 +116,7 @@ const WorldScene = () => {
         opacity: 0,
         top: '+=30px',
         ease: 'power1.easeInOut',
-        duration: 1,
+        duration: animationDurations.FAST,
       });
     }
 
@@ -133,45 +126,47 @@ const WorldScene = () => {
 
       timeline.to(subscreenElement, {
         top: '-=100vh',
-        duration: 3,
+        duration: animationDurations.XSLOW,
       });
 
       if (i === 0) {
         timeline.from([headerStartRef.current, headerAttributeElement], {
           filter: 'blur(0.5rem)',
           opacity: 0,
-          duration: 1,
-        }, '<+=2');
+          duration: animationDurations.MEDIUM,
+        }, `<+=${animationDurations.MEDIUM}`);
       }
       else {
         if (i < subscreenCount) {
           timeline.to(headerAttributeRefs.current[i - 1], {
             filter: 'blur(0.5rem)',
             opacity: 0,
-            duration: 2,
+            duration: animationDurations.FAST,
           }, '<');
         }
 
         timeline.from(headerAttributeElement, {
           filter: 'blur(0.5rem)',
           opacity: 0,
-          duration: 1,
-        }, '>');
+          duration: animationDurations.MEDIUM,
+        }, `>+=${animationDurations.FAST}`);
       }
       
       timeline.to(subscreenElement, {
         // Do nothing to simulate a pause
+        duration: animationDurations.FAST,
       });
     }
 
     timeline.to(headerRef.current, {
       // Do nothing to simulate a pause
+      duration: animationDurations.FAST,
     });
 
     timeline.to(headerRef.current, {
       top: '-=10rem',
       ease: 'power1.easeInOut',
-      duration: 1,
+      duration: animationDurations.MEDIUM,
     });
 
     timeline.from(endHeaderRef.current, {
@@ -179,9 +174,11 @@ const WorldScene = () => {
       opacity: 0,
       top: '+=30px',
       ease: 'power1.easeInOut',
-      duration: 1,
+      duration: animationDurations.MEDIUM,
     });
-  });
+
+    registerScene(sceneIndex, screenRef, timeline);
+  }, []);
 
   const setSubscreenRef = (element: HTMLDivElement): HTMLDivElement => {
     subscreenRefs.current[subscreenRefs.current.length] = element;

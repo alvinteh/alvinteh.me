@@ -1,14 +1,17 @@
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { dishData, extraBakeDishData, extraCookDishData } from './data/dish-data';
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
 import Accordion, { AccordionItem, AccordionItemContent, AccordionItemHeader } from '../../../../components/Accordion';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
+import { PageWrapper } from '../../../../components/static';
+import PageContext from '../../../../utils/PageContext';
+import { animationDurations } from '../../../../utils/ParallaxUtils';
+import { SceneProps } from '../../../../utils/SceneUtils';
 import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
 import { Dish } from '../../common';
 
@@ -19,7 +22,6 @@ import Header3Svg from './images/cook-header-3.svg?react';
 import Header4Svg from './images/cook-header-4.svg?react';
 import NoteBackground from './images/cook-note.png';
 import FaqWrapperBackground from './images/faq-wrapper.png';
-
 
 const Header1 = styled(Header1Svg)`
   position: absolute;
@@ -326,6 +328,11 @@ const FaqWrapper = styled.div`
     height: 65%;
   }
 
+  @media ${screenSizes.desktopM} {
+    max-width: 50%;
+    height: 65%;    
+  }
+
   @media ${aspectRatios.a21x9} {
     padding: 6% 5% 5% 3%;
   }
@@ -364,8 +371,12 @@ const FaqContent = styled(AccordionItemContent)`
   }
 `;
 
-const CookScene = () => {
-  // Screen refs and nodes
+const CookScene = ({ sceneIndex }: SceneProps) => {
+  const { registerScene } = useContext(PageContext);
+  const [dishes, setDishes] = useState<Dish[]>([]);
+  const [extraDishes, setExtraDishes] = useState<Dish[]>([]);
+
+  // Screen refs
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const header1Ref = useRef<SVGSVGElement>() as React.MutableRefObject<SVGSVGElement>;
   const header2Ref = useRef<SVGSVGElement>() as React.MutableRefObject<SVGSVGElement>;
@@ -373,98 +384,50 @@ const CookScene = () => {
   const header4Ref = useRef<SVGSVGElement>() as React.MutableRefObject<SVGSVGElement>;
   const faqWrapperRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const dishesRef = useRef<HTMLUListElement>() as React.MutableRefObject<HTMLUListElement>;
+  const dishRefs = useRef<HTMLDivElement[]>([]);
+  const dishInfoRefs = useRef<HTMLDivElement[]>([]);
   const extraDishesRef = useRef<HTMLUListElement>() as React.MutableRefObject<HTMLUListElement>;
+  const extraDishRefs = useRef<HTMLLIElement[]>([]);
 
-  let dishElements: React.ReactNode[];
-  let extraDishElements: React.ReactNode[];
+  gsap.registerPlugin(DrawSVGPlugin);
 
-  // Screen data
-  let dishes: Dish[] = [];
-  let extraDishes: Dish[] = [];
-
-  gsap.registerPlugin(DrawSVGPlugin, ScrollTrigger);
-
-  // Initialize dish elements
-  ((): void => {
-    dishes = getRandomElements(dishData, 5) as Dish[];
-    extraDishes = getRandomElements(extraBakeDishData, 3) as Dish[];
+  // Initialize dish data
+  useEffect((): void => {
+    const dishes: Dish[] = getRandomElements(dishData, 5) as Dish[];
+    let extraDishes: Dish[] = getRandomElements(extraBakeDishData, 3) as Dish[];
     extraDishes = extraDishes.concat(getRandomElements(extraCookDishData, 3) as Dish[]);
-
-    for (const dish of dishes) {
-      // We can ignore the linting errors as the elements always exist
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      dish.dishRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      dish.dishInfoRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
-    }
-
-    for (const extraDish of extraDishes) {
-      // We can ignore the linting errors as the elements always exist
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      extraDish.dishRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      extraDish.dishInfoRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
-    }
 
     randomize(dishes);
     randomize(extraDishes);
 
-    dishElements = dishes.map((dish: Dish): React.ReactNode => {
-      return (
-        <Dish
-          key={dish.name}
-        >
-          <DishName ref={dish.dishInfoRef}>{dish.name}</DishName>
-          <DishImage ref={dish.dishRef as React.MutableRefObject<HTMLDivElement>} $backgroundImage={dish.image} />
-        </Dish>
-      );
-    });
-
-    extraDishElements = extraDishes.map((extraDish: Dish): React.ReactNode => {
-      return (
-        <ExtraDish
-          key={extraDish.name}
-          ref={extraDish.dishRef as React.MutableRefObject<HTMLLIElement>}
-          $backgroundImage={extraDish.image}
-        >
-          <ExtraDishName ref={extraDish.dishInfoRef}>{extraDish.name}</ExtraDishName>
-        </ExtraDish>
-      );
-    });
-  })();
+    setDishes(dishes);
+    setExtraDishes(extraDishes);
+  }, []);
 
   // Screen animation
   useGSAP((): void => {
-    const isPortrait = window.innerHeight > window.innerWidth;
-    const letterAnimationCount: number = (header1Ref.current.children.length
-      + header2Ref.current.children.length
-      + header3Ref.current.children.length
-      + header4Ref.current.children.length) / 2;
-    
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: screenRef.current,
-        pin: true,
-        scrub: true,
-        start: 'top top',
-        end: `+=${dishes.length * 300 + extraDishes.length * 200 + (letterAnimationCount + 4 * 4) * 100}`,
-      }
-    });
+    if (dishes.length === 0 || extraDishes.length === 0) {
+      return;
+    }
 
+    const timeline = gsap.timeline({});
+
+    const isPortrait = window.innerHeight > window.innerWidth;
+    
     for (const path of header1Ref.current.children) {
       timeline.fromTo(path, {
         drawSVG: '0%',
       },
       {
         drawSVG: '100%',
-        duration: 0.5,
+        duration: animationDurations.XFAST,
       });
     }
 
     timeline.to(header1Ref.current.children, {
       opacity: 0,
       ease: 'back.out(1)',
-      duration: 4,
+      duration: animationDurations.FAST,
     });
 
     for (const path of header2Ref.current.children) {
@@ -473,52 +436,49 @@ const CookScene = () => {
       },
       {
         drawSVG: '100%',
-        duration: 0.5,
+        duration: animationDurations.XFAST,
       });
     }
 
     timeline.to(header2Ref.current.children, {
       opacity: 0,
       ease: 'back.out(1)',
-      duration: 4,
+      duration: animationDurations.MEDIUM,
     });
 
     timeline.from(dishesRef.current, {
       transform: 'translate3d(30vw, 0, 0)',
       ease: 'power.out',
-      duration: 1,
+      duration: animationDurations.FAST,
     });
 
-    for (const dish of dishes) {
-      // We can ignore the linting errors as the references will always exist 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      timeline.from(dish.dishRef!.current, {
-        transform: 'translate3d(0, 90vh, 0)',
+    for (let i = 0; i < dishes.length; i++) {
+      const dishElement: HTMLDivElement = dishRefs.current[i];
+      const dishInfoElement: HTMLDivElement = dishInfoRefs.current[i];
+
+      timeline.from(dishElement, {
+        transform: 'translate3d(0, 84vw, 0)',
         ease: 'power1.out',
-        duration: 1,
+        duration: animationDurations.MEDIUM,
       });
 
-      // We can ignore the linting errors as the references will always exist 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      timeline.to(dish.dishInfoRef!.current, {
+      timeline.to(dishInfoElement, {
         "--lineScale": 1,
         ease: 'power1.out',
-        duration: 1,
+        duration: animationDurations.FAST,
       });
 
-      // We can ignore the linting errors as the references will always exist 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      timeline.to(dish.dishRef!.current, {
+      timeline.to(dishElement, {
         transform: 'translate3d(0, -100vh, 0)',
         ease: 'power1.out',
-        duration: 1,
+        duration: animationDurations.MEDIUM,
       });
     }
 
     timeline.to(dishesRef.current, {
       transform: 'translate3d(30vw, 0, 0)',
       ease: 'power.out',
-      duration: 1,
+      duration: animationDurations.MEDIUM,
     });
 
     for (const path of header3Ref.current.children) {
@@ -527,41 +487,41 @@ const CookScene = () => {
       },
       {
         drawSVG: '100%',
-        duration: 0.5,
+        duration: animationDurations.XFAST,
       });
     }
 
     timeline.to(header3Ref.current.children, {
       opacity: 0,
       ease: 'back.out(1)',
-      duration: 4,
+      duration: animationDurations.MEDIUM,
     });
 
-    for (const extraDish of extraDishes) {
-      // We can ignore the linting errors as the references will always exist 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      timeline.from(extraDish.dishRef!.current, {
+    for (let i = 0; i < extraDishes.length; i++) {
+      const extraDishElement: HTMLLIElement = extraDishRefs.current[i];
+
+      timeline.from(extraDishElement, {
         top: '105vh', // Leave additional allowance given the rotation
         left: 'calc(50% - 7vw - 10px)',
         ease: 'power1.out',
-        duration: 1,
+        duration: animationDurations.FAST,
       });
     }
 
     timeline.to(header3Ref.current, {
       // Do nothing to simulate a "pause"
-      duration: 1,
+      duration: animationDurations.FAST,
     });
 
     for (let i = extraDishes.length - 1; i >= 0; i--) {
-      // We can ignore the linting errors as the references will always exist 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      timeline.to(extraDishes[i].dishRef!.current, {
-        top: '100vh',
+      const extraDishElement: HTMLLIElement = extraDishRefs.current[i];
+
+      timeline.to(extraDishElement, {
+        top: '105vh',
         left: 'calc(50% - 7vw - 10px)',
         transform: 'rotate(0)',
         ease: 'power1.out',
-        duration: 0.5,
+        duration: animationDurations.FAST,
       });
     }
 
@@ -571,26 +531,66 @@ const CookScene = () => {
       },
       {
         drawSVG: '100%',
-        duration: 0.5,
+        duration: animationDurations.XFAST,
       });
     }
 
     timeline.to(header4Ref.current.querySelectorAll('.line1'), {
       opacity: 0,
-      duration: 1,
+      duration: animationDurations.FAST,
     });
     
     timeline.to(header4Ref.current, {
       transform: `translate3d(0, -${isPortrait ? 20 : 40}vh, 0)`,
       ease: 'power1.out',
-      duration: 4,
+      duration: animationDurations.MEDIUM,
     });
 
     timeline.from(faqWrapperRef.current, {
       transform: 'translate3d(0, 100%, 0)',
       ease: 'power1.out',
-      duration: 4,
+      duration: animationDurations.MEDIUM,
     }, '<');
+
+    registerScene(sceneIndex, screenRef, timeline);
+  }, [dishes, extraDishes]);
+
+  const setDishRef = (element: HTMLDivElement): HTMLDivElement => {
+    dishRefs.current[dishRefs.current.length] = element;
+    return element;
+  };
+
+  const setDishInfoRef = (element: HTMLDivElement): HTMLDivElement => {
+    dishInfoRefs.current[dishInfoRefs.current.length] = element;
+    return element;
+  };
+
+  const setExtraDishRef = (element: HTMLLIElement): HTMLLIElement => {
+    extraDishRefs.current[extraDishRefs.current.length] = element;
+    return element;
+  };
+
+  const dishElements: React.ReactNode[] = dishes.map((dish: Dish): React.ReactNode => {
+    return (
+      <Dish
+        key={dish.name}
+      >
+        <DishName ref={setDishInfoRef}>{dish.name}</DishName>
+        <DishImage ref={setDishRef} $backgroundImage={dish.image} />
+      </Dish>
+    );
+  });
+
+  const extraDishElements: React.ReactNode[] = extraDishes.map((extraDish: Dish): React.ReactNode => {
+    return (
+      <ExtraDish
+        key={extraDish.name}
+        ref={setExtraDishRef}
+        $backgroundImage={extraDish.image}
+      >
+        <ExtraDishName>{extraDish.name}</ExtraDishName>
+      </ExtraDish>
+    );
   });
 
   return (
@@ -599,85 +599,87 @@ const CookScene = () => {
       backgroundImage={SceneBackground}
       title="Cooks & Bakes"
     >
-      <Header1 ref={header1Ref} />
-      <Header2 ref={header2Ref} />
-      <Dishes ref={dishesRef}>
-        {dishElements}
-      </Dishes>
-      <Header3 ref={header3Ref} />
-      <ExtraDishes ref={extraDishesRef}>
-        {extraDishElements}
-      </ExtraDishes>
-      <Header4 ref={header4Ref} />
-      <FaqWrapper ref={faqWrapperRef}>
-        <Accordion>
-          <Faq>
-            <FaqHeader>
-              How did you get tables at those fancy restaurants?
-            </FaqHeader>
-            <FaqContent>
-              No secrets here, I join the line just like most other people. In many cases, this means visiting a 
-              restaurant&apos;s website to check when they release bookings (it&apos;s typically 2 - 3 months) in 
-              advance, and scrambling to secure a table once that happens. For some restaurants, I might waitlist a
-              whole week (and plan travel accordingly) to increase my chances.
-            </FaqContent>
-          </Faq>
-          <Faq>
-            <FaqHeader>
-              There&apos;s a cool place you should check out. How can I make suggestions? 
-            </FaqHeader>
-            <FaqContent>
-              I cannot guarantee I&apos;ll visit your suggested places, but let me know via the contact form! In 
-              addition,  note that just because I have visited a place does not mean I will recommend it.
-            </FaqContent>
-          </Faq>
-          <Faq>
-            <FaqHeader>
-              Do you do reviews, endorsements or sponsored content?
-            </FaqHeader>
-            <FaqContent>
-              No, I do not. Food and drink are a hobby, not a career for me. I&apos;m not an influencer either,
-              and all of my meals and drinks were paid out of my own pocket.
-            </FaqContent>
-          </Faq>
-          <Faq>
-            <FaqHeader>
-              We&apos;ve met and I remember you saying you don&apos;t take fruit, vegetables, or seafood?
-            </FaqHeader>
-            <FaqContent>
-              Good catch! But if you remember, I said <em>generally speaking</em>, I do not take fruits, vegetables
-              and/or seafood. There are a lot of rules and exceptions (e.g. I take strawberry jam, but I do not eat
-              whole strawberries), and it is so complex I often joke that the person who can come up with a ML model
-              that accurately predicts what I take/don&apos;t take can win a Nobel prize. And if you are wondering,
-              fine dining establishments do not get an automatic pass. I have left whole plates of fruit/etc.
-              untouched at 2/3-Michelin starred places. 
-            </FaqContent>
-          </Faq>
-          <Faq>
-            <FaqHeader>
-              What is your favorite food and drink?
-            </FaqHeader>
-            <FaqContent>
-              Food-wise, it is hard for me to pick a single dish, but I am generally down for a good lasagna. Dishes 
-              that are meat and/or cheese heavy (e.g. burgers, BBQ, mac and cheese, carbonara) tend to be among my 
-              favorites too. As for drink, my favorite cocktail is the Pencillin, and I also love Paper Planes and 
-              Pisco Sours.
-            </FaqContent>
-          </Faq>
-          <Faq>
-            <FaqHeader>
-              How did you start cooking?
-            </FaqHeader>
-            <FaqContent>
-              I lamented the lack of quality food in my neighborhood, and since dining out all the time would be too 
-              costly, decided to put on an apron and try my hand at cooking. I watched a number of YouTube channels
-              (<a href="https://www.joshuaweissman.com/" rel="external noreferrer" target="_blank">Joshua Weissman</a>
-              is one of my influences) and slowly but surely worked my way into being a better home cook/baker.
-              (Trust me, there were a lot of failures I did not post here!)
-            </FaqContent>
-          </Faq>
-        </Accordion>
-      </FaqWrapper>
+      <PageWrapper>
+        <Header1 ref={header1Ref} />
+        <Header2 ref={header2Ref} />
+        <Dishes ref={dishesRef}>
+          {dishElements}
+        </Dishes>
+        <Header3 ref={header3Ref} />
+        <ExtraDishes ref={extraDishesRef}>
+          {extraDishElements}
+        </ExtraDishes>
+        <Header4 ref={header4Ref} />
+        <FaqWrapper ref={faqWrapperRef}>
+          <Accordion>
+            <Faq>
+              <FaqHeader>
+                How did you get tables at those fancy restaurants?
+              </FaqHeader>
+              <FaqContent>
+                No secrets here, I join the line just like most other people. In many cases, this means visiting a 
+                restaurant&apos;s website to check when they release bookings (it&apos;s typically 2 - 3 months) in 
+                advance, and scrambling to secure a table once that happens. For some restaurants, I might waitlist a
+                whole week (and plan travel accordingly) to increase my chances.
+              </FaqContent>
+            </Faq>
+            <Faq>
+              <FaqHeader>
+                There&apos;s a cool place you should check out. How can I make suggestions? 
+              </FaqHeader>
+              <FaqContent>
+                I cannot guarantee I&apos;ll visit your suggested places, but let me know via the contact form! In 
+                addition,  note that just because I have visited a place does not mean I will recommend it.
+              </FaqContent>
+            </Faq>
+            <Faq>
+              <FaqHeader>
+                Do you do reviews, endorsements or sponsored content?
+              </FaqHeader>
+              <FaqContent>
+                No, I do not. Food and drink are a hobby, not a career for me. I&apos;m not an influencer either,
+                and all of my meals and drinks were paid out of my own pocket.
+              </FaqContent>
+            </Faq>
+            <Faq>
+              <FaqHeader>
+                We&apos;ve met and I remember you saying you don&apos;t take fruit, vegetables, or seafood?
+              </FaqHeader>
+              <FaqContent>
+                Good catch! But if you remember, I said <em>generally speaking</em>, I do not take fruits, vegetables
+                and/or seafood. There are a lot of rules and exceptions (e.g. I take strawberry jam, but I do not eat
+                whole strawberries), and it is so complex I often joke that the person who can come up with a ML model
+                that accurately predicts what I take/don&apos;t take can win a Nobel prize. And if you are wondering,
+                fine dining establishments do not get an automatic pass. I have left whole plates of fruit/etc.
+                untouched at 2/3-Michelin starred places. 
+              </FaqContent>
+            </Faq>
+            <Faq>
+              <FaqHeader>
+                What is your favorite food and drink?
+              </FaqHeader>
+              <FaqContent>
+                Food-wise, it is hard for me to pick a single dish, but I am generally down for a good lasagna. Dishes 
+                that are meat and/or cheese heavy (e.g. burgers, BBQ, mac and cheese, carbonara) tend to be among my 
+                favorites too. As for drink, my favorite cocktail is the Pencillin, and I also love Paper Planes and 
+                Pisco Sours.
+              </FaqContent>
+            </Faq>
+            <Faq>
+              <FaqHeader>
+                How did you start cooking?
+              </FaqHeader>
+              <FaqContent>
+                I lamented the lack of quality food in my neighborhood, and since dining out all the time would be too 
+                costly, decided to put on an apron and try my hand at cooking. I watched a number of YouTube channels
+                (<a href="https://www.joshuaweissman.com/" rel="external noreferrer" target="_blank">Joshua Weissman</a>
+                is one of my influences) and slowly but surely worked my way into being a better home cook/baker.
+                (Trust me, there were a lot of failures I did not post here!)
+              </FaqContent>
+            </Faq>
+          </Accordion>
+        </FaqWrapper>
+      </PageWrapper>
     </ParallaxScreen>
   );
 };

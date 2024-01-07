@@ -1,12 +1,14 @@
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { randomize } from '../../../../utils/ArrayUtils';
+import PageContext from '../../../../utils/PageContext';
+import { SceneProps } from '../../../../utils/SceneUtils';
 import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
+import { PageWrapper } from '../../../../components/static';
 
 import SceneBackground from './images/scene-drinks.jpg'
 import Drink1Background from './images/drink-1.png';
@@ -14,6 +16,7 @@ import Drink2Background from './images/drink-2.png';
 import Drink3Background from './images/drink-3.png';
 import Drink4Background from './images/drink-4.png';
 import Drink5Background from './images/drink-5.png';
+import { animationDurations } from '../../../../utils/ParallaxUtils';
 
 interface Drink {
   name: string;
@@ -140,63 +143,35 @@ const drinkData: Drink[] = [
   }, 
 ];
 
-const DrinksScene = () => {
-  // Screen refs and nodes
+const DrinksScene = ({ sceneIndex }: SceneProps) => {
+  const { registerScene } = useContext(PageContext);
+  const [drinks, setDrinks] = useState<Drink[]>([]);
+
+  // Screen refs
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const headerRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
-  let drinkElements: React.ReactNode[];
+  const drinkRefs = useRef<HTMLDivElement[]>([]);
+  const drinkInfoRefs = useRef<HTMLDivElement[]>([]);
 
-  // Screen data
-  let drinks: Drink[] = [];
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  // Initialize drink elements
-  ((): void => {
-    drinks = [...drinkData];
-
-    for (const drink of drinks) {
-      // We can ignore the linting errors as the elements always exist
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      drink.drinkRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      drink.drinkInfoRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
-    }
+  // Initialize drink data
+  useEffect((): void => {
+    const drinks: Drink[] = [...drinkData];
 
     randomize(drinks);
-  
-    drinkElements = drinks.map((drink: Drink): React.ReactNode => {
-      return (
-        <Drink key={drink.bar}>
-          <DrinkImage
-            // We can ignore the linting errors as the references always exist
-            // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
-            ref={drink.drinkRef as React.MutableRefObject<HTMLDivElement>}
-            $backgroundImage={drink.image}
-          />
-          <DrinkInfo ref={drink.drinkInfoRef}>
-            <DrinkName>{drink.name}</DrinkName>
-            <DrinkIngredients>{drink.ingredients}</DrinkIngredients>
-            <DrinkBar>{drink.bar}</DrinkBar>
-          </DrinkInfo>
-        </Drink>
-      );
-    });
-  })();
+    setDrinks(drinks);
+  }, []);
 
   // Screen animation
-  useGSAP((): void => {  
+  useGSAP((): void => {
+    if (drinks.length === 0) {
+      return;
+    }
+
     const wordAnimationCount: number = (headerRef.current.children.length) / 2;
 
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: screenRef.current,
-        pin: true,
-        scrub: true,
-        start: 'top top',
-        end: `+=${(wordAnimationCount + (drinks.length * 4) + 1) * 150}`,
-      }
-    });
+    const timeline = gsap.timeline({ data: { 
+      duration: (wordAnimationCount + (drinks.length * 4) + 1) * 150,
+    }});
 
     timeline.from(headerRef.current.children, {
       filter: 'blur(4rem)',
@@ -208,20 +183,47 @@ const DrinksScene = () => {
       stagger: 0.5,
     });
 
-    for (const drink of drinks) {
-      // We can ignore the linting errors as the references will always exist 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const drinkElement = drink.drinkRef!.current;
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const drinkBarElement = drink.drinkInfoRef!.current;
+    for (let i = 0; i < drinks.length; i++) {
+      const drinkElement: HTMLDivElement = drinkRefs.current[i];
+      const drinkInfoElement: HTMLDivElement = drinkInfoRefs.current[i];
 
       timeline
-      .from(drinkElement, { transform: 'translate3d(35vw, 0, 0)', duration: 1, })
-      .from(drinkBarElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)', duration: 1, })
-      .to(drinkElement, {})
-      .to(drinkElement, { transform: 'translate3d(35vw, 0, 0)', duration: 1, })
-      .to(drinkBarElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)', duration: 1, }, '<');
+      .from(drinkElement, { transform: 'translate3d(35vw, 0, 0)', duration: animationDurations.FAST, })
+      .from(drinkInfoElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)',
+        duration: animationDurations.FAST, })
+      .to(drinkElement, { duration: animationDurations.FAST })
+      .to(drinkElement, { transform: 'translate3d(35vw, 0, 0)', duration: animationDurations.FAST, })
+      .to(drinkInfoElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)',
+        duration: animationDurations.FAST, }, '<');
     }
+
+    registerScene(sceneIndex, screenRef, timeline);
+  }, [drinks]);
+
+  const setDrinkRef = (element: HTMLDivElement): HTMLDivElement => {
+    drinkRefs.current[drinkRefs.current.length] = element;
+    return element;
+  };
+
+  const setDrinkInfoRef = (element: HTMLDivElement): HTMLDivElement => {
+    drinkInfoRefs.current[drinkInfoRefs.current.length] = element;
+    return element;
+  };
+  
+  const drinkElements: React.ReactNode[] = drinks.map((drink: Drink): React.ReactNode => {
+    return (
+      <Drink key={drink.bar}>
+        <DrinkImage
+          ref={setDrinkRef}
+          $backgroundImage={drink.image}
+        />
+        <DrinkInfo ref={setDrinkInfoRef}>
+          <DrinkName>{drink.name}</DrinkName>
+          <DrinkIngredients>{drink.ingredients}</DrinkIngredients>
+          <DrinkBar>{drink.bar}</DrinkBar>
+        </DrinkInfo>
+      </Drink>
+    );
   });
 
   return (
@@ -230,17 +232,19 @@ const DrinksScene = () => {
       backgroundImage={SceneBackground}
       title="Cocktail Bar Experiences"
     >
-      <Header ref={headerRef}>
-        <span>Drinks </span>
-        <span>play </span>
-        <span>an </span>
-        <span>equally </span>
-        <span>important </span>
-        <span>role.</span>
-      </Header>
-      <Drinks>
-        {drinkElements}
-      </Drinks>
+      <PageWrapper>
+        <Header ref={headerRef}>
+          <span>Drinks </span>
+          <span>play </span>
+          <span>an </span>
+          <span>equally </span>
+          <span>important </span>
+          <span>role.</span>
+        </Header>
+        <Drinks>
+          {drinkElements}
+        </Drinks>
+      </PageWrapper>
     </DrinksParallaxScreen>
   );
 };

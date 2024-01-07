@@ -1,10 +1,12 @@
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import styled from 'styled-components';
 
 import ParallaxScreen from '../../../../components/ParallaxScreen';
+import PageContext from '../../../../utils/PageContext';
+import { animationDurations } from '../../../../utils/ParallaxUtils';
+import { SceneProps } from '../../../../utils/SceneUtils';
 import { screenSizes } from '../../../../utils/StyleUtils';
 
 import SceneBackground from './images/scene-background.jpg';
@@ -73,8 +75,10 @@ const StatType = styled.span`
   }
 `;
 
-const StatsScene = () => {
-  // Screen refs and nodes
+const StatsScene = ({ sceneIndex }: SceneProps) => {
+  const { registerScene } = useContext(PageContext);
+
+  // Screen refs
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const countriesVisitedRef = useRef<HTMLSpanElement>() as React.MutableRefObject<HTMLSpanElement>;
   const citiesVisitedRef = useRef<HTMLSpanElement>() as React.MutableRefObject<HTMLSpanElement>;
@@ -85,19 +89,9 @@ const StatsScene = () => {
   const storedPhotosRef = useRef<HTMLSpanElement>() as React.MutableRefObject<HTMLSpanElement>;
   const mobileShotsRef = useRef<HTMLSpanElement>() as React.MutableRefObject<HTMLSpanElement>;
 
-  gsap.registerPlugin(ScrollTrigger);
-
   // Screen animation
   useGSAP((): void => {
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: screenRef.current,
-        pin: true,
-        scrub: true,
-        start: 'top top',
-        end: `+=${3 * 300}`,
-      }
-    });
+    const timeline = gsap.timeline({});
 
     const textAnimation: gsap.TweenVars = {
       innerText: 0,
@@ -120,7 +114,7 @@ const StatsScene = () => {
     timeline.to(screenRef.current, {
       opacity: 1,
       'mask-image': 'radial-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 1) 99%, rgba(0, 0, 0, 0) 100%)',
-      duration: 2,
+      duration: animationDurations.MEDIUM,
     });
     timeline.from(countriesVisitedRef.current, textAnimation);
     timeline.from(citiesVisitedRef.current, textAnimation, '<');
@@ -128,9 +122,12 @@ const StatsScene = () => {
     timeline.from(shotsKeptRef.current, textAnimation, '<');
     timeline.from(speciesShotRef.current, textAnimation, '<');
     timeline.from(mostShotsRef.current, textAnimation, '<');
-    timeline.from(storedPhotosRef.current, Object.assign({}, textAnimation, { snap: { innerText: 0.1 }, stagger: { each: 0.1 }}), '<');
+    timeline.from(storedPhotosRef.current, Object.assign({}, textAnimation, {
+      snap: { innerText: 0.1 }, stagger: { each: 0.1 }}), '<');
     timeline.from(mobileShotsRef.current, textAnimation, '<');
-  }); 
+
+    registerScene(sceneIndex, screenRef, timeline);
+  }, []); 
 
   return (
     <StyledParallaxScreen innerRef={screenRef} backgroundImage={SceneBackground} title="Photography Stats">

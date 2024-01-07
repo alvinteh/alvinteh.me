@@ -9,12 +9,12 @@ import TitleScene from './scenes/TitleScene';
 const Culinary = () => {
   return (
     <PageBase titleSuffix="Culinary" shouldHaveScrollPrompt={true}>
-      <TitleScene />
-      <FineDiningScene />
-      <CasualDiningScene />
-      <DrinksScene />
-      <MapScene />
-      <CookScene />
+      <TitleScene sceneIndex={0} />
+      <FineDiningScene sceneIndex={1} />
+      <CasualDiningScene sceneIndex={2} />
+      <DrinksScene sceneIndex={3} />
+      <MapScene sceneIndex={4} />
+      <CookScene sceneIndex={5} />
     </PageBase>
   );
 };

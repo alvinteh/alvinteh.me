@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components';
 
 import {
   PageTitle,
-  PageWrapper,
+  PaddedPageWrapper,
   
   fadeInAnimation,
   pageTransitionDuration
@@ -190,7 +190,7 @@ const Link = styled(LinkRR)`
 const MainScene = () => {
   return (
     <ParallaxScreen title="">
-      <PageWrapper>
+      <PaddedPageWrapper>
         <PageTitle>About</PageTitle>
         <HeroTitle><AnimatedText>Alvin Teh</AnimatedText></HeroTitle>
         <Writeup>
@@ -205,7 +205,7 @@ const MainScene = () => {
           <Activity><Link to="/literary">Philosophy</Link></Activity>
           <Activity><Link to="/technology">Tech</Link></Activity>
         </Activities>
-      </PageWrapper>
+      </PaddedPageWrapper>
     </ParallaxScreen>
   );
 };
