@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { PageWrapper } from '../../components/static';
+import { PaddedPageWrapper } from '../../components/static';
 
 const PageTitle = styled.h1`
   margin: 0 0 10px;
@@ -14,9 +14,9 @@ const PageTitle = styled.h1`
 
 const Technology = () => {
   return (
-    <PageWrapper>
+    <PaddedPageWrapper>
       <PageTitle>Technology</PageTitle>
-    </PageWrapper>
+    </PaddedPageWrapper>
   );
 };
 

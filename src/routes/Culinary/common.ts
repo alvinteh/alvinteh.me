@@ -15,8 +15,6 @@ interface Dish {
   restaurant: string,
   image: string,
   imageAspectRatio: number,
-  dishRef?: React.MutableRefObject<HTMLLIElement | HTMLDivElement>;
-  dishInfoRef?: React.MutableRefObject<HTMLDivElement>;
 }
 
 export type { Continent, Dish, };

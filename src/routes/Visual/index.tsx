@@ -6,9 +6,9 @@ import WorldScene from './scenes/WorldScene';
 const Visual = () => {
   return (
     <PageBase titleSuffix="Visual" shouldHaveScrollPrompt={true}>
-      <TitleScene />
-      <WorldScene />
-      <StatsScene />
+      <TitleScene sceneIndex={0} />
+      <WorldScene sceneIndex={1} />
+      <StatsScene sceneIndex={2} />
     </PageBase>
   );
 };

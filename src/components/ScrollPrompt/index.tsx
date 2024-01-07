@@ -133,7 +133,7 @@ const ScrollPrompt = ({ pageRef }: { pageRef: React.MutableRefObject<HTMLDivElem
   };
 
   const handleScroll = (): void => {    
-    if (window.innerHeight + window.scrollY >= pageRef.current.scrollHeight) {
+    if (window.innerHeight + window.scrollY >= pageRef.current.parentElement.scrollHeight) {
       setVisible(false);
     }
     else {

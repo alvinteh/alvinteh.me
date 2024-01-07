@@ -35,13 +35,14 @@ const FullPageWrapper = styled.div`
 const PageWrapper = styled.div`
   position: relative;
   box-sizing: border-box;
-  padding: 50px 40px 0;
+  padding: 0;
   min-height: 100vh;
-  animation: ${fadeInAnimation} 1ms ${cubicBezier} ${pageTransitionDuration}ms 1 backwards;
 `;
 
-const ParallaxPageWrapper = styled.div`
+const PaddedPageWrapper = styled.div`
   position: relative;
+  box-sizing: border-box;
+  padding: 50px 40px 0;
   min-height: 100vh;
   animation: ${fadeInAnimation} 1ms ${cubicBezier} ${pageTransitionDuration}ms 1 backwards;
 `;
@@ -78,8 +79,8 @@ export {
   pageTransitionDuration,
 
   FullPageWrapper,
+  PaddedPageWrapper,
   PageWrapper,
-  ParallaxPageWrapper,
   PageTitle,
 
   Overlay,

@@ -1,14 +1,28 @@
+import { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import ScreenBase from '../ScreenBase';
 
-const ParallaxScreenWrapper = styled.div<{ $backgroundImage?: string }>`
-  position: relative;
+import PageContext from '../../utils/PageContext';
+import { setPageTitle } from '../../utils/PageUtils';
+
+const ParallaxScreenElement = styled.div<{ $backgroundImage?: string }>`
+  position: absolute;
+  top: 100vh;
+  left: 0;
+  right: 0;
   height: 100vh;
   background-image: ${(props) => { return props.$backgroundImage ? `url(${props.$backgroundImage})` : 'none'; }};
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   overflow: hidden;
+
+  &:first-child {
+    top: 0;
+  }
+`;
+
+const ScrollTracker = styled.div`
+  position: relative;
 `;
 
 const ParallaxScreen = ({ innerRef, className, children, backgroundImage, title }: {
@@ -18,16 +32,32 @@ const ParallaxScreen = ({ innerRef, className, children, backgroundImage, title 
   backgroundImage?: string, 
   title: string
 }) => {
+  const { titleSuffix } = useContext(PageContext);
+  const scrollRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+
+  const handleScroll = (): void => {  
+    const element: HTMLElement = scrollRef.current;
+    const bounds: DOMRect = element.getBoundingClientRect();
+
+    if (bounds.top >= 0 && bounds.top <= 0.5 * window.innerHeight) {
+      setPageTitle(title ? `${title} | ${titleSuffix}` : titleSuffix);
+    }
+  };
+
+  useEffect((): () => void => {
+    window.addEventListener('scroll', handleScroll);
+
+    return (): void => {
+      window.removeEventListener('scroll', handleScroll);
+    }
+  });
+
   return (
-    <ScreenBase title={title}>
-      <ParallaxScreenWrapper
-        ref={innerRef}
-        className={className ?? ''}
-        $backgroundImage={backgroundImage}
-        >
-          {children}
-      </ParallaxScreenWrapper>
-    </ScreenBase>
+    <ParallaxScreenElement ref={innerRef} className={className ?? ''} $backgroundImage={backgroundImage}>
+      <ScrollTracker ref={scrollRef}>
+        {children}
+      </ScrollTracker>
+    </ParallaxScreenElement>
   );
 };
 

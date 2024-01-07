@@ -1,12 +1,15 @@
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
+import { PageWrapper } from '../../../../components/static';
 import { Continents, Dish } from '../../common';
+import PageContext from '../../../../utils/PageContext';
+import { animationDurations } from '../../../../utils/ParallaxUtils';
+import { SceneProps } from '../../../../utils/SceneUtils';
 import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
 
 import SceneBackground from './images/scene-finedining.jpg'
@@ -155,20 +158,21 @@ const dishData: Record<string, Dish[]> = {
   ],
 };
 
-const FineDiningScene = () => {
-  // Screen refs and nodes
+const FineDiningScene = ({ sceneIndex }: SceneProps) => {
+  const { registerScene } = useContext(PageContext);
+  const [dishes, setDishes] = useState<Dish[]>([]);
+
+  // Screen refs
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const exploreTextRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
+  const dishRefs = useRef<HTMLLIElement[]>([]);
+  const dishInfoRefs = useRef<HTMLDivElement[]>([]);
   const closureTextRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
-  let dishElements: React.ReactNode[];
 
-  // Screen data
-  const dishes: Dish[] = [];
+  // Initialize dish data
+  useEffect((): void => {
+    const dishes: Dish[] = [];
 
-  gsap.registerPlugin(ScrollTrigger);
-
-  // Initialize dish elements
-  ((): void => {
     for (const continent of Object.keys(dishData)) {
       const continentDishes: Dish[] = dishData[continent];
       // We can ignore the linting errors as the elements always exist
@@ -176,74 +180,46 @@ const FineDiningScene = () => {
       dishes.push(...getRandomElements(continentDishes, 1));
     }
   
-    for (const Dish of dishes) {
-      // We can ignore the linting errors as the elements always exist
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      Dish.dishRef = useRef<HTMLLIElement>() as React.MutableRefObject<HTMLLIElement>;
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      Dish.dishInfoRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
-    }
-  
     randomize(dishes);
-  
-    dishElements = dishes.map((dish: Dish): React.ReactNode => {
-      return (
-        <Dish
-          ref={dish.dishRef as React.MutableRefObject<HTMLLIElement>}
-          key={dish.restaurant}
-          $backgroundImage={dish.image}
-        >
-          <DishInfo ref={dish.dishInfoRef}>
-            <DishName>{dish.name}</DishName>
-            <DishRestaurant>{dish.restaurant}</DishRestaurant>
-          </DishInfo>
-        </Dish>
-      );
-    });
-  })();
+    setDishes(dishes);
+  }, []);
 
   // Screen animation
   useGSAP((): void => {
+    if (dishes.length === 0) {
+      return;
+    }
+
     const exploreTextLineElements = exploreTextRef.current.children;
     
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: screenRef.current,
-        pin: true,
-        scrub: true,
-        start: 'top top',
-        end: `+=${dishes.length * 300 + 7 * 150}`,
-      }
-    });
+    const timeline = gsap.timeline({});
 
     for (let i = 0, length = exploreTextLineElements.length; i < length; i++) {
       timeline.from(exploreTextLineElements[i], {
           filter: 'blur(4rem)',
           opacity: 0,
           transform: 'scale(0.95) translate3d(0, 30px, 0)',
-          duration: 1,
+          duration: animationDurations.FAST
       });
     }
 
-    timeline.to(exploreTextLineElements, { transform: 'translate3d(0, -40vh, 0)', duration: 1, });
+    timeline.to(exploreTextLineElements, { transform: 'translate3d(0, -40vh, 0)', duration: animationDurations.MEDIUM });
 
-    for (const dish of dishes) {
-      // We can ignore the linting errors as the references will always exist 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const dishElement = dish.dishRef!.current;
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const dishInfoElement = dish.dishInfoRef!.current;
+    for (let i = 0; i < dishes.length; i++) {
+      const dishElement: HTMLLIElement = dishRefs.current[i];
+      const dishInfoElement: HTMLDivElement = dishInfoRefs.current[i];
 
       timeline
-      .to(dishElement, { transform: 'translate3d(0, -72vh, 0)', duration: 1, })
-      .from(dishInfoElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)', duration: 1, })
-      .to(dishInfoElement, { opacity: 0, duration: 1, })
-      .to(dishElement, { transform: 'translate3d(0, -145vh, 0)', duration: 1, });  
+      .to(dishElement, { transform: 'translate3d(0, -72vh, 0)', duration: animationDurations.MEDIUM })
+      .from(dishInfoElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)', duration:
+        animationDurations.FAST })
+      .to(dishInfoElement, { opacity: 0, duration: animationDurations.FAST })
+      .to(dishElement, { transform: 'translate3d(0, -145vh, 0)', duration: animationDurations.MEDIUM });  
     }
 
     timeline.from(closureTextRef.current, {
       // Do nothing to simulate a pause
-      duration: 1,
+      duration: animationDurations.FAST,
     });
 
     for (let i = 0, length = exploreTextLineElements.length; i < length; i++) {
@@ -251,7 +227,7 @@ const FineDiningScene = () => {
           filter: 'blur(4rem)',
           opacity: 0,
           transform: 'translate3d(0, -50vh, 0)',
-          duration: 1,
+          duration: animationDurations.FAST
       });
     }
 
@@ -259,8 +235,35 @@ const FineDiningScene = () => {
       filter: 'blur(4rem)',
       opacity: 0,
       transform: 'scale(0.95) translate3d(0, 30px, 0)',
-      duration: 1,
+      duration: animationDurations.FAST
     });
+
+    registerScene(sceneIndex, screenRef, timeline);
+  }, [dishes]);
+
+  const setDishRef = (element: HTMLLIElement): HTMLLIElement => {
+    dishRefs.current[dishRefs.current.length] = element;
+    return element;
+  };
+
+  const setDishInfoRef = (element: HTMLDivElement): HTMLDivElement => {
+    dishInfoRefs.current[dishInfoRefs.current.length] = element;
+    return element;
+  };
+
+  const dishElements: React.ReactNode[] = dishes.map((dish: Dish): React.ReactNode => {
+    return (
+      <Dish
+        ref={setDishRef}
+        key={dish.restaurant}
+        $backgroundImage={dish.image}
+      >
+        <DishInfo ref={setDishInfoRef}>
+          <DishName>{dish.name}</DishName>
+          <DishRestaurant>{dish.restaurant}</DishRestaurant>
+        </DishInfo>
+      </Dish>
+    );
   });
 
   return (
@@ -269,15 +272,17 @@ const FineDiningScene = () => {
       backgroundImage={SceneBackground}
       title="Fine Dining Experiences"
     >
-      <Header ref={exploreTextRef}>
-        <span>Exploring</span>
-        <span>the</span>
-        <span>world of flavor</span>
-      </Header>
-      {dishElements}
-      <Header ref={closureTextRef}>
-        It&apos;s not just all fancy
-      </Header>
+      <PageWrapper>
+        <Header ref={exploreTextRef}>
+          <span>Exploring</span>
+          <span>the</span>
+          <span>world of flavor</span>
+        </Header>
+        {dishElements}
+        <Header ref={closureTextRef}>
+          It&apos;s not just all fancy
+        </Header>
+      </PageWrapper>
     </ParallaxScreen>
   );
 };

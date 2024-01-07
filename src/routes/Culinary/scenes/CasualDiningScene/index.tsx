@@ -1,13 +1,15 @@
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
 import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
-import { Overlay, PageWrapper } from '../../../../components/static';
+import { Overlay, PaddedPageWrapper } from '../../../../components/static';
+import PageContext from '../../../../utils/PageContext';
+import { animationDurations } from '../../../../utils/ParallaxUtils';
+import { SceneProps } from '../../../../utils/SceneUtils';
 import { Continents, Dish } from '../../common';
 
 import SceneBackground from './images/screen-casualdining.jpg'
@@ -286,23 +288,22 @@ const dishData: Record<string, Dish[]> = {
   ]
 };
 
-const CasualDiningScene = () => {
-  // Screen refs and nodes
+const CasualDiningScene = ({ sceneIndex }: SceneProps) => {
+  const { registerScene } = useContext(PageContext);
+  const [dishes, setDishes] = useState<Dish[]>([]);
+
+  // Screen refs
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const headerS1Ref = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
   const headerS2Ref = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
   const headerS3Ref = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
+  const dishRefs = useRef<HTMLLIElement[]>([]);
   const endOverlayRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const endHeaderRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
-  let dishElements: React.ReactNode[];
 
-  // Screen data
-  const dishes: Dish[] = [];
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  // Initialize dish elements
-  ((): void => {
+  // Initialize dish data
+  useEffect((): void => {
+    const dishes: Dish[] = [];
     const isUltrawide = window.innerWidth / window.innerHeight > 21 / 9;
 
     for (const continent of Object.keys(dishData)) {
@@ -312,55 +313,26 @@ const CasualDiningScene = () => {
       dishes.push(...getRandomElements(continentDishes, Math.min(continentDishes.length, isUltrawide ? 4: 3)));
     }
   
-    for (const Dish of dishes) {
-      // We can ignore the linting errors as the elements always exist
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      Dish.dishRef = useRef<HTMLLIElement>() as React.MutableRefObject<HTMLLIElement>;
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      Dish.dishInfoRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
-    }
-  
     randomize(dishes);
     // Remove a dish to keep total to 15/12
     dishes.splice(0, isUltrawide ? 2 : 1);
-  
-    dishElements = dishes.map((dish: Dish): React.ReactNode => {
-      return (
-        <Dish
-          ref={dish.dishRef as React.MutableRefObject<HTMLLIElement>}
-          key={dish.restaurant}
-          $backgroundImage={dish.image}
-          $aspectRatio={dish.imageAspectRatio}
-          $jitterY={Math.round(Math.random() * 10) / 10}
-          $rotation={-25 + Math.round(Math.random() * 10) * 5}
-        >
-          <DishInfo ref={dish.dishInfoRef}>
-            <DishName>{dish.name}</DishName>
-            <DishRestaurant>{dish.restaurant}</DishRestaurant>
-          </DishInfo>
-        </Dish>
-      );
-    });
-  })();
+    setDishes(dishes);
+  }, []);
 
   // Screen animation
   useGSAP((): void => {
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: screenRef.current,
-        pin: true,
-        scrub: true,
-        start: 'top top',
-        end: `+=${dishes.length * 300 + 4 * 100}`,
-      }
-    });
+    if (dishes.length === 0) {
+      return;
+    }
+
+    const timeline = gsap.timeline({});
 
     timeline.from(headerS1Ref.current, {
       filter: 'blur(1.5rem)',
       opacity: 0,
       transform: 'scale(0.05)',
       ease: 'back.out(1)',
-      duration: 1,
+      duration: animationDurations.FAST,
     });
 
     timeline.from(headerS2Ref.current, {
@@ -368,7 +340,7 @@ const CasualDiningScene = () => {
       opacity: 0,
       transform: 'scale(0.05)',
       ease: 'back.out(1)',
-      duration: 1,
+      duration: animationDurations.FAST,
     });
 
     timeline.from(headerS3Ref.current, {
@@ -376,29 +348,29 @@ const CasualDiningScene = () => {
       opacity: 0,
       transform: 'scale(0.05)',
       ease: 'back.out(1)',
-      duration: 1,
+      duration: animationDurations.FAST,
     });
 
-    for (const dish of dishes) {
-      // We can ignore the linting errors as the references will always exist 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      timeline.from(dish.dishRef!.current, {
+    for (let i = 0; i < dishes.length; i++) {
+      const dishElement: HTMLLIElement = dishRefs.current[i];
+
+      timeline.from(dishElement, {
         y: '-=130vh',
         rotation: 900 + Math.round(Math.random() * 540) * (Math.random() >= 0.5 ? 1 : 1),
         ease: 'power1.out',
-        duration: 1,
+        duration: animationDurations.FAST,
       });
     }
 
     timeline.from(endOverlayRef.current, {
       // Do nothing to simulate a "pause"
-      duration: 1,
+      duration: animationDurations.FAST,
     });
 
     timeline.from(endOverlayRef.current, {
       background: 'rgba(0, 0, 0, 0)',
       ease: 'power1.out',
-      duration: 1,
+      duration: animationDurations.FAST,
     });
 
     timeline.from(endHeaderRef.current, {
@@ -406,8 +378,33 @@ const CasualDiningScene = () => {
       opacity: 0,
       transform: 'scale(0.05)',
       ease: 'back.out(1)',
-      duration: 1,
+      duration: animationDurations.FAST,
     }, '<');
+
+    registerScene(sceneIndex, screenRef, timeline);
+  }, [dishes]);
+
+  const setDishRef = (element: HTMLLIElement): HTMLLIElement => {
+    dishRefs.current[dishRefs.current.length] = element;
+    return element;
+  };
+
+  const dishElements: React.ReactNode[] = dishes.map((dish: Dish): React.ReactNode => {
+    return (
+      <Dish
+        ref={setDishRef}
+        key={dish.restaurant}
+        $backgroundImage={dish.image}
+        $aspectRatio={dish.imageAspectRatio}
+        $jitterY={Math.round(Math.random() * 10) / 10}
+        $rotation={-25 + Math.round(Math.random() * 10) * 5}
+      >
+        <DishInfo>
+          <DishName>{dish.name}</DishName>
+          <DishRestaurant>{dish.restaurant}</DishRestaurant>
+        </DishInfo>
+      </Dish>
+    );
   });
 
   return (
@@ -416,7 +413,7 @@ const CasualDiningScene = () => {
       backgroundImage={SceneBackground}
       title="Casual Dining & Street Food Experiences"
     >
-      <PageWrapper>
+      <PaddedPageWrapper>
         <Header>
           <HeaderS1 ref={headerS1Ref}>Casual</HeaderS1>
           <HeaderS2 ref={headerS2Ref}>is sometimes</HeaderS2>
@@ -425,7 +422,7 @@ const CasualDiningScene = () => {
         <Dishes>
           {dishElements}
         </Dishes>
-      </PageWrapper>
+      </PaddedPageWrapper>
       <Overlay ref={endOverlayRef}>
         <EndHeader ref={endHeaderRef}>It&apos;s not just food</EndHeader>
       </Overlay>

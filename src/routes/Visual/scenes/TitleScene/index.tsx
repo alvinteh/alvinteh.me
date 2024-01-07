@@ -1,8 +1,11 @@
+import { gsap } from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { useContext, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 import ParallaxScreen from '../../../../components/ParallaxScreen';
-import { PageTitle, PageWrapper, pageTransitionDuration } from '../../../../components/static';
-
+import { PageTitle, PaddedPageWrapper, pageTransitionDuration } from '../../../../components/static';
+import PageContext from '../../../../utils/PageContext';
 const revealAnimation = keyframes`
   0% {
     filter: blur(0.5rem);
@@ -138,12 +141,25 @@ const QuoteAuthor = styled.div`
   ${changeTextColorAnimation} 1200ms ease-in-out ${pageTransitionDuration + 5000}ms 1 backwards;
 `;
 
-const TitleScene = () => {
+const TitleScene = ({ sceneIndex }: { sceneIndex: number }) => {
+  const { registerScene } = useContext(PageContext);
+
+  // Screen refs
+  const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+  
+  // Screen animation
+  useGSAP((): void => {
+    const timeline = gsap.timeline({});
+
+    registerScene(sceneIndex, screenRef, timeline);
+  }, []);
+
   return (
     <ParallaxScreen
+      innerRef={screenRef}
       title=""
     >
-      <PageWrapper>
+      <PaddedPageWrapper>
         <PageTitle>Visual</PageTitle>
         <Quote>
           <QuoteText>
@@ -168,7 +184,7 @@ const TitleScene = () => {
           </QuoteText>
           <QuoteAuthor>Steve McCurry</QuoteAuthor>
         </Quote>
-      </PageWrapper>
+      </PaddedPageWrapper>
     </ParallaxScreen>
   );
 };

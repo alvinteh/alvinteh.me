@@ -1,12 +1,14 @@
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
 import { APIProvider } from '@vis.gl/react-google-maps';
 
 import ParallaxScreen from '../../../../components/ParallaxScreen';
+import PageContext from '../../../../utils/PageContext';
+import { animationDurations } from '../../../../utils/ParallaxUtils';
+import { SceneProps } from '../../../../utils/SceneUtils';
 import { screenSizes } from '../../../../utils/StyleUtils';
 import PlaceMap from './components/PlaceMap';
 import PlaceMapContext from './components/PlaceMapContext';
@@ -116,7 +118,8 @@ const places: Place[] = (rawPlaces as unknown) as Place[];
 places.forEach((place: Place) => { place.id = uuid(); })
 places.sort((a: Place, b: Place): number => { return (a.name < b.name ? -1 : 1); })
 
-const MapScene = () => {
+const MapScene = ({ sceneIndex }: SceneProps) => {
+  const { registerScene } = useContext(PageContext);
   const [activePlaceId, setActivePlaceId] = useState('');
 
   // Screen refs and nodes
@@ -127,66 +130,55 @@ const MapScene = () => {
   const subscreen3Ref = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const subscreen3HeaderRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
 
-  // Screen data
-  // (None)
+  // Screen animation
+  useGSAP((): void => {      
+    const timeline = gsap.timeline({});
 
-  gsap.registerPlugin(ScrollTrigger);
+    timeline.from(subscreen1HeaderRef.current.children, {
+      filter: 'blur(4rem)',
+      opacity: 0,
+      transform: 'scale(0.95) translate3d(0, 75px, 0)',
+      ease: 'power1.out',
+      duration: animationDurations.FAST,
+      stagger: 0.25,
+    });
 
-    // Screen animation
-    useGSAP((): void => {      
-      const timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: screenRef.current,
-          pin: true,
-          scrub: true,
-          start: 'top top',
-          end: `+=${5 * 300}`,
-        }
-      });
+    timeline.to(subscreen2Ref.current, {
+      top: '-=100vh',
+      duration: animationDurations.XSLOW,
+    });
 
-      timeline.from(subscreen1HeaderRef.current.children, {
-        filter: 'blur(4rem)',
-        opacity: 0,
-        transform: 'scale(0.95) translate3d(0, 75px, 0)',
-        ease: 'power1.out',
-        duration: 1,
-        stagger: 0.25,
-      });
+    // Do nothing to simulate a pause
+    timeline.to(subscreen2Ref.current, {
+      duration: animationDurations.FAST,
+    });
 
-      timeline.to(subscreen2Ref.current, {
-        top: '-=100vh',
-        duration: 2,
-      });
+    timeline.to(subscreen1Ref.current, {
+      top: '-=100vh',
+      duration: animationDurations.XSLOW,
+    });
 
-      // Do nothing to simulate a pause
-      timeline.to(subscreen2Ref.current, {
-        duration: 1,
-      });
+    timeline.to(subscreen2Ref.current, {
+      top: '-=200vh',
+      duration: animationDurations.XSLOW * 2,
+    }, '<');
 
-      timeline.to(subscreen1Ref.current, {
-        top: '-=100vh',
-        duration: 2,
-      });
+    timeline.to(subscreen3Ref.current, {
+      top: '-=100vh',
+      duration: animationDurations.XSLOW,
+    }, '<');
 
-      timeline.to(subscreen2Ref.current, {
-        top: '-=200vh',
-        duration: 2,
-      }, '<');
+    timeline.from(subscreen3HeaderRef.current.children, {
+      filter: 'blur(4rem)',
+      opacity: 0,
+      transform: 'scale(0.95) translate3d(0, 75px, 0)',
+      ease: 'power1.out',
+      duration: animationDurations.FAST,
+      stagger: 0.25,
+    });
 
-      timeline.to(subscreen3Ref.current, {
-        top: '-=100vh',
-        duration: 2,
-      }, '<');
-
-      timeline.from(subscreen3HeaderRef.current.children, {
-        filter: 'blur(4rem)',
-        opacity: 0,
-        transform: 'scale(0.95) translate3d(0, 75px, 0)',
-        ease: 'power1.out',
-        duration: 1,
-        stagger: 0.25,
-      });
-  });
+    registerScene(sceneIndex, screenRef, timeline);
+  }, []);
 
   return (
     <ParallaxScreen
