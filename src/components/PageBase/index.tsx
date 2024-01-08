@@ -37,6 +37,7 @@ const PageBase = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
   useGSAP((): void => {
     const sceneCount: number = Children.count(children);
 
+    // Skip processing if the scene refs/timelines have not been registered
     if (sceneRefs.length === 0 || sceneRefs.length !== sceneCount || sceneTimelines.length !== sceneCount) {
       return;
     }
@@ -49,10 +50,12 @@ const PageBase = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
       };
     }, { totalDuration: 0, totalChildren: 0 });
 
+    // Skip processing if the timeline children have not been registered
     if (totalChildren === 0) {
       return;
     }
 
+    // Create master timeline
     const timeline = gsap.timeline({
       scrollTrigger: {
         trigger: pageRef.current,
@@ -63,13 +66,15 @@ const PageBase = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
       }
     });
 
-    // Note: skip the last scene as it does not require parallax effects
+    // Stitch the timelines
     for (let i = 0; i < sceneTimelines.length; i++) {
       const nextSceneRef: React.MutableRefObject<HTMLDivElement> = sceneRefs[i + 1];
       const sceneTimeline: gsap.core.Timeline = sceneTimelines[i];
 
       timeline.add(sceneTimeline);
 
+      // Add transition animations between scenes
+      // Note: skip the last scene as it does not require parallax effects
       if (i < sceneTimelines.length - 1) {
         timeline.add(gsap.to(nextSceneRef.current, {
           transform: 'translate3d(0, -100vh, 0)',
