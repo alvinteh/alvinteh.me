@@ -1,8 +1,9 @@
-import { Helmet } from 'react-helmet';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Layout from '../../components/Layout';
+import { setPageTitle } from '../../utils/PageUtils';
 
 import HeroBackground from './images/hero.jpg';
 
@@ -61,11 +62,12 @@ const ReturnButton = styled(Link)`
 `;
 
 const ErrorPage = () => {
+  useEffect((): void => {
+    setPageTitle('Page Not Found | Alvin Teh');
+  });
+
   return (
     <>
-      <Helmet>
-        <title>Page Not Found</title>
-      </Helmet>
       <Layout>
         <Background>
           <ContentWrapper>
