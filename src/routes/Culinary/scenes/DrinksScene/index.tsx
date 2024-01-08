@@ -191,7 +191,7 @@ const DrinksScene = ({ sceneIndex }: SceneProps) => {
       .from(drinkElement, { transform: 'translate3d(35vw, 0, 0)', duration: animationDurations.FAST, })
       .from(drinkInfoElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)',
         duration: animationDurations.FAST, })
-      .to(drinkElement, { duration: animationDurations.FAST })
+      .to(drinkElement, { duration: animationDurations.FAST, })
       .to(drinkElement, { transform: 'translate3d(35vw, 0, 0)', duration: animationDurations.FAST, })
       .to(drinkInfoElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)',
         duration: animationDurations.FAST, }, '<');
