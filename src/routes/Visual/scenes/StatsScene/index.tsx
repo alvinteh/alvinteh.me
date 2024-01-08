@@ -96,7 +96,7 @@ const StatsScene = ({ sceneIndex }: SceneProps) => {
     const textAnimation: gsap.TweenVars = {
       innerText: 0,
       snap : { innerText: 1, },
-      duration: 1,
+      duration: animationDurations.XFAST,
       stagger: {
         each: 1,
         onUpdate: function () {
