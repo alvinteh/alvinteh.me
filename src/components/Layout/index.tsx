@@ -43,8 +43,6 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
-    width: 100vw;
-    height: 100vh;
     background: #000000;
     color: #ffffff;
     font-family: Inter;
@@ -276,8 +274,8 @@ const NavWrapper = styled.div<{ $isNavOpen: boolean, $isPageOpen: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  right: 0;
+  bottom: 0;
   overflow: hidden;
   pointer-events: ${(props) => { return (props.$isNavOpen ? 'auto' : 'none'); }};
   z-index: 2;
@@ -306,11 +304,9 @@ const NavWrapper = styled.div<{ $isNavOpen: boolean, $isPageOpen: boolean }>`
 `;
 
 const Wrapper = styled.div`
-  position: absolute;
-  width: 100vw;
+  position: relative;
   height: 100vh;
 `;
-
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
