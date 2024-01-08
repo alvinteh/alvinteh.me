@@ -122,7 +122,7 @@ const MapScene = ({ sceneIndex }: SceneProps) => {
   const { registerScene } = useContext(PageContext);
   const [activePlaceId, setActivePlaceId] = useState('');
 
-  // Screen refs and nodes
+  // Screen refs
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const subscreen1Ref = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const subscreen1HeaderRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
