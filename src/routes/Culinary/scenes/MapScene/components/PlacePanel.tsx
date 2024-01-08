@@ -37,7 +37,8 @@ const Places = styled.ul`
   padding: 1rem 0;
   height: 55vh;
   list-style: none;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
 `;
 
 const Place = styled.li<{ $isActive: boolean }>`
