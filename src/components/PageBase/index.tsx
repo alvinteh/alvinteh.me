@@ -12,6 +12,9 @@ import ScrollPrompt from '../ScrollPrompt';
 import styled from 'styled-components';
 import { animationDurations } from '../../utils/ParallaxUtils';
 
+// Note: this is intentionally unstyled as GSAP automatically applies styles
+const ParallaxSpacer = styled.div``;
+
 const ParallaxPageWrapper = styled.div`
   position: relative;
   height: 100vh;
@@ -24,6 +27,7 @@ const PageBase = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
   shouldHaveScrollPrompt: boolean,
   children: React.ReactNode
 }) => {
+  const pinSpacerRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const pageRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const [sceneRefs, setSceneRefs] = useState<React.MutableRefObject<HTMLDivElement>[]>([]);
   const [sceneTimelines, setSceneTimelines] = useState<gsap.core.Timeline[]>([]);
@@ -60,6 +64,7 @@ const PageBase = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
       scrollTrigger: {
         trigger: pageRef.current,
         pin: true,
+        pinSpacer: pinSpacerRef.current,
         scrub: true,
         start: 'top top',
         end: `+=${(totalDuration + sceneCount - 1) * parallaxUnit}`,
@@ -102,14 +107,14 @@ const PageBase = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
   // Note that the extra <div> is needed to prevent React errors arising when navigating away from the page
   // see https://gsap.com/community/forums/topic/28327-scrolltrigger-breaks-react-router/
   return (
-    <div>
+    <ParallaxSpacer ref={pinSpacerRef}>
       <PageContext.Provider value={{ titleSuffix, registerScene }}>
         <ParallaxPageWrapper ref={pageRef}>
           {children}
           {shouldHaveScrollPrompt && <ScrollPrompt pageRef={pageRef} />}
         </ParallaxPageWrapper>
       </PageContext.Provider>
-    </div>
+    </ParallaxSpacer>
   );
 };
 
