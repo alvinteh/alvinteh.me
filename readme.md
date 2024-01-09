@@ -7,7 +7,7 @@ v2 of my personal website, hosted at [https://alvinteh.me](https://alvinteh.me).
 * [node](https://nodejs.org/en/) 20.10.0+
 * [Google Maps](https://developers.google.com/maps) API Key and Map ID (see [guide](https://developers.google.com/maps/get-started) on obtaining it)
 * Paid [Font Awesome](https://fontawesome.com/) plan. The Pro version suffices.
-* (If deploying outside localhost) Paid [GSAP](https://gsap.com) plugin. The Plus version suffices.
+* (If deploying outside localhost) Paid [GSAP](https://gsap.com) plugin. The Premium version suffices.
  
 ## Get Started
 
@@ -22,7 +22,7 @@ v2 of my personal website, hosted at [https://alvinteh.me](https://alvinteh.me).
 
   Replace XXX and YYY with your Google Maps API key and Map ID respectively.
 
-4. This project uses plugins from the [paid version of GSAP](https://gsap.com/pricing/). Follow the steps in the [GSAP documentation](https://gsap.com/docs/v3/Installation/) to configure your npm profile to connect to the private repository. If you are only working on the files locally and prefer not to purchase GSAP, you can use the trial version of the plugin by updating the `gsap` package's reference to the private repository from `npm:@gsap/simply` to `npm:gsap-trial` in `package.json`.
+4. This project uses plugins from the [paid version of GSAP](https://gsap.com/pricing/). Follow the steps in the [GSAP documentation](https://gsap.com/docs/v3/Installation/) to configure your npm profile to connect to the private repository. If you are only working on the files locally and prefer not to purchase GSAP, you can use the trial version of the plugin by updating the `gsap` package's reference to the private repository from `npm:@gsap/shockingly` to `npm:gsap-trial` in `package.json`.
 5. This project uses [Pro icons from Font Awesome](https://fontawesome.com/plans). Follow the steps in the Font Awesome documentation to configure your npm profile to connect to the private repository.
 6. Run `npm run dev` to run the website locally for development/testing.
 7. Run `npm run build` to build the website for production, followed by `npm run preview` to test the aforementioned build locally.
