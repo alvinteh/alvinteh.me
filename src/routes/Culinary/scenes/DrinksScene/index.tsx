@@ -27,6 +27,10 @@ interface Drink {
   drinkInfoRef?: React.MutableRefObject<HTMLDivElement>;
 }
 
+interface DrinkAttrs {
+  $backgroundImage: string;
+}
+
 const DrinksParallaxScreen = styled(ParallaxScreen)`
   background-position: center bottom;
 `;
@@ -69,10 +73,13 @@ const Drink = styled.li`
   }
 `;
 
-const DrinkImage = styled.div<{ $backgroundImage: string }>`
+const DrinkImage = styled.div.attrs<DrinkAttrs>(({ $backgroundImage }) => ({
+  style: {
+    backgroundImage: `url(${$backgroundImage})`,
+  }
+}))`
   width: 100%;
   height: 100%;
-  background-image: url(${(props) => { return props.$backgroundImage; }});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
