@@ -140,7 +140,9 @@ const ScrollPrompt = ({ pageRef }: { pageRef: React.MutableRefObject<HTMLDivElem
   };
 
   const handleScroll = (): void => {    
-    if (window.innerHeight + window.scrollY >= pageRef.current.parentElement.scrollHeight) {
+    // We can ignore the linter error as the parent element always exists
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (window.innerHeight + window.scrollY >= pageRef.current.parentElement!.scrollHeight) {
       setVisible(false);
     }
     else {
