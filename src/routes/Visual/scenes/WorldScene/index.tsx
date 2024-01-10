@@ -16,7 +16,17 @@ import Subscreen5Background from './images/subscreen-5.jpg';
 import Subscreen6Background from './images/subscreen-6.jpg';
 import Subscreen7Background from './images/subscreen-7.jpg';
 
-const Subscreen = styled.div`
+interface SubscreenProps {
+  $backgroundImage: string;
+  $backgroundPosition?: string;
+}
+
+const Subscreen = styled.div.attrs<SubscreenProps>(({ $backgroundImage, $backgroundPosition}) => ({
+  style: {
+    backgroundImage: `url(${$backgroundImage})`,
+    backgroundPosition: $backgroundPosition ?? 'center',
+  }
+}))`
   position: absolute;
   top: 100vh;
   padding: 0;
@@ -195,34 +205,13 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
         <span>This world we live in.</span>
         <span>Our world.</span>
       </StartHeader>
-      <Subscreen ref={setSubscreenRef} style={{
-        backgroundImage: `url(${Subscreen1Background})`,
-        backgroundPosition: 'center left'
-      }} />
-      <Subscreen ref={setSubscreenRef} style={{
-        backgroundImage: `url(${Subscreen2Background})`,
-        backgroundPosition: 'top left'
-      }} />
-      <Subscreen ref={setSubscreenRef} style={{
-        backgroundImage: `url(${Subscreen3Background})`,
-        backgroundPosition: 'center'
-      }} />
-      <Subscreen ref={setSubscreenRef} style={{
-        backgroundImage: `url(${Subscreen4Background})`,
-        backgroundPosition: 'bottom right'
-      }} />
-      <Subscreen ref={setSubscreenRef} style={{
-        backgroundImage: `url(${Subscreen5Background})`,
-        backgroundPosition: 'center'
-      }} />
-      <Subscreen ref={setSubscreenRef} style={{
-        backgroundImage: `url(${Subscreen6Background})`,
-        backgroundPosition: 'center'
-      }} />
-      <Subscreen ref={setSubscreenRef} style={{
-        backgroundImage: `url(${Subscreen7Background})`,
-        backgroundPosition: 'bottom center'
-      }} />
+      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen1Background} $backgroundPosition="center left" />
+      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen2Background} $backgroundPosition="top left" />
+      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen3Background} />
+      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen4Background} $backgroundPosition="bottom right" />
+      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen5Background} />
+      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen6Background} />
+      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen7Background} $backgroundPosition="bottom center" />
       <Header ref={headerRef}>
         <HeaderStart ref={headerStartRef}>Our world is&nbsp;</HeaderStart>
         <HeaderAttributes>
