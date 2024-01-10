@@ -41,7 +41,15 @@ const Header = styled.h3`
   }
 `;
 
-const Dish = styled.li`
+interface DishProps {
+  $backgroundImage: string;
+}
+
+const Dish = styled.li.attrs<DishProps>(({ $backgroundImage }) => ({
+  style: {
+    backgroundImage: `url(${$backgroundImage})`,
+  }
+}))`
   position: absolute;
   bottom: -45vh;
   left: 50%;
@@ -255,7 +263,7 @@ const FineDiningScene = ({ sceneIndex }: SceneProps) => {
       <Dish
         ref={setDishRef}
         key={dish.restaurant}
-        style={{ backgroundImage: `url(${dish.image})` }}
+        $backgroundImage={dish.image}
       >
         <DishInfo ref={setDishInfoRef}>
           <DishName>{dish.name}</DishName>
