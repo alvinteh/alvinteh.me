@@ -11,6 +11,10 @@ import { NavItemData, navItemData } from './NavItemData';
 
 type NavItemState = 'DEFAULT' | 'CURRENT' | 'DULLED';
 
+interface NavItemAttrs {
+  $backgroundImage: string;
+}
+
 const NavItemStates: Record<string, NavItemState> = keyMirror({
   DEFAULT: null,
   CURRENT: null,
@@ -145,13 +149,16 @@ const Link = styled(LinkRR)`
 `;
 
 // Note: background images should be at least 768/1037/3226px (cropped/hovered/expanded) * 2160px
-const NavItem = styled.li<{ $slug: string, $backgroundImage: string, $state: NavItemState }>`
+const NavItem = styled.li.attrs<NavItemAttrs>(({ $backgroundImage }) => ({
+  style: {
+    backgroundImage: `url(${$backgroundImage})`,
+  }
+}))<{ $state: NavItemState }>`
   display: block; 
   position: relative;
   height: 100%;
   flex: ${(props) => { return (props.$state === NavItemStates.CURRENT ? 21 : 1); }};
   overflow: hidden;
-  background-image: url(${(props) => { return props.$backgroundImage; }});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -356,7 +363,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     return (
       <NavItem
         key={navItemData.slug}
-        $slug={navItemData.slug}
         $backgroundImage={navItemData.backgroundImage}
         $state={state}
       >
