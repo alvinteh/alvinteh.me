@@ -23,6 +23,14 @@ import Header4Svg from './images/cook-header-4.svg?react';
 import NoteBackground from './images/cook-note.png';
 import FaqWrapperBackground from './images/faq-wrapper.png';
 
+interface DishImageAttrs {
+  $backgroundImage: string;
+}
+
+interface ExtraDishAttrs {
+  $backgroundImage: string;
+}
+
 const Header1 = styled(Header1Svg)`
   position: absolute;
   top: 35vh;
@@ -172,14 +180,17 @@ const DishName = styled.div`
   }
 `;
 
-const DishImage = styled.div<{ $backgroundImage: string }>`
+const DishImage = styled.div.attrs<DishImageAttrs>(({ $backgroundImage }) => ({
+  style: {
+    backgroundImage: `url(${$backgroundImage})`,
+  }
+}))`
   position: absolute;
   top: 50%;
   left: calc(100% + 1.5vw - 42vw - 31vh);
   margin-top: -34vh;
   width: 62vh;
   aspect-ratio: 1;
-  background-image: url(${(props) => { return props.$backgroundImage; }});
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -201,7 +212,11 @@ const ExtraDishes = styled.ul`
   }
 `;
 
-const ExtraDish = styled.li<{ $backgroundImage: string }>`
+const ExtraDish = styled.li.attrs<ExtraDishAttrs>(({ $backgroundImage }) => ({
+  style: {
+    backgroundImage: `url(${$backgroundImage})`,
+  }
+}))`
   position: absolute;
   margin: 0;
   border: solid 10px #ffffff;
