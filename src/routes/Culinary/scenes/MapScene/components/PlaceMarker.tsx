@@ -7,10 +7,17 @@ import { Place } from '../types';
 import cuisineMarkerStyleMap, { MarkerStyle } from '../data/map-icon-data';
 import PlaceMapContext from './PlaceMapContext';
 
-const MarkerBackground = styled.div<{ $backgroundColor: string }>`
+interface MarkerBackgroundAttrs {
+  $backgroundColor: string;
+}
+
+const MarkerBackground = styled.div.attrs<MarkerBackgroundAttrs>(({ $backgroundColor }) => ({
+  style: {
+    background: $backgroundColor,
+  }
+}))`
   border-radius: 50%;
   padding: 0.3rem;
-  background: ${(props) => { return props.$backgroundColor; }};
   color: #ffffff;
 `;
 
