@@ -97,7 +97,9 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
   const handleDrag = useCallback(function(): void {
     // @ts-expect-error We can ignore the linting issue as this is set by GSAP
     const draggable: Draggable = this as Draggable;
-    const dragDirection: string = draggable.getDirection('start');
+    // Note: we do not use .deltaX/Y as those are inaccurate
+    const deltaX: number = draggable.endX - draggable.startX;
+    const deltaY: number = draggable.endY - draggable.startY;
 
     const galleryTop: number = draggable.y * -1;
     const galleryBottom: number = galleryTop + galleryRef.current.clientHeight;
@@ -108,7 +110,7 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
     const updatedGalleryImages: GalleryImage[] = [];
     let newGalleryLayout: GalleryImage[][] = galleryLayout.slice();
 
-    if (dragDirection.includes('down')) {
+    if (deltaY > 0) {
       // Check if first item in each row is within Y bounds, starting with top row
       while (newGalleryLayout[0][0].y + galleryImageHeight > galleryTop) {
         // Move bottommost items to top edge (using top item's Y)
@@ -123,7 +125,7 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
         newGalleryLayout = newGalleryLayout.slice(-1).concat(newGalleryLayout.slice(0, -1));
       }
     }
-    else if (dragDirection.includes('up')) {
+    else if (deltaY < 0) {
       // Check if first item in each row is within Y bounds, starting with bottom row
       while (newGalleryLayout[newGalleryLayout.length - 1][0].y < galleryBottom) {
         // Move topmost items to bottom edge (using bottom item's Y)
@@ -138,7 +140,7 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
         newGalleryLayout = newGalleryLayout.slice(1).concat(newGalleryLayout.slice(0, 1));
       }
     }
-    if (dragDirection.includes('right')) {
+    if (deltaX > 0) {
       // Check if each item in each row is within X bounds, starting with first/leftmost item
       for (let i = 0; i < newGalleryLayout.length; i++) {
         while (newGalleryLayout[i][0].x + getGalleryImageWidth(newGalleryLayout[i][0].image) > galleryLeft) {
@@ -154,7 +156,7 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
         }
       }
     }
-    else if (dragDirection.includes('left')) {
+    else if (deltaX < 0) {
       // Check if last/rightmost item in each row is within X bounds
       for (let i = 0; i < newGalleryLayout.length; i++) {
         while (newGalleryLayout[i][newGalleryLayout[i].length - 1].x < galleryRight) {
