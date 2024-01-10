@@ -35,6 +35,12 @@ import Dish19Background from './images/casualdining-dish-19.jpg';
 import Dish20Background from './images/casualdining-dish-20.jpg';
 import Dish21Background from './images/casualdining-dish-21.jpg';
 
+interface DishAttrs {
+  $backgroundImage: string;
+  $jitterY: number;
+  $rotation: number;
+}
+
 const Header = styled.h3`
   position: relative;
   top: 30vh;
@@ -90,21 +96,24 @@ const Dishes = styled.ul`
   }
 `;
 
-const Dish = styled.li<{ $backgroundImage: string, $aspectRatio: number, $jitterY: number, $rotation: number }>`
+const Dish = styled.li.attrs<DishAttrs>(({ $backgroundImage, $jitterY, $rotation }) => ({
+  style: {
+    top: `${$jitterY}rem`,
+    backgroundImage: `url(${$backgroundImage})`,
+    transform: `rotate(${$rotation}deg)`,
+  }
+}))<{ $aspectRatio: number, $rotation: number }>`
   position: relative;
-  top: ${(props) => { return props.$jitterY; }}rem;
   margin: -6vw 0 0;
   border: solid 10px #ffffff;
   border-bottom-width: 50px;
   padding: 0;
   width: 18vw;
   height: ${(props) => { return Math.round(props.$aspectRatio * 18); }}vw;
-  background-image: url(${(props) => { return props.$backgroundImage; }});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   box-shadow: 3px 3px 3px #303030;
-  transform: rotate(${(props) => { return props.$rotation; }}deg);
 
   @media ${aspectRatios.a21x9} {
     width: 14vw;
