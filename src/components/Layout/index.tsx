@@ -232,7 +232,6 @@ const NavList = styled.ul<{ $isPageOpen: boolean }>`
 
 const Nav = styled.nav<{ $isNavOpen: boolean }>`
   position: relative;
-  width: 100vw;
   height: 100vh;
   filter: blur(${(props) => { return (props.$isNavOpen ? 0 : '0px'); }});
   opacity: ${(props) => { return (props.$isNavOpen ? 1 : 0); }};
@@ -291,11 +290,11 @@ const NavWrapper = styled.div<{ $isNavOpen: boolean, $isPageOpen: boolean }>`
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     background: #1a1a1a;
     content: "";
-    transform: translate3d(-100vw, 0, 0);
+    transform: translate3d(-100%, 0, 0);
     z-index: 99;
     animation: ${slideInAnimation} 800ms ${cubicBezier} 0ms 1 normal forwards,
       ${slideOutAnimation} 800ms ${cubicBezier} 1200ms 1 normal forwards;
