@@ -18,14 +18,13 @@ import { Place } from './types';
 
 import SceneBackground from './images/screen-map.jpg';
 
-const Subscreen = styled.div<{ $zIndex?: number }>`
+const Subscreen = styled.div`
   position: absolute;
   top: 100vh;
   padding: 0;
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  z-index: ${(props) => { return Number.isNaN(props.$zIndex) ? 'auto' : props.$zIndex; }};
 
   &:nth-child(1) {
     top: 0;
@@ -194,7 +193,7 @@ const MapScene = ({ sceneIndex }: SceneProps) => {
           </Subscreen1Header>
         </Overlay>
       </Subscreen>
-      <Subscreen ref={subscreen2Ref} $zIndex={9992}>
+      <Subscreen ref={subscreen2Ref}>
         <PlaceMapContext.Provider value={{ activePlaceId, setActivePlaceId }}>
           <FlexWrapper>
             <ContentPanel>
@@ -209,7 +208,7 @@ const MapScene = ({ sceneIndex }: SceneProps) => {
           </FlexWrapper>
         </PlaceMapContext.Provider>
       </Subscreen>
-      <Subscreen ref={subscreen3Ref} $zIndex={9993}>
+      <Subscreen ref={subscreen3Ref}>
         <Overlay>
             <Subscreen3Header ref={subscreen3HeaderRef}>
               <Subscreen3HeaderS1>All of this food and drink</Subscreen3HeaderS1>
