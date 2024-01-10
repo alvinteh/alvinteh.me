@@ -36,10 +36,11 @@ const ImageWrapper = styled.div<{ $aspectRatio: number, $padding: number, $heigh
   aspect-ratio: ${(props) => { return props.$aspectRatio; }};
 `;
 
-const ImageElement = styled.div<{ $src: string }>`
+const ImageElement = styled.div`
   width: 100%;
   height: 100%;
-  background: url(${(props) => { return props.$src; }}) no-repeat;
+  background-position: center;
+  background-repeat: no-repeat;
   background-size: cover;
 `;
 
@@ -67,7 +68,7 @@ const GalleryImage = ({ id, image, height, padding, x, y }: {
 
   return (
     <ImageWrapper $aspectRatio={image.aspectRatio} $padding={padding} $height={height} style={style}>
-      <ImageElement $src={image.src} />    
+      <ImageElement style={{ backgroundImage: `url(${image.src})` }} />
       {!import.meta.env.PROD && <DebugLabel>{id}</DebugLabel>}
     </ImageWrapper>
   );
