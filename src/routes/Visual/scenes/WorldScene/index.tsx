@@ -16,12 +16,12 @@ import Subscreen5Background from './images/subscreen-5.jpg';
 import Subscreen6Background from './images/subscreen-6.jpg';
 import Subscreen7Background from './images/subscreen-7.jpg';
 
-interface SubscreenProps {
+interface SubscreenAttrs {
   $backgroundImage: string;
   $backgroundPosition?: string;
 }
 
-const Subscreen = styled.div.attrs<SubscreenProps>(({ $backgroundImage, $backgroundPosition}) => ({
+const Subscreen = styled.div.attrs<SubscreenAttrs>(({ $backgroundImage, $backgroundPosition}) => ({
   style: {
     backgroundImage: `url(${$backgroundImage})`,
     backgroundPosition: $backgroundPosition ?? 'center',

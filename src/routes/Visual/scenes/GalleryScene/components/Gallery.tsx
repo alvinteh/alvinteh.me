@@ -15,7 +15,7 @@ interface GalleryImage {
   y: number;
 }
 
-interface ImageElementProps {
+interface ImageElementAttrs {
   $backgroundImage: string;
 }
 
@@ -40,7 +40,7 @@ const ImageWrapper = styled.div<{ $aspectRatio: number, $padding: number, $heigh
   aspect-ratio: ${(props) => { return props.$aspectRatio; }};
 `;
 
-const ImageElement = styled.div.attrs<ImageElementProps>(({ $backgroundImage }) => ({
+const ImageElement = styled.div.attrs<ImageElementAttrs>(({ $backgroundImage }) => ({
   style: {
     backgroundImage: `url(${$backgroundImage})`,
   }

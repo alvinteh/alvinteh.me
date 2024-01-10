@@ -41,11 +41,11 @@ const Header = styled.h3`
   }
 `;
 
-interface DishProps {
+interface DishAttrs {
   $backgroundImage: string;
 }
 
-const Dish = styled.li.attrs<DishProps>(({ $backgroundImage }) => ({
+const Dish = styled.li.attrs<DishAttrs>(({ $backgroundImage }) => ({
   style: {
     backgroundImage: `url(${$backgroundImage})`,
   }
