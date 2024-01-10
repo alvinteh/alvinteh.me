@@ -4,6 +4,10 @@ import styled, { keyframes } from 'styled-components';
 
 import { navItemData, NavItemData } from '../Layout/NavItemData';
 
+interface ScrollPromptWrapperAttrs {
+  $positionAdjFactor: number;
+}
+
 const scrollPromptLeftAnimation = keyframes`
   0% {
     opacity: 1;
@@ -67,11 +71,14 @@ const ScrollPromptText = styled.span`
   user-select: none;
 `;
 
-const ScrollPromptWrapper = styled.span<{ $positionAdjFactor: number, $isVisible: boolean }>`
+const ScrollPromptWrapper = styled.span.attrs<ScrollPromptWrapperAttrs>(({ $positionAdjFactor }) => ({
+  style: {
+    left: `${42 + $positionAdjFactor * 4}%`
+  }
+}))<{ $isVisible: boolean }>`
   display: block;
   position: fixed;
   bottom: 10px;
-  left: ${(props) => { return 42 + props.$positionAdjFactor * 4; }}%;
   margin-left: -45px;
   width: 90px;
   height: 60px;
