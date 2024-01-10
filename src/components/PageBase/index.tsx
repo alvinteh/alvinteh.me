@@ -3,7 +3,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Children, useCallback, useEffect, useRef, useState } from 'react';
 
-import { cubicBezier, fadeInAnimation, pageTransitionDuration } from '../../components/static';
 import PageContext from '../../utils/PageContext';
 import { setPageTitle } from '../../utils/PageUtils';
 import { parallaxUnit } from '../../utils/ParallaxUtils';
@@ -19,7 +18,6 @@ const ParallaxPageWrapper = styled.div`
   position: relative;
   height: 100vh;
   overflow: hidden;
-  animation: ${fadeInAnimation} 1ms ${cubicBezier} ${pageTransitionDuration}ms 1 backwards;
 `;
 
 const PageBase = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
