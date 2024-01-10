@@ -4,13 +4,20 @@ import styled from 'styled-components';
 import PageContext from '../../utils/PageContext';
 import { setPageTitle } from '../../utils/PageUtils';
 
-const ParallaxScreenElement = styled.div<{ $backgroundImage?: string }>`
+interface ParallaxScreenElementAttrs {
+  $backgroundImage?: string;
+}
+
+const ParallaxScreenElement = styled.div.attrs<ParallaxScreenElementAttrs>(({ $backgroundImage }) => ({
+  style: {
+    backgroundImage: $backgroundImage ? `url(${$backgroundImage})` : 'none'
+  }
+}))`
   position: absolute;
   top: 100vh;
   left: 0;
   right: 0;
   height: 100vh;
-  background-image: ${(props) => { return props.$backgroundImage ? `url(${props.$backgroundImage})` : 'none'; }};
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
