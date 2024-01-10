@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
 
+import { cubicBezier } from '../../../../../components/static';
 import { Image } from '../types';
 
 interface GalleryImage {
@@ -17,6 +18,14 @@ interface GalleryImage {
 
 interface ImageElementAttrs {
   $backgroundImage: string;
+}
+
+interface FullImageAttrs {
+  $x: number;
+  $y: number;
+  $width: number;
+  $height: number;
+  $backgroundImage?: string;
 }
 
 const GalleryElement = styled.div`
@@ -52,40 +61,78 @@ const ImageElement = styled.div.attrs<ImageElementAttrs>(({ $backgroundImage }) 
   background-size: cover;
 `;
 
-const DebugLabel = styled.div`
-  position: absolute;
-  top: 45%;
+const FullImageViewer = styled.div<{ $isActive: boolean }>`
+  position: fixed;
+  top: 0;
+  bottom: 0;
   left: 0;
   right: 0;
-  color: #ffffff;
-  font-size: 2rem;
+  background-color: rgba(0, 0, 0, 0.95);
+  opacity: ${(props) => { return props.$isActive ? 1 : 0; }};
+  pointer-events: ${(props) => { return props.$isActive ? 'auto' : 'none'; }};
+  transition: opacity ${cubicBezier} 800ms;
+`;
+
+const FullImage = styled.div.attrs<FullImageAttrs>(({ $x, $y, $width, $height, $backgroundImage }) => ({
+  style: {
+    backgroundImage: $backgroundImage ? `url(${$backgroundImage})` : 'none',
+    width: `${$width}px`,
+    height: `${$height}px`,
+    transform: `translate3d(${$x}px, ${$y}px, 0)`,
+  }
+}))`
+  position: absolute;
+  background-size: cover;
+  background-position: center;
+`;
+
+const Caption = styled.div`
+  position: absolute;
+  width: 100%;
+  font-family: 'Crimson Text', serif;
+  font-size: 1.5rem;
   text-align: center;
 `;
 
-const GalleryImage = ({ id, image, height, padding, x, y }: {
-  id: string
+const GalleryImage = ({ id, image, height, padding, x, y, onClick }: {
+  id: string,
   image: Image,
   height: number,
   padding: number,
   x: number,
-  y: number
+  y: number,
+  onClick: (id: string) => void,
 }) => {
   const style: React.CSSProperties = {
     transform: `translate3d(${x}px, ${y}px, 0)`,
   };
 
+  const handleClick = (): void => {
+    onClick(id);
+  };
+
   return (
-    <ImageWrapper $aspectRatio={image.aspectRatio} $padding={padding} $height={height} style={style}>
+    <ImageWrapper
+      data-id={id}
+      $aspectRatio={image.aspectRatio}
+      $padding={padding}
+      $height={height}
+      style={style}
+      onClick={handleClick}
+    >
       <ImageElement $backgroundImage={image.src} />
-      {!import.meta.env.PROD && <DebugLabel>{id}</DebugLabel>}
     </ImageWrapper>
   );
 };
 
 const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }) => {
   const galleryRef =  useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+  const fullImageRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+  const captionRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+
   const [galleryImages, setGalleryImages] = useState<Record<string, GalleryImage>>({});
   const [galleryLayout, setGalleryLayout] = useState<GalleryImage[][]>([]);
+  const [activeGalleryImage, setActiveGalleryImage] = useState<GalleryImage>();
 
   const galleryItemPadding = 5;
 
@@ -197,6 +244,14 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
     }
   }, [galleryImages, galleryLayout, galleryImageHeight, getGalleryImageWidth]);
 
+  const handleGalleryImageClick = (id: string): void => {
+    setActiveGalleryImage(galleryImages[id]);
+  };
+
+  const handleFullImageViewerClick = (): void => {
+    setActiveGalleryImage(undefined);
+  };
+
   useEffect((): void => {
     const galleryElement: HTMLDivElement = galleryRef.current;
     const galleryWidth: number = galleryElement.clientWidth;
@@ -237,6 +292,73 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
     setGalleryLayout(galleryLayout);
   }, [images, itemHeight, galleryImageHeight, galleryImageMaxWidth, getGalleryImageWidth]);
 
+  useEffect((): void => {
+    if (!activeGalleryImage) {
+      return;
+    }
+
+    const image: Image = activeGalleryImage.image;
+    const galleryElement: HTMLDivElement = galleryRef.current;
+    const galleryRect: DOMRect = galleryElement.getBoundingClientRect();
+
+    let x: number = Math.round((galleryRect.width - image.aspectRatio * itemHeight) / 2);
+    let y: number = Math.round((galleryRect.height - itemHeight) / 2);
+
+    const fullImageElement: HTMLDivElement = fullImageRef.current;
+    const captionElement: HTMLDivElement = captionRef.current;
+
+    // Start image from gallery image position
+    fullImageElement.style.width = `${Math.round(image.aspectRatio * itemHeight)}px`;
+    fullImageElement.style.height = `${itemHeight}px`;
+    fullImageElement.style.transform = `translate3d(${activeGalleryImage.x}, ${activeGalleryImage.y}, 0)`;
+    captionElement.style.opacity = '0';
+
+    const timeline = gsap.timeline({});
+
+    timeline.to(fullImageElement, {
+      // Do nothing to simulate a pause
+      duration: 0.8,
+    });
+
+    // Move image to center
+    timeline.fromTo(fullImageElement,
+      {
+        transform: `translate3d(${activeGalleryImage.x}, ${activeGalleryImage.y}, 0)`,
+      },
+      {
+        transform: `translate3d(${x}px, ${y}px, 0)`,
+        ease: 'power1.inOut',
+        duration: 0.8,
+      }
+    );
+
+    // Scale image up
+    // Leave a buffer for the scroll prompt for portrait images
+    const bottomHeightBuffer = 110;
+    const imageWidth: number = image.aspectRatio >= 1 ? galleryRect.width :
+      Math.round((galleryRect.height + bottomHeightBuffer) * image.aspectRatio);
+    const imageHeight: number = image.aspectRatio < 1 ? galleryRect.height - bottomHeightBuffer :
+      Math.round(Math.pow(image.aspectRatio / galleryRect.width, -1));
+    x = Math.round((galleryRect.width - imageWidth) / 2);
+    y = image.aspectRatio < 1 ? 0 : Math.round((galleryRect.height - imageHeight) / 2);
+
+    captionElement.style.transform = `translate3d(0, ${y + imageHeight + 10}px, 0)`;
+
+    timeline.to(fullImageElement, {
+      width: `${imageWidth}px`,
+      height: `${imageHeight}px`,
+      transform: `translate3d(${x}px, ${y}px, 0)`,
+      ease: 'power1.inOut',
+      duration: 0.8,
+    });
+
+    timeline.to(captionRef.current, {
+      opacity: 1,
+      ease: 'power1.inOut',
+      duration: 0.4,
+    });
+  }, [activeGalleryImage, itemHeight]);
+
   useGSAP((): void => {
     if (Object.keys(galleryImages).length === 0) {
       return;
@@ -259,13 +381,26 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
       height={itemHeight}
       x={galleryImage.x}
       y={galleryImage.y}
+      onClick={handleGalleryImageClick}
     />;
   });
 
   return (
-    <GalleryElement ref={galleryRef}>
-      {imageElements}    
-    </GalleryElement>
+    <>
+      <GalleryElement ref={galleryRef}>
+        {imageElements}
+      </GalleryElement>
+      <FullImageViewer $isActive={!!activeGalleryImage} onClick={handleFullImageViewerClick}>
+        <FullImage ref={fullImageRef}
+          $x={(activeGalleryImage?.x ?? 0) + galleryItemPadding}
+          $y={(activeGalleryImage?.y ?? 0) + galleryItemPadding}
+          $width={activeGalleryImage ? Math.round(activeGalleryImage.image.aspectRatio * itemHeight) : 0}
+          $height={itemHeight}
+          $backgroundImage={activeGalleryImage?.image.src}
+        />
+        <Caption ref={captionRef}>{activeGalleryImage?.image.caption}</Caption>
+      </FullImageViewer>
+    </>
   )
 };
 
