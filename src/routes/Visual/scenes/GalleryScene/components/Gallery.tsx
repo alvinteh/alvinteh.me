@@ -302,52 +302,67 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
     const galleryElement: HTMLDivElement = galleryRef.current;
     const galleryRect: DOMRect = galleryElement.getBoundingClientRect();
 
-    let x: number = Math.round((galleryRect.width - image.aspectRatio * itemHeight) / 2);
-    let y: number = Math.round((galleryRect.height - itemHeight) / 2);
-
     const fullImageElement: HTMLDivElement = fullImageRef.current;
     const captionElement: HTMLDivElement = captionRef.current;
 
-    // Start image from gallery image position
-    fullImageElement.style.width = `${Math.round(image.aspectRatio * itemHeight)}px`;
+    // Calculate image dimensions for all 3 stages
+    // Stage 1: same size as gallery image
+    // Stage 2: partially zoomed
+    // Stage 3: fully zoomed, contained within gallery element
+    const bottomHeightBuffer = 110;
+    const stage1ImageWidth: number = Math.round(image.aspectRatio * itemHeight);
+    const stage1ImageHeight: number = itemHeight;
+    const stage3ImageWidth: number = image.aspectRatio >= 1 ? galleryRect.width :
+      Math.round((galleryRect.height + bottomHeightBuffer) * image.aspectRatio);
+    const stage3ImageHeight: number = image.aspectRatio < 1 ? galleryRect.height - bottomHeightBuffer :
+      Math.round(Math.pow(image.aspectRatio / galleryRect.width, -1));
+    const stage2ImageWidth: number = stage1ImageWidth + Math.round(0.75 * (stage3ImageWidth - stage1ImageWidth));
+    const stage2ImageHeight: number = stage1ImageHeight + Math.round(0.75 * (stage3ImageHeight - stage1ImageHeight));
+
+    const timeline = gsap.timeline({});
+
+    // Stage 1: start image from gallery image position
+    let x: number = activeGalleryImage.x;
+    let y: number = activeGalleryImage.y;
+
+    fullImageElement.style.width = `${stage1ImageWidth}px`;
     fullImageElement.style.height = `${itemHeight}px`;
     fullImageElement.style.transform = `translate3d(${activeGalleryImage.x}, ${activeGalleryImage.y}, 0)`;
     captionElement.style.opacity = '0';
-
-    const timeline = gsap.timeline({});
 
     timeline.to(fullImageElement, {
       // Do nothing to simulate a pause
       duration: 0.8,
     });
 
-    // Move image to center
+    // Stage 2: move image to center and scale it partially
+    x = Math.round((galleryRect.width - stage2ImageWidth) / 2);
+    y = Math.round((galleryRect.height - stage2ImageHeight) / 2);
+
     timeline.fromTo(fullImageElement,
       {
-        transform: `translate3d(${activeGalleryImage.x}, ${activeGalleryImage.y}, 0)`,
+        width: `${stage1ImageWidth}px`,
+        height: `${stage1ImageHeight}px`,
+        transform: `translate3d(${activeGalleryImage.x}px, ${activeGalleryImage.y}px, 0)`,
       },
       {
+        width: `${stage2ImageWidth}px`,
+        height: `${stage2ImageHeight}px`,
         transform: `translate3d(${x}px, ${y}px, 0)`,
         ease: 'power1.inOut',
         duration: 0.8,
       }
     );
 
-    // Scale image up
-    // Leave a buffer for the scroll prompt for portrait images
-    const bottomHeightBuffer = 110;
-    const imageWidth: number = image.aspectRatio >= 1 ? galleryRect.width :
-      Math.round((galleryRect.height + bottomHeightBuffer) * image.aspectRatio);
-    const imageHeight: number = image.aspectRatio < 1 ? galleryRect.height - bottomHeightBuffer :
-      Math.round(Math.pow(image.aspectRatio / galleryRect.width, -1));
-    x = Math.round((galleryRect.width - imageWidth) / 2);
-    y = image.aspectRatio < 1 ? 0 : Math.round((galleryRect.height - imageHeight) / 2);
+    // Stage 3: further scale up image and reposition it
+    x = Math.round((galleryRect.width - stage3ImageWidth) / 2);
+    y = image.aspectRatio < 1 ? 0 : Math.round((galleryRect.height - stage3ImageHeight) / 2);
 
-    captionElement.style.transform = `translate3d(0, ${y + imageHeight + 10}px, 0)`;
+    captionElement.style.transform = `translate3d(0, ${y + stage3ImageHeight + 10}px, 0)`;
 
     timeline.to(fullImageElement, {
-      width: `${imageWidth}px`,
-      height: `${imageHeight}px`,
+      width: `${stage3ImageWidth}px`,
+      height: `${stage3ImageHeight}px`,
       transform: `translate3d(${x}px, ${y}px, 0)`,
       ease: 'power1.inOut',
       duration: 0.8,
