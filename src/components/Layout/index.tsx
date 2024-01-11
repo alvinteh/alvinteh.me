@@ -410,7 +410,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     }
   });
 
-  const handleSideOverlayClick = (): void => {
+  const handleFullScreenOverlayClick = (): void => {
     setIsOverlayToggled(false);
   };
 
@@ -433,7 +433,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <FullScreenOverlay
           isToggled={isOverlayToggled}
           overlayType={OverlayTypes.STRONG}
-          clickHandler={handleSideOverlayClick}
+          clickHandler={handleFullScreenOverlayClick}
         >
           {overlayContent}
         </FullScreenOverlay>
