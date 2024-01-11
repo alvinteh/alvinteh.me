@@ -2,10 +2,11 @@ import gsap from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 import { InertiaPlugin } from 'gsap/InertiaPlugin';
 import { useGSAP } from '@gsap/react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
 
+import ScrollPromptContext from '../../../../../components/ScrollPrompt/ScrollPromptContext';
 import { cubicBezier } from '../../../../../components/static';
 import { Image } from '../types';
 
@@ -134,6 +135,7 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
   const [galleryImages, setGalleryImages] = useState<Record<string, GalleryImage>>({});
   const [galleryLayout, setGalleryLayout] = useState<GalleryImage[][]>([]);
   const [activeGalleryImage, setActiveGalleryImage] = useState<GalleryImage>();
+  const { setIsEnabled: setIsScrollPromptEnabled } = useContext(ScrollPromptContext);
 
   const galleryItemPadding = 5;
 
@@ -246,10 +248,12 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
   }, [galleryImages, galleryLayout, galleryImageHeight, getGalleryImageWidth]);
 
   const handleGalleryImageClick = (id: string): void => {
+    setIsScrollPromptEnabled(false);
     setActiveGalleryImage(galleryImages[id]);
   };
 
   const handleFullImageViewerClick = (): void => {
+    setIsScrollPromptEnabled(true);
     setActiveGalleryImage(undefined);
   };
 
@@ -309,7 +313,7 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
     // Stage 1: same size as gallery image
     // Stage 2: partially zoomed
     // Stage 3: fully zoomed, contained within gallery element
-    const bottomHeightBuffer = 110;
+    const bottomHeightBuffer = 40;
     const stage1ImageWidth: number = Math.round(image.aspectRatio * itemHeight);
     const stage1ImageHeight: number = itemHeight;
     const stage3ImageWidth: number = image.aspectRatio >= 1 ? galleryRect.width :
