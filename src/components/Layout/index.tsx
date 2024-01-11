@@ -149,6 +149,17 @@ const Link = styled(LinkRR)`
   z-index: 1;
 `;
 
+const OverlayCloseLink = styled(MiscLink)<{ $isNavOpen: boolean, $isPageOpen: boolean }>`
+  top: 25px;
+  left: 50px;
+  color: rgba(255, 255, 255, 1);
+  transition: all cubic-bezier(0.525, 0.06, 0.11, 0.995) 200ms;
+
+  &:hover {
+    color: rgba(128, 128, 128, 1);
+  }
+`;
+
 // Note: background images should be at least 768/1037/3226px (cropped/hovered/expanded) * 2160px
 const NavItem = styled.li.attrs<NavItemAttrs>(({ $backgroundImage }) => ({
   style: {
@@ -331,6 +342,7 @@ const FullScreenOverlay = ({ children, isToggled, overlayType, clickHandler }: {
       $type={overlayType}
       onClick={clickHandler}
     >
+      <OverlayCloseLink>Close</OverlayCloseLink>
       {children}
     </FullScreenOverlayElement>
   )
