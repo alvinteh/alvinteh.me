@@ -1,8 +1,8 @@
 import { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-import PageContext from '../../utils/PageContext';
 import { setPageTitle } from '../../utils/PageUtils';
+import PageContext from '../Page/PageContext';
 
 interface ParallaxScreenElementAttrs {
   $backgroundImage?: string;

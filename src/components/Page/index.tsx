@@ -3,11 +3,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Children, useCallback, useEffect, useRef, useState } from 'react';
 
-import PageContext from '../../utils/PageContext';
 import { setPageTitle } from '../../utils/PageUtils';
 import { parallaxUnit } from '../../utils/ParallaxUtils';
 import ScrollPromptContext from '../ScrollPrompt/ScrollPromptContext';
 import ScrollPrompt from '../ScrollPrompt';
+import PageContext from './PageContext';
 
 import styled from 'styled-components';
 import { animationDurations } from '../../utils/ParallaxUtils';

@@ -3,14 +3,14 @@ import { useGSAP } from '@gsap/react';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
+import PageContext from '../../../../components/Page/PageContext';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
 import { PageWrapper } from '../../../../components/static';
-import { Continents, Dish } from '../../common';
-import PageContext from '../../../../utils/PageContext';
+import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
 import { animationDurations } from '../../../../utils/ParallaxUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
 import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
+import { Continents, Dish } from '../../common';
 
 import SceneBackground from './images/scene-finedining.jpg'
 import Dish1Background from './images/finedining-dish-1.png';

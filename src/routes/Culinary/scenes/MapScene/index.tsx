@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
 import { APIProvider } from '@vis.gl/react-google-maps';
 
+import PageContext from '../../../../components/Page/PageContext';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
-import PageContext from '../../../../utils/PageContext';
 import { animationDurations } from '../../../../utils/ParallaxUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
 import { screenSizes } from '../../../../utils/StyleUtils';

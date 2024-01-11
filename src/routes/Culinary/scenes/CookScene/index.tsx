@@ -4,16 +4,16 @@ import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { dishData, extraBakeDishData, extraCookDishData } from './data/dish-data';
-import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
 import Accordion, { AccordionItem, AccordionItemContent, AccordionItemHeader } from '../../../../components/Accordion';
+import PageContext from '../../../../components/Page/PageContext';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
 import { PageWrapper } from '../../../../components/static';
-import PageContext from '../../../../utils/PageContext';
+import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
 import { animationDurations } from '../../../../utils/ParallaxUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
 import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
 import { Dish } from '../../common';
+import { dishData, extraBakeDishData, extraCookDishData } from './data/dish-data';
 
 import SceneBackground from './images/scene-cook.jpg'
 import Header1Svg from './images/cook-header-1.svg?react';

@@ -3,9 +3,10 @@ import { useGSAP } from '@gsap/react';
 import { useContext, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 
+import PageContext from '../../../../components/Page/PageContext';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
 import { PageTitle, PaddedPageWrapper, pageTransitionDuration } from '../../../../components/static';
-import PageContext from '../../../../utils/PageContext';
+
 const revealAnimation = keyframes`
   0% {
     filter: blur(0.5rem);

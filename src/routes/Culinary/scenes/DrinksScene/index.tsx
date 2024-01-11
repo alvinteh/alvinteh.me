@@ -3,12 +3,12 @@ import { useGSAP } from '@gsap/react';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { randomize } from '../../../../utils/ArrayUtils';
-import PageContext from '../../../../utils/PageContext';
-import { SceneProps } from '../../../../utils/SceneUtils';
-import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
+import PageContext from '../../../../components/Page/PageContext';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
 import { PageWrapper } from '../../../../components/static';
+import { randomize } from '../../../../utils/ArrayUtils';
+import { SceneProps } from '../../../../utils/SceneUtils';
+import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
 
 import SceneBackground from './images/scene-drinks.jpg'
 import Drink1Background from './images/drink-1.png';

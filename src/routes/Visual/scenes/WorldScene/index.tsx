@@ -3,8 +3,8 @@ import { useGSAP } from '@gsap/react';
 import { useContext, useRef } from 'react';
 import styled from 'styled-components';
 
+import PageContext from '../../../../components/Page/PageContext';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
-import PageContext from '../../../../utils/PageContext';
 import { animationDurations } from '../../../../utils/ParallaxUtils';
 
 import ScreenBackground from './images/screen-background.jpg';

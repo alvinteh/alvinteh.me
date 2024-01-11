@@ -3,9 +3,9 @@ import { useGSAP } from '@gsap/react';
 import { useContext, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 
+import PageContext from '../../../../components/Page/PageContext';
 import ParallaxScreen from '../../../../components/ParallaxScreen';
 import { PageTitle, PaddedPageWrapper, pageTransitionDuration } from '../../../../components/static';
-import PageContext from '../../../../utils/PageContext';
 import { screenSizes } from '../../../../utils/StyleUtils';
 
 const revealAnimation = keyframes`
