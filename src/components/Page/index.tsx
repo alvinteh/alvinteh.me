@@ -28,6 +28,7 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
 }) => {
   const pinSpacerRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const pageRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+  const [pageTimeline, setPageTimeline] = useState<gsap.core.Timeline>(gsap.timeline({}));
   const [sceneRefs, setSceneRefs] = useState<React.MutableRefObject<HTMLDivElement>[]>([]);
   const [sceneTimelines, setSceneTimelines] = useState<gsap.core.Timeline[]>([]);
   const [isScrollPromptEnabled, setIsScrollPromptEnabled] = useState<boolean>(true);
@@ -76,6 +77,7 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
       const nextSceneRef: React.MutableRefObject<HTMLDivElement> = sceneRefs[i + 1];
       const sceneTimeline: gsap.core.Timeline = sceneTimelines[i];
 
+      timeline.addLabel(`scene-${i}`, '>');
       timeline.add(sceneTimeline);
 
       // Add transition animations between scenes
@@ -87,6 +89,8 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
         }));
       }
     }
+
+    setPageTimeline(timeline);
   }, [children, sceneRefs, sceneTimelines]);
 
   const registerScene = useCallback((index: number, ref: React.MutableRefObject<HTMLDivElement>,
@@ -108,7 +112,7 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
   // see https://gsap.com/community/forums/topic/28327-scrolltrigger-breaks-react-router/
   return (
     <ParallaxSpacer ref={pinSpacerRef}>
-      <PageContext.Provider value={{ titleSuffix, registerScene }}>
+      <PageContext.Provider value={{ titleSuffix, pageTimeline, registerScene }}>
         <ScrollPromptContext.Provider value={{
             isEnabled: isScrollPromptEnabled,
             setIsEnabled: setIsScrollPromptEnabled
