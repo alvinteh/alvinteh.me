@@ -1,15 +1,17 @@
-import PageBase from '../../components/PageBase';
+import Page from '../../components/Page';
+import GalleryScene from './scenes/GalleryScene';
 import StatsScene from './scenes/StatsScene';
 import TitleScene from './scenes/TitleScene';
 import WorldScene from './scenes/WorldScene';
 
 const Visual = () => {
   return (
-    <PageBase titleSuffix="Visual" shouldHaveScrollPrompt={true}>
+    <Page titleSuffix="Visual" shouldHaveScrollPrompt={true}>
       <TitleScene sceneIndex={0} />
-      <WorldScene sceneIndex={1} />
-      <StatsScene sceneIndex={2} />
-    </PageBase>
+      <GalleryScene sceneIndex={1} />
+      <WorldScene sceneIndex={2} />
+      <StatsScene sceneIndex={3} />
+    </Page>
   );
 };
 

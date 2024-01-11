@@ -1,11 +1,11 @@
-import PageBase from '../../components/PageBase';
+import Page from '../../components/Page';
 import MainScene from './scenes/MainScene';
 
 const About = () => {
   return (
-    <PageBase titleSuffix="About" shouldHaveScrollPrompt={false}>
+    <Page titleSuffix="About" shouldHaveScrollPrompt={false}>
       <MainScene />
-    </PageBase>
+    </Page>
   );
 };
 

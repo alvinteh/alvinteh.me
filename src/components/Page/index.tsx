@@ -21,7 +21,7 @@ const ParallaxPageWrapper = styled.div`
   overflow: hidden;
 `;
 
-const PageBase = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
+const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
   titleSuffix: string,
   shouldHaveScrollPrompt: boolean,
   children: React.ReactNode
@@ -123,4 +123,4 @@ const PageBase = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
   );
 };
 
-export default PageBase;
+export default Page;
