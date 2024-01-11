@@ -1,6 +1,14 @@
+import keyMirror from 'keymirror';
 import styled, { keyframes } from 'styled-components';
 
 import { screenSizes } from '../utils/StyleUtils';
+
+type OverlayType = 'NORMAL' | 'STRONG';
+
+const OverlayTypes: Record<OverlayType, OverlayType> = keyMirror({
+  NORMAL: null,
+  STRONG: null,
+});
 
 const cubicBezier = 'cubic-bezier(0.525, 0.06, 0.11, 0.995)';
 const pageTransitionDuration = 400;
@@ -63,16 +71,20 @@ const PageTitle = styled.h1`
   }
 `;
 
-const Overlay = styled.div`
+const Overlay = styled.div<{ $isToggled?: boolean, $type?: OverlayType }>`
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, ${(props) => { return props.$type === OverlayTypes.STRONG ? 0.95 : 0.5; }});
+  opacity: ${(props) => { return props.$isToggled ? 1 : 0; }};
+  pointer-events: ${(props) => { return props.$isToggled ? 'auto' : 'none'; }};
+  transition: opacity ${cubicBezier} 800ms;
   z-index: 999;
 `;
 
+export type { OverlayType };
 export {
   cubicBezier,
   fadeInAnimation,
@@ -84,4 +96,5 @@ export {
   PageTitle,
 
   Overlay,
+  OverlayTypes,
 };

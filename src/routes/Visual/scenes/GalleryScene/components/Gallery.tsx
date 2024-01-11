@@ -6,6 +6,7 @@ import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'r
 import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
 
+import LayoutContext from '../../../../../components/Layout/LayoutContext';
 import ScrollPromptContext from '../../../../../components/ScrollPrompt/ScrollPromptContext';
 import { cubicBezier } from '../../../../../components/static';
 import { Image } from '../types';
@@ -136,6 +137,7 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
   const [galleryLayout, setGalleryLayout] = useState<GalleryImage[][]>([]);
   const [activeGalleryImage, setActiveGalleryImage] = useState<GalleryImage>();
   const { setIsEnabled: setIsScrollPromptEnabled } = useContext(ScrollPromptContext);
+  const { isOverlayToggled, setIsOverlayToggled } = useContext(LayoutContext);
 
   const galleryItemPadding = 5;
 
@@ -247,15 +249,17 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
     }
   }, [galleryImages, galleryLayout, galleryImageHeight, getGalleryImageWidth]);
 
-  const handleGalleryImageClick = (id: string): void => {
+  const handleGalleryImageClick = useCallback((id: string): void => {
     setIsScrollPromptEnabled(false);
+    setIsOverlayToggled(true);
     setActiveGalleryImage(galleryImages[id]);
-  };
+  }, [setIsScrollPromptEnabled, setIsOverlayToggled, setActiveGalleryImage, galleryImages]);
 
-  const handleFullImageViewerClick = (): void => {
+  const handleFullImageViewerClick = useCallback((): void => {
     setIsScrollPromptEnabled(true);
+    setIsOverlayToggled(false);
     setActiveGalleryImage(undefined);
-  };
+  }, [setIsScrollPromptEnabled, setIsOverlayToggled, setActiveGalleryImage]);
 
   useEffect((): void => {
     const galleryElement: HTMLDivElement = galleryRef.current;
@@ -378,6 +382,14 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
       duration: 0.4,
     });
   }, [activeGalleryImage, itemHeight]);
+
+  useEffect((): void => {
+    if (isOverlayToggled) {
+      return;
+    }
+
+    handleFullImageViewerClick();
+  }, [isOverlayToggled, handleFullImageViewerClick]);
 
   useGSAP((): void => {
     if (Object.keys(galleryImages).length === 0) {

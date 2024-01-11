@@ -1,12 +1,13 @@
 import keyMirror from 'keymirror';
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as LinkRR, useLocation, useNavigate } from 'react-router-dom';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 
 import { useDispatch, useSelector } from '../../core/hooks';
 import { open, toggle } from '../../slices/nav';
-import { cubicBezier } from '../static';
+import { cubicBezier, Overlay, OverlayType, OverlayTypes } from '../static';
 import { setPageTitle } from '../../utils/PageUtils';
+import LayoutContext from './LayoutContext';
 import { NavItemData, navItemData } from './NavItemData';
 
 type NavItemState = 'DEFAULT' | 'CURRENT' | 'DULLED';
@@ -15,7 +16,12 @@ interface NavItemAttrs {
   $backgroundImage: string;
 }
 
-const NavItemStates: Record<string, NavItemState> = keyMirror({
+interface SideOverlayAttrs {
+  $left: number;
+  $right: number;
+}
+
+const NavItemStates: Record<NavItemState, NavItemState> = keyMirror({
   DEFAULT: null,
   CURRENT: null,
   DULLED: null,
@@ -253,9 +259,9 @@ const Nav = styled.nav<{ $isNavOpen: boolean }>`
   }
 `;
 
-const Main = styled.main<{ $isPageOpen: boolean, $currentSlugIndex: number }>`
+const Main = styled.main<{ $isPageOpen: boolean, $currentPageIndex: number }>`
   position: relative;
-  left: ${(props) => { return (props.$isPageOpen ? Math.max(0, props.$currentSlugIndex) * 4 : 0); }}%;
+  left: ${(props) => { return (props.$isPageOpen ? Math.max(0, props.$currentPageIndex) * 4 : 0); }}%;
   width: 84%;
   min-height: 100vh;
   z-index: ${(props) => { return (props.$isPageOpen ? 3 : 0); }};
@@ -314,10 +320,46 @@ const Wrapper = styled.div`
   height: 100vh;
 `;
 
+const SideOverlay = styled(Overlay).attrs<SideOverlayAttrs>(({ $left, $right }) => ({
+  style: {
+    left: `${$left}%`,
+    right: `${$right}%`,
+  }
+}))`
+  position: fixed;
+`;
+
+const SideOverlays = ({ isToggled, overlayType, currentPageIndex, clickHandler }: {
+  isToggled: boolean,
+  overlayType: OverlayType,
+  currentPageIndex: number,
+  clickHandler: () => void,
+}) => {
+  return (
+    <>
+      <SideOverlay
+        $isToggled={isToggled}
+        $type={overlayType}
+        $left={0}
+        $right={84 + currentPageIndex * 4}
+        onClick={clickHandler}
+      />
+      <SideOverlay
+        $isToggled={isToggled}
+        $type={overlayType}
+        $left={84 + currentPageIndex * 4}
+        $right={0}
+        onClick={clickHandler}
+      />
+    </>
+  )
+};
+
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isOverlayToggled, setIsOverlayToggled] = useState<boolean>(false);
 
   const currentPage: string = location.pathname.substring(1).split('/')[0];
   const isPageOpen: boolean = currentPage !== '';
@@ -386,8 +428,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     }
   });
 
+  const handleSideOverlayClick = (): void => {
+    setIsOverlayToggled(false);
+  };
+
   return (
-    <React.Fragment>
+    <LayoutContext.Provider value={{ isOverlayToggled, setIsOverlayToggled }}>
       <GlobalStyle />
       <Wrapper>
         <NavWrapper $isNavOpen={isNavOpen} $isPageOpen={isPageOpen || isFromInternalNav}>
@@ -399,11 +445,17 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         </NavWrapper>
         <MenuLink onClick={handleMenuLinkClick} $isNavOpen={isNavOpen} $isPageOpen={isPageOpen}>Menu</MenuLink>
         <ConnectLink>Connect</ConnectLink>
-        <Main $isPageOpen={isPageOpen} $currentSlugIndex={currentPageIndex}>
+        <Main $isPageOpen={isPageOpen} $currentPageIndex={currentPageIndex}>
             {children}
         </Main>
+        <SideOverlays
+          isToggled={isOverlayToggled}
+          overlayType={OverlayTypes.STRONG}
+          currentPageIndex={currentPageIndex}
+          clickHandler={handleSideOverlayClick}
+        />
       </Wrapper>
-    </React.Fragment>
+    </LayoutContext.Provider>
   );
 };
 
