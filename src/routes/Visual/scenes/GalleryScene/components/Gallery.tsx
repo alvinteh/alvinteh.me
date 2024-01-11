@@ -510,9 +510,11 @@ const Gallery = ({ images, itemHeight, scrollTop }: { images: Image[], itemHeigh
       type: 'x,y',
       inertia: true,
       zIndexBoost: false,
+      throwResistance: 1250,
       onDragStart: handleDragStart,
       onDrag: handleDrag,
       onDragEnd: handleDragEnd,
+      onThrowUpdate: handleDrag,
     });
   }, [galleryImages]);
 
