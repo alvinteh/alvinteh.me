@@ -40,3 +40,6 @@ dist-ssr
 # Ignore image working files
 *.ai
 *.psd
+
+# Ignore personal notes
+/notes.md
