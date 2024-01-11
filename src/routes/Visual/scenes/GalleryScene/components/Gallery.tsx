@@ -1,6 +1,7 @@
 import gsap from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 import { InertiaPlugin } from 'gsap/InertiaPlugin';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -62,6 +63,11 @@ const ImageElement = styled.div.attrs<ImageElementAttrs>(({ $backgroundImage }) 
   background-size: cover;
 `;
 
+const FullImageViewerElement = styled.div`
+  position: absolute;
+  overflow: hidden;
+`;
+
 const FullImage = styled.div.attrs<FullImageAttrs>(({ $x, $y, $width, $height, $backgroundImage }) => ({
   style: {
     backgroundImage: $backgroundImage ? `url(${$backgroundImage})` : 'none',
@@ -117,22 +123,24 @@ const GalleryImage = ({ id, image, height, padding, x, y, onClick }: {
   );
 };
 
-const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef } : {
+const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef, scrollTop } : {
   isActive: boolean,
   galleryImage: GalleryImage | undefined,
   galleryItemHeight: number,
   galleryRef: React.MutableRefObject<HTMLDivElement>,
+  scrollTop: number,
 }) => {
   const { isOverlayToggled, setIsOverlayToggled, setOverlayContent } = useContext(LayoutContext);
   const { setIsEnabled: setIsScrollPromptEnabled } = useContext(ScrollPromptContext);
 
+  const fullImageViewerRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const fullImageRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const captionRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 
   useEffect((): void => {
     if (isActive && galleryImage) {
       const overlayContent: React.ReactNode = (
-        <>
+        <FullImageViewerElement ref={fullImageViewerRef}>
           <FullImage
             ref={fullImageRef}
             $x={galleryImage.x + galleryItemPadding}
@@ -142,7 +150,7 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
             $backgroundImage={galleryImage.image.src}
           />
           <Caption ref={captionRef}>{galleryImage.image.caption}</Caption>
-        </>
+        </FullImageViewerElement>
       );
 
       setIsScrollPromptEnabled(false);
@@ -170,6 +178,20 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
     const image: Image = galleryImage.image;
     const galleryBounds: DOMRect = galleryRef.current.getBoundingClientRect();
 
+    // Ensure gallery top is aligned to screen top
+    // Assumption is that the gallery is the same height as the scene (each scene is 100vh tall)
+    if (document.documentElement.scrollTop !== 0) {
+      window.scrollTo({ top: scrollTop, behavior: 'smooth' });
+    }
+
+    const fullImageViewerElement: HTMLDivElement = fullImageViewerRef.current;
+
+    // Position full image viewer
+    fullImageViewerElement.style.top = `0px`;
+    fullImageViewerElement.style.width = `${galleryBounds.width}px`;
+    fullImageViewerElement.style.left = `${galleryBounds.x}px`;
+    fullImageViewerElement.style.height = `${galleryBounds.height}px`;
+
     const fullImageElement: HTMLDivElement = fullImageRef.current;
     const captionElement: HTMLDivElement = captionRef.current;
 
@@ -190,12 +212,12 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
     const timeline = gsap.timeline({});
 
     // Stage 1: start image from gallery image position
-    let x: number = galleryImage.x;
-    let y: number = galleryImage.y;
+    const stage1X: number = galleryImage.x + galleryItemPadding;
+    const stage1Y: number = galleryImage.y + galleryItemPadding;
 
     fullImageElement.style.width = `${stage1ImageWidth}px`;
     fullImageElement.style.height = `${stage1ImageHeight}px`;
-    fullImageElement.style.transform = `translate3d(${galleryImage.x}, ${galleryImage.y}, 0)`;
+    fullImageElement.style.transform = `translate3d(${stage1X}, ${stage1Y}, 0)`;
     captionElement.style.opacity = '0';
 
     timeline.to(fullImageElement, {
@@ -204,34 +226,34 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
     });
 
     // Stage 2: move image to center and scale it partially
-    x = galleryBounds.x + Math.round((galleryBounds.width - stage2ImageWidth) / 2);
-    y = Math.round((galleryBounds.height - stage2ImageHeight) / 2);
+    const stage2X: number = Math.round((galleryBounds.width - stage2ImageWidth) / 2);
+    const stage2Y: number = Math.round((galleryBounds.height - stage2ImageHeight) / 2);
 
     timeline.fromTo(fullImageElement,
       {
         width: `${stage1ImageWidth}px`,
         height: `${stage1ImageHeight}px`,
-        transform: `translate3d(${galleryImage.x}px, ${galleryImage.y}px, 0)`,
+        transform: `translate3d(${stage1X}px, ${stage1Y}px, 0)`,
       },
       {
         width: `${stage2ImageWidth}px`,
         height: `${stage2ImageHeight}px`,
-        transform: `translate3d(${x}px, ${y}px, 0)`,
+        transform: `translate3d(${stage2X}px, ${stage2Y}px, 0)`,
         ease: 'power1.inOut',
         duration: 0.8,
       }
     );
 
     // Stage 3: further scale up image and reposition it
-    x = galleryBounds.x + Math.round((galleryBounds.width - stage3ImageWidth) / 2);
-    y = image.aspectRatio < 1 ? 0 : Math.round((galleryBounds.height - stage3ImageHeight) / 2);
+    const stage3X: number = Math.round((galleryBounds.width - stage3ImageWidth) / 2);
+    const stage3Y: number = image.aspectRatio < 1 ? 0 : Math.round((galleryBounds.height - stage3ImageHeight) / 2);
 
-    captionElement.style.transform = `translate3d(0, ${y + stage3ImageHeight + 10}px, 0)`;
+    captionElement.style.transform = `translate3d(0, ${stage3Y + stage3ImageHeight + 10}px, 0)`;
 
     timeline.to(fullImageElement, {
       width: `${stage3ImageWidth}px`,
       height: `${stage3ImageHeight}px`,
-      transform: `translate3d(${x}px, ${y}px, 0)`,
+      transform: `translate3d(${stage3X}px, ${stage3Y}px, 0)`,
       ease: 'power1.inOut',
       duration: 0.8,
     });
@@ -248,7 +270,7 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
   );
 };
 
-const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }) => {
+const Gallery = ({ images, itemHeight, scrollTop }: { images: Image[], itemHeight: number, scrollTop: number }) => {
   const galleryRef =  useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 
   const [galleryImages, setGalleryImages] = useState<Record<string, GalleryImage>>({});
@@ -452,6 +474,7 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
         galleryImage={activeGalleryImage}
         galleryItemHeight={itemHeight}
         galleryRef={galleryRef}
+        scrollTop={scrollTop}
       />
     </>
   )

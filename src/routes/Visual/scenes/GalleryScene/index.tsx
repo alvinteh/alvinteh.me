@@ -17,7 +17,7 @@ const GalleryWrapper = styled.div`
 `;
 
 const GalleryScene = ({ sceneIndex }: SceneProps) => {
-  const { registerScene } = useContext(PageContext);
+  const { pageTimeline, registerScene } = useContext(PageContext);
 
   // Screen refs
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
@@ -32,12 +32,16 @@ const GalleryScene = ({ sceneIndex }: SceneProps) => {
     });
 
     registerScene(sceneIndex, screenRef, timeline);
-  }, []); 
+  }, []);
 
   return (
     <Screen innerRef={screenRef} title="Photo Gallery">
       <GalleryWrapper>
-        <Gallery images={images} itemHeight={270} />
+        <Gallery
+          images={images}
+          itemHeight={270}
+          scrollTop={pageTimeline.scrollTrigger?.labelToScroll(`scene-${sceneIndex}`) ?? 0}
+        />
       </GalleryWrapper>
     </Screen>
   );
