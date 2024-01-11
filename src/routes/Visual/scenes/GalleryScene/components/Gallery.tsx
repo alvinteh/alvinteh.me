@@ -168,6 +168,10 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
   const fullImageRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const captionRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 
+  const handleClick = (event: React.MouseEvent): void => {
+    event.stopPropagation();
+  };
+
   useEffect((): void => {
     if (isActive && galleryImage) {
       const overlayContent: React.ReactNode = (
@@ -179,8 +183,9 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
             $width={Math.round(galleryImage.image.aspectRatio * galleryItemHeight)}
             $height={galleryItemHeight}
             $backgroundImage={galleryImage.image.src}
+            onClick={handleClick}
           />
-          <Caption ref={captionRef}>{galleryImage.image.caption}</Caption>
+          <Caption ref={captionRef} onClick={handleClick}>{galleryImage.image.caption}</Caption>
         </FullImageViewerElement>
       );
 
