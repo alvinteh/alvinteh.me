@@ -2,13 +2,12 @@ import gsap from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 import { InertiaPlugin } from 'gsap/InertiaPlugin';
 import { useGSAP } from '@gsap/react';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
 
 import LayoutContext from '../../../../../components/Layout/LayoutContext';
 import ScrollPromptContext from '../../../../../components/ScrollPrompt/ScrollPromptContext';
-import { cubicBezier } from '../../../../../components/static';
 import { Image } from '../types';
 
 interface GalleryImage {
@@ -63,18 +62,6 @@ const ImageElement = styled.div.attrs<ImageElementAttrs>(({ $backgroundImage }) 
   background-size: cover;
 `;
 
-const FullImageViewer = styled.div<{ $isActive: boolean }>`
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.95);
-  opacity: ${(props) => { return props.$isActive ? 1 : 0; }};
-  pointer-events: ${(props) => { return props.$isActive ? 'auto' : 'none'; }};
-  transition: opacity ${cubicBezier} 800ms;
-`;
-
 const FullImage = styled.div.attrs<FullImageAttrs>(({ $x, $y, $width, $height, $backgroundImage }) => ({
   style: {
     backgroundImage: $backgroundImage ? `url(${$backgroundImage})` : 'none',
@@ -96,6 +83,8 @@ const Caption = styled.div`
   font-weight: 400;
   text-align: center;
 `;
+
+const galleryItemPadding = 5;
 
 const GalleryImage = ({ id, image, height, padding, x, y, onClick }: {
   id: string,
@@ -128,18 +117,144 @@ const GalleryImage = ({ id, image, height, padding, x, y, onClick }: {
   );
 };
 
-const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }) => {
-  const galleryRef =  useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef } : {
+  isActive: boolean,
+  galleryImage: GalleryImage | undefined,
+  galleryItemHeight: number,
+  galleryRef: React.MutableRefObject<HTMLDivElement>,
+}) => {
+  const { isOverlayToggled, setIsOverlayToggled, setOverlayContent } = useContext(LayoutContext);
+  const { setIsEnabled: setIsScrollPromptEnabled } = useContext(ScrollPromptContext);
+
   const fullImageRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const captionRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+
+  useEffect((): void => {
+    if (isActive && galleryImage) {
+      const overlayContent: React.ReactNode = (
+        <>
+          <FullImage
+            ref={fullImageRef}
+            $x={galleryImage.x + galleryItemPadding}
+            $y={galleryImage.y + galleryItemPadding}
+            $width={Math.round(galleryImage.image.aspectRatio * galleryItemHeight)}
+            $height={galleryItemHeight}
+            $backgroundImage={galleryImage.image.src}
+          />
+          <Caption ref={captionRef}>{galleryImage.image.caption}</Caption>
+        </>
+      );
+
+      setIsScrollPromptEnabled(false);
+      setOverlayContent(overlayContent);
+      setIsOverlayToggled(true);
+    }
+    else {
+      setIsScrollPromptEnabled(true);
+      setIsOverlayToggled(false);
+    }
+  }, [
+    isActive,
+    galleryImage,
+    galleryItemHeight,
+    setIsScrollPromptEnabled,
+    setIsOverlayToggled,
+    setOverlayContent
+  ]);
+
+  useEffect((): void => {
+    if (!isOverlayToggled || !isActive || !galleryImage) {
+      return;
+    }
+
+    const image: Image = galleryImage.image;
+    const galleryBounds: DOMRect = galleryRef.current.getBoundingClientRect();
+
+    const fullImageElement: HTMLDivElement = fullImageRef.current;
+    const captionElement: HTMLDivElement = captionRef.current;
+
+    // Calculate image dimensions for all 3 stages
+    // Stage 1: same size as gallery image
+    // Stage 2: partially zoomed
+    // Stage 3: fully zoomed, contained within gallery element
+    const bottomHeightBuffer = 40;
+    const stage1ImageWidth: number = Math.round(image.aspectRatio * galleryItemHeight);
+    const stage1ImageHeight: number = galleryItemHeight;
+    const stage3ImageWidth: number = image.aspectRatio >= 1 ? galleryBounds.width :
+      Math.round((galleryBounds.height + bottomHeightBuffer) * image.aspectRatio);
+    const stage3ImageHeight: number = image.aspectRatio < 1 ? galleryBounds.height - bottomHeightBuffer :
+      Math.round(Math.pow(image.aspectRatio / galleryBounds.width, -1));
+    const stage2ImageWidth: number = stage1ImageWidth + Math.round(0.75 * (stage3ImageWidth - stage1ImageWidth));
+    const stage2ImageHeight: number = stage1ImageHeight + Math.round(0.75 * (stage3ImageHeight - stage1ImageHeight));
+
+    const timeline = gsap.timeline({});
+
+    // Stage 1: start image from gallery image position
+    let x: number = galleryImage.x;
+    let y: number = galleryImage.y;
+
+    fullImageElement.style.width = `${stage1ImageWidth}px`;
+    fullImageElement.style.height = `${stage1ImageHeight}px`;
+    fullImageElement.style.transform = `translate3d(${galleryImage.x}, ${galleryImage.y}, 0)`;
+    captionElement.style.opacity = '0';
+
+    timeline.to(fullImageElement, {
+      // Do nothing to simulate a pause
+      duration: 0.8,
+    });
+
+    // Stage 2: move image to center and scale it partially
+    x = galleryBounds.x + Math.round((galleryBounds.width - stage2ImageWidth) / 2);
+    y = Math.round((galleryBounds.height - stage2ImageHeight) / 2);
+
+    timeline.fromTo(fullImageElement,
+      {
+        width: `${stage1ImageWidth}px`,
+        height: `${stage1ImageHeight}px`,
+        transform: `translate3d(${galleryImage.x}px, ${galleryImage.y}px, 0)`,
+      },
+      {
+        width: `${stage2ImageWidth}px`,
+        height: `${stage2ImageHeight}px`,
+        transform: `translate3d(${x}px, ${y}px, 0)`,
+        ease: 'power1.inOut',
+        duration: 0.8,
+      }
+    );
+
+    // Stage 3: further scale up image and reposition it
+    x = galleryBounds.x + Math.round((galleryBounds.width - stage3ImageWidth) / 2);
+    y = image.aspectRatio < 1 ? 0 : Math.round((galleryBounds.height - stage3ImageHeight) / 2);
+
+    captionElement.style.transform = `translate3d(0, ${y + stage3ImageHeight + 10}px, 0)`;
+
+    timeline.to(fullImageElement, {
+      width: `${stage3ImageWidth}px`,
+      height: `${stage3ImageHeight}px`,
+      transform: `translate3d(${x}px, ${y}px, 0)`,
+      ease: 'power1.inOut',
+      duration: 0.8,
+    });
+
+    timeline.to(captionElement, {
+      opacity: 1,
+      ease: 'power1.inOut',
+      duration: 0.4,
+    });
+  }, [isOverlayToggled, isActive, galleryImage, galleryItemHeight, galleryRef]);
+
+  return (
+    <></>
+  );
+};
+
+const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }) => {
+  const galleryRef =  useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 
   const [galleryImages, setGalleryImages] = useState<Record<string, GalleryImage>>({});
   const [galleryLayout, setGalleryLayout] = useState<GalleryImage[][]>([]);
   const [activeGalleryImage, setActiveGalleryImage] = useState<GalleryImage>();
-  const { setIsEnabled: setIsScrollPromptEnabled } = useContext(ScrollPromptContext);
-  const { isOverlayToggled, setIsOverlayToggled } = useContext(LayoutContext);
-
-  const galleryItemPadding = 5;
+  const { isOverlayToggled } = useContext(LayoutContext);
 
   gsap.registerPlugin(Draggable, InertiaPlugin);
 
@@ -250,16 +365,8 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
   }, [galleryImages, galleryLayout, galleryImageHeight, getGalleryImageWidth]);
 
   const handleGalleryImageClick = useCallback((id: string): void => {
-    setIsScrollPromptEnabled(false);
-    setIsOverlayToggled(true);
     setActiveGalleryImage(galleryImages[id]);
-  }, [setIsScrollPromptEnabled, setIsOverlayToggled, setActiveGalleryImage, galleryImages]);
-
-  const handleFullImageViewerClick = useCallback((): void => {
-    setIsScrollPromptEnabled(true);
-    setIsOverlayToggled(false);
-    setActiveGalleryImage(undefined);
-  }, [setIsScrollPromptEnabled, setIsOverlayToggled, setActiveGalleryImage]);
+  }, [setActiveGalleryImage, galleryImages]);
 
   useEffect((): void => {
     const galleryElement: HTMLDivElement = galleryRef.current;
@@ -302,94 +409,12 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
   }, [images, itemHeight, galleryImageHeight, galleryImageMaxWidth, getGalleryImageWidth]);
 
   useEffect((): void => {
-    if (!activeGalleryImage) {
-      return;
-    }
-
-    const image: Image = activeGalleryImage.image;
-    const galleryElement: HTMLDivElement = galleryRef.current;
-    const galleryRect: DOMRect = galleryElement.getBoundingClientRect();
-
-    const fullImageElement: HTMLDivElement = fullImageRef.current;
-    const captionElement: HTMLDivElement = captionRef.current;
-
-    // Calculate image dimensions for all 3 stages
-    // Stage 1: same size as gallery image
-    // Stage 2: partially zoomed
-    // Stage 3: fully zoomed, contained within gallery element
-    const bottomHeightBuffer = 40;
-    const stage1ImageWidth: number = Math.round(image.aspectRatio * itemHeight);
-    const stage1ImageHeight: number = itemHeight;
-    const stage3ImageWidth: number = image.aspectRatio >= 1 ? galleryRect.width :
-      Math.round((galleryRect.height + bottomHeightBuffer) * image.aspectRatio);
-    const stage3ImageHeight: number = image.aspectRatio < 1 ? galleryRect.height - bottomHeightBuffer :
-      Math.round(Math.pow(image.aspectRatio / galleryRect.width, -1));
-    const stage2ImageWidth: number = stage1ImageWidth + Math.round(0.75 * (stage3ImageWidth - stage1ImageWidth));
-    const stage2ImageHeight: number = stage1ImageHeight + Math.round(0.75 * (stage3ImageHeight - stage1ImageHeight));
-
-    const timeline = gsap.timeline({});
-
-    // Stage 1: start image from gallery image position
-    let x: number = activeGalleryImage.x;
-    let y: number = activeGalleryImage.y;
-
-    fullImageElement.style.width = `${stage1ImageWidth}px`;
-    fullImageElement.style.height = `${itemHeight}px`;
-    fullImageElement.style.transform = `translate3d(${activeGalleryImage.x}, ${activeGalleryImage.y}, 0)`;
-    captionElement.style.opacity = '0';
-
-    timeline.to(fullImageElement, {
-      // Do nothing to simulate a pause
-      duration: 0.8,
-    });
-
-    // Stage 2: move image to center and scale it partially
-    x = Math.round((galleryRect.width - stage2ImageWidth) / 2);
-    y = Math.round((galleryRect.height - stage2ImageHeight) / 2);
-
-    timeline.fromTo(fullImageElement,
-      {
-        width: `${stage1ImageWidth}px`,
-        height: `${stage1ImageHeight}px`,
-        transform: `translate3d(${activeGalleryImage.x}px, ${activeGalleryImage.y}px, 0)`,
-      },
-      {
-        width: `${stage2ImageWidth}px`,
-        height: `${stage2ImageHeight}px`,
-        transform: `translate3d(${x}px, ${y}px, 0)`,
-        ease: 'power1.inOut',
-        duration: 0.8,
-      }
-    );
-
-    // Stage 3: further scale up image and reposition it
-    x = Math.round((galleryRect.width - stage3ImageWidth) / 2);
-    y = image.aspectRatio < 1 ? 0 : Math.round((galleryRect.height - stage3ImageHeight) / 2);
-
-    captionElement.style.transform = `translate3d(0, ${y + stage3ImageHeight + 10}px, 0)`;
-
-    timeline.to(fullImageElement, {
-      width: `${stage3ImageWidth}px`,
-      height: `${stage3ImageHeight}px`,
-      transform: `translate3d(${x}px, ${y}px, 0)`,
-      ease: 'power1.inOut',
-      duration: 0.8,
-    });
-
-    timeline.to(captionRef.current, {
-      opacity: 1,
-      ease: 'power1.inOut',
-      duration: 0.4,
-    });
-  }, [activeGalleryImage, itemHeight]);
-
-  useEffect((): void => {
     if (isOverlayToggled) {
       return;
     }
 
-    handleFullImageViewerClick();
-  }, [isOverlayToggled, handleFullImageViewerClick]);
+    setActiveGalleryImage(undefined);
+  }, [isOverlayToggled, setActiveGalleryImage]);
 
   useGSAP((): void => {
     if (Object.keys(galleryImages).length === 0) {
@@ -422,16 +447,12 @@ const Gallery = ({ images, itemHeight }: { images: Image[], itemHeight: number }
       <GalleryElement ref={galleryRef}>
         {imageElements}
       </GalleryElement>
-      <FullImageViewer $isActive={!!activeGalleryImage} onClick={handleFullImageViewerClick}>
-        <FullImage ref={fullImageRef}
-          $x={(activeGalleryImage?.x ?? 0) + galleryItemPadding}
-          $y={(activeGalleryImage?.y ?? 0) + galleryItemPadding}
-          $width={activeGalleryImage ? Math.round(activeGalleryImage.image.aspectRatio * itemHeight) : 0}
-          $height={itemHeight}
-          $backgroundImage={activeGalleryImage?.image.src}
-        />
-        <Caption ref={captionRef}>{activeGalleryImage?.image.caption}</Caption>
-      </FullImageViewer>
+      <FullImageViewer
+        isActive={!!activeGalleryImage}
+        galleryImage={activeGalleryImage}
+        galleryItemHeight={itemHeight}
+        galleryRef={galleryRef}
+      />
     </>
   )
 };

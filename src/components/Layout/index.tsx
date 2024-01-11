@@ -1,5 +1,5 @@
 import keyMirror from 'keymirror';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as LinkRR, useLocation, useNavigate } from 'react-router-dom';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 
@@ -14,11 +14,6 @@ type NavItemState = 'DEFAULT' | 'CURRENT' | 'DULLED';
 
 interface NavItemAttrs {
   $backgroundImage: string;
-}
-
-interface SideOverlayAttrs {
-  $left: number;
-  $right: number;
 }
 
 const NavItemStates: Record<NavItemState, NavItemState> = keyMirror({
@@ -320,38 +315,24 @@ const Wrapper = styled.div`
   height: 100vh;
 `;
 
-const SideOverlay = styled(Overlay).attrs<SideOverlayAttrs>(({ $left, $right }) => ({
-  style: {
-    left: `${$left}%`,
-    right: `${$right}%`,
-  }
-}))`
+const FullScreenOverlayElement = styled(Overlay)`
   position: fixed;
 `;
 
-const SideOverlays = ({ isToggled, overlayType, currentPageIndex, clickHandler }: {
+const FullScreenOverlay = ({ children, isToggled, overlayType, clickHandler }: {
+  children: React.ReactNode,
   isToggled: boolean,
   overlayType: OverlayType,
-  currentPageIndex: number,
   clickHandler: () => void,
 }) => {
   return (
-    <>
-      <SideOverlay
-        $isToggled={isToggled}
-        $type={overlayType}
-        $left={0}
-        $right={84 + currentPageIndex * 4}
-        onClick={clickHandler}
-      />
-      <SideOverlay
-        $isToggled={isToggled}
-        $type={overlayType}
-        $left={84 + currentPageIndex * 4}
-        $right={0}
-        onClick={clickHandler}
-      />
-    </>
+    <FullScreenOverlayElement
+      $isToggled={isToggled}
+      $type={overlayType}
+      onClick={clickHandler}
+    >
+      {children}
+    </FullScreenOverlayElement>
   )
 };
 
@@ -360,6 +341,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isOverlayToggled, setIsOverlayToggled] = useState<boolean>(false);
+  const [overlayContent, setOverlayContent] = useState<React.ReactNode>(<></>);
 
   const currentPage: string = location.pathname.substring(1).split('/')[0];
   const isPageOpen: boolean = currentPage !== '';
@@ -433,7 +415,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <LayoutContext.Provider value={{ isOverlayToggled, setIsOverlayToggled }}>
+    <LayoutContext.Provider value={{ isOverlayToggled, setIsOverlayToggled, setOverlayContent }}>
       <GlobalStyle />
       <Wrapper>
         <NavWrapper $isNavOpen={isNavOpen} $isPageOpen={isPageOpen || isFromInternalNav}>
@@ -448,12 +430,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <Main $isPageOpen={isPageOpen} $currentPageIndex={currentPageIndex}>
             {children}
         </Main>
-        <SideOverlays
+        <FullScreenOverlay
           isToggled={isOverlayToggled}
           overlayType={OverlayTypes.STRONG}
-          currentPageIndex={currentPageIndex}
           clickHandler={handleSideOverlayClick}
-        />
+        >
+          {overlayContent}
+        </FullScreenOverlay>
       </Wrapper>
     </LayoutContext.Provider>
   );
