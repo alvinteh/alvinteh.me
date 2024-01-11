@@ -91,19 +91,20 @@ const Caption = styled.div`
 
 const galleryItemPadding = 5;
 
-const GalleryImage = ({ id, image, height, padding, x, y, onClick }: {
+const GalleryImage = ({ id, image, height, padding, x, y, isClickable, onClick }: {
   id: string,
   image: Image,
   height: number,
   padding: number,
   x: number,
   y: number,
+  isClickable: boolean,
   onClick: (id: string) => void,
 }) => {
   const style: React.CSSProperties = {
     transform: `translate3d(${x}px, ${y}px, 0)`,
+    pointerEvents: isClickable ? 'auto' : 'none',
   };
-
   const handleClick = (): void => {
     onClick(id);
   };
@@ -280,6 +281,7 @@ const Gallery = ({ images, itemHeight, scrollTop }: { images: Image[], itemHeigh
   const [galleryImages, setGalleryImages] = useState<Record<string, GalleryImage>>({});
   const [galleryLayout, setGalleryLayout] = useState<GalleryImage[][]>([]);
   const [activeGalleryImage, setActiveGalleryImage] = useState<GalleryImage>();
+  const [isDragging, setIsDragging] = useState<boolean>(false);
   const { isOverlayToggled } = useContext(LayoutContext);
 
   gsap.registerPlugin(Draggable, InertiaPlugin);
@@ -297,6 +299,8 @@ const Gallery = ({ images, itemHeight, scrollTop }: { images: Image[], itemHeigh
   }, [itemHeight]);
 
   const handleDrag = useCallback(function(): void {
+    setIsDragging(false);
+
     // @ts-expect-error We can ignore the linting issue as this is set by GSAP
     const draggable: Draggable = this as Draggable;
     // Note: we do not use .deltaX/Y as those are inaccurate
@@ -391,8 +395,12 @@ const Gallery = ({ images, itemHeight, scrollTop }: { images: Image[], itemHeigh
   }, [galleryImages, galleryLayout, galleryImageHeight, getGalleryImageWidth]);
 
   const handleGalleryImageClick = useCallback((id: string): void => {
+    if (isDragging) {
+      return;
+    }
+
     setActiveGalleryImage(galleryImages[id]);
-  }, [setActiveGalleryImage, galleryImages]);
+  }, [setActiveGalleryImage, galleryImages, isDragging]);
 
   useEffect((): void => {
     const galleryElement: HTMLDivElement = galleryRef.current;
@@ -451,6 +459,9 @@ const Gallery = ({ images, itemHeight, scrollTop }: { images: Image[], itemHeigh
       type: 'x,y',
       inertia: true,
       zIndexBoost: false,
+      onDragStart: (): void => {
+        setIsDragging(true);
+      },
       onDragEnd: handleDrag,
     });
   }, [galleryImages]);
@@ -464,6 +475,7 @@ const Gallery = ({ images, itemHeight, scrollTop }: { images: Image[], itemHeigh
       height={itemHeight}
       x={galleryImage.x}
       y={galleryImage.y}
+      isClickable={!isDragging}
       onClick={handleGalleryImageClick}
     />;
   });
