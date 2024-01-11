@@ -6,6 +6,7 @@ import { Children, useCallback, useEffect, useRef, useState } from 'react';
 import PageContext from '../../utils/PageContext';
 import { setPageTitle } from '../../utils/PageUtils';
 import { parallaxUnit } from '../../utils/ParallaxUtils';
+import ScrollPromptContext from '../ScrollPrompt/ScrollPromptContext';
 import ScrollPrompt from '../ScrollPrompt';
 
 import styled from 'styled-components';
@@ -29,6 +30,7 @@ const PageBase = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
   const pageRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const [sceneRefs, setSceneRefs] = useState<React.MutableRefObject<HTMLDivElement>[]>([]);
   const [sceneTimelines, setSceneTimelines] = useState<gsap.core.Timeline[]>([]);
+  const [isScrollPromptEnabled, setIsScrollPromptEnabled] = useState<boolean>(true);
 
   gsap.registerPlugin(ScrollTrigger);
 
@@ -107,10 +109,15 @@ const PageBase = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
   return (
     <ParallaxSpacer ref={pinSpacerRef}>
       <PageContext.Provider value={{ titleSuffix, registerScene }}>
-        <ParallaxPageWrapper ref={pageRef}>
-          {children}
-          {shouldHaveScrollPrompt && <ScrollPrompt pageRef={pageRef} />}
-        </ParallaxPageWrapper>
+        <ScrollPromptContext.Provider value={{
+            isEnabled: isScrollPromptEnabled,
+            setIsEnabled: setIsScrollPromptEnabled
+          }}>
+          <ParallaxPageWrapper ref={pageRef}>
+            {children}
+            {shouldHaveScrollPrompt && <ScrollPrompt pageRef={pageRef} />}
+          </ParallaxPageWrapper>
+        </ScrollPromptContext.Provider>
       </PageContext.Provider>
     </ParallaxSpacer>
   );

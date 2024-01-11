@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
 import { navItemData, NavItemData } from '../Layout/NavItemData';
+import ScrollPromptContext from './ScrollPromptContext';
 
 interface ScrollPromptWrapperAttrs {
   $positionAdjFactor: number;
@@ -125,6 +126,7 @@ const ScrollPromptWrapper = styled.span.attrs<ScrollPromptWrapperAttrs>(({ $posi
 `;
 
 const ScrollPrompt = ({ pageRef }: { pageRef: React.MutableRefObject<HTMLDivElement> }) => {
+  const { isEnabled } = useContext(ScrollPromptContext);
   const location = useLocation();
 
   const currentSlug: string = location.pathname.substring(1);
@@ -162,7 +164,7 @@ const ScrollPrompt = ({ pageRef }: { pageRef: React.MutableRefObject<HTMLDivElem
     <ScrollPromptWrapper
       onClick={handleClick}
       $positionAdjFactor={currentSlugIndex}
-      $isVisible={isVisible}
+      $isVisible={isEnabled && isVisible}
     >
       <ScrollPromptText>Scroll Down</ScrollPromptText>
     </ScrollPromptWrapper>
