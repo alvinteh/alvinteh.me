@@ -2,7 +2,7 @@ import keyMirror from 'keymirror';
 
 type Continent = 'ASIA' | 'AFRICA_MID_EAST' | 'NORTH_AMERICA' | 'SOUTH_AMERICA' | 'EUROPE';
 
-const Continents: Record<string, Continent> = keyMirror({
+const Continents: Record<Continent, Continent> = keyMirror({
   ASIA: null,
   AFRICA_MID_EAST: null,
   NORTH_AMERICA: null,
