@@ -1,8 +1,8 @@
 import { createContext } from 'react';
 
 interface PlaceMapContext {
-  activePlaceId: string,
-  setActivePlaceId: (placeId: string) => void,
+  activePlaceId: string;
+  setActivePlaceId: (placeId: string) => void;
 }
 
 const PlaceMapContext = createContext<PlaceMapContext>({

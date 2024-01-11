@@ -11,10 +11,10 @@ const Continents: Record<string, Continent> = keyMirror({
 });
 
 interface Dish {
-  name: string,
-  restaurant: string,
-  image: string,
-  imageAspectRatio: number,
+  name: string;
+  restaurant: string;
+  image: string;
+  imageAspectRatio: number;
 }
 
 export type { Continent, Dish, };

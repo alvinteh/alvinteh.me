@@ -1,10 +1,10 @@
 interface Size {
-  phone: string
-  tablet: string
-  desktopS: string
-  desktopM: string
-  desktopL: string
-  desktopXL: string
+  phone: string;
+  tablet: string;
+  desktopS: string;
+  desktopM: string;
+  desktopL: string;
+  desktopXL: string;
 }
 
 const breakpoints: Size = {

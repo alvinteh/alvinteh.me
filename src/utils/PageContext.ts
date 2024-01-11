@@ -1,8 +1,8 @@
 import { createContext } from 'react';
 
 interface PageContext {
-  titleSuffix: string,
-  registerScene: (index: number, ref: React.MutableRefObject<HTMLDivElement>, timeline: gsap.core.Timeline) => void,
+  titleSuffix: string;
+  registerScene: (index: number, ref: React.MutableRefObject<HTMLDivElement>, timeline: gsap.core.Timeline) => void;
 }
 
 const PageContext = createContext<PageContext>({

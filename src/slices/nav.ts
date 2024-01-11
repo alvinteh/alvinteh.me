@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 interface NavState {
-  isOpen: boolean,
+  isOpen: boolean;
 }
 
 const initialState: NavState = {

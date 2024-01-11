@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
 
 interface AccordionContext {
-  activeItemId: string,
-  setActiveItemId: (itemId: string) => void,
+  activeItemId: string;
+  setActiveItemId: (itemId: string) => void;
 }
 
 interface AccordionItemContext {
-  itemId: string,
-  isCollapsed: boolean,
-  setIsCollapsed: (isCollapsed: boolean) => void
+  itemId: string;
+  isCollapsed: boolean;
+  setIsCollapsed: (isCollapsed: boolean) => void;
 }
 
 const AccordionElement = styled.ul`
