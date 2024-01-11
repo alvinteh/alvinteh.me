@@ -1,7 +1,6 @@
 import gsap from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 import { InertiaPlugin } from 'gsap/InertiaPlugin';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -176,7 +175,12 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
     }
 
     const image: Image = galleryImage.image;
-    const galleryBounds: DOMRect = galleryRef.current.getBoundingClientRect();
+    const galleryElement: HTMLDivElement = galleryRef.current;
+    const galleryBounds: DOMRect = galleryElement.getBoundingClientRect();
+    const galleryTranslate: number[] = galleryElement.style.transform.split(/\w+\(|\);?/)[1]
+      .split(/,\s?/g).map((s: string) => { return Number.parseFloat(s.replace('px', '')); });
+    const galleryTranslateX: number = galleryTranslate[0];
+    const galleryTranslateY: number = galleryTranslate[1];
 
     // Ensure gallery top is aligned to screen top
     // Assumption is that the gallery is the same height as the scene (each scene is 100vh tall)
@@ -189,7 +193,7 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
     // Position full image viewer
     fullImageViewerElement.style.top = `0px`;
     fullImageViewerElement.style.width = `${galleryBounds.width}px`;
-    fullImageViewerElement.style.left = `${galleryBounds.x}px`;
+    fullImageViewerElement.style.left = `${galleryBounds.x - galleryTranslateX}px`;
     fullImageViewerElement.style.height = `${galleryBounds.height}px`;
 
     const fullImageElement: HTMLDivElement = fullImageRef.current;
@@ -212,8 +216,8 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
     const timeline = gsap.timeline({});
 
     // Stage 1: start image from gallery image position
-    const stage1X: number = galleryImage.x + galleryItemPadding;
-    const stage1Y: number = galleryImage.y + galleryItemPadding;
+    const stage1X: number = galleryImage.x + galleryTranslateX + galleryItemPadding;
+    const stage1Y: number = galleryImage.y + galleryTranslateY + galleryItemPadding;
 
     fullImageElement.style.width = `${stage1ImageWidth}px`;
     fullImageElement.style.height = `${stage1ImageHeight}px`;
@@ -263,7 +267,7 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
       ease: 'power1.inOut',
       duration: 0.4,
     });
-  }, [isOverlayToggled, isActive, galleryImage, galleryItemHeight, galleryRef]);
+  }, [isOverlayToggled, isActive, galleryImage, galleryItemHeight, galleryRef, scrollTop]);
 
   return (
     <></>
