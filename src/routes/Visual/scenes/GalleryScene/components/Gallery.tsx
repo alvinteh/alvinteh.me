@@ -89,8 +89,9 @@ const FullImage = styled.div.attrs<FullImageAttrs>(({ $x, $y, $width, $height, $
 const Caption = styled.div`
   position: absolute;
   width: 100%;
-  font-family: 'Crimson Text', serif;
-  font-size: 1.5rem;
+  font-family: Lato, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 400;
   text-align: center;
 `;
 
