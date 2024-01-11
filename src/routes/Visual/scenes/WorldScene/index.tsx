@@ -4,7 +4,7 @@ import { useContext, useRef } from 'react';
 import styled from 'styled-components';
 
 import PageContext from '../../../../components/Page/PageContext';
-import ParallaxScreen from '../../../../components/ParallaxScreen';
+import Screen from '../../../../components/Screen';
 import { animationDurations } from '../../../../utils/ParallaxUtils';
 
 import ScreenBackground from './images/screen-background.jpg';
@@ -199,7 +199,7 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
   };
 
   return (
-    <ParallaxScreen innerRef={screenRef} backgroundImage={ScreenBackground} title="Photos from around the World">
+    <Screen innerRef={screenRef} backgroundImage={ScreenBackground} title="Photos from around the World">
       <StartHeader ref={startHeaderRef}>
         <span>What is this world to you?</span>
         <span>This world we live in.</span>
@@ -225,7 +225,7 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
         </HeaderAttributes>
       </Header>
       <EndHeader ref={endHeaderRef}>How much of it have you explored?</EndHeader>
-    </ParallaxScreen>
+    </Screen>
   );
 };
 

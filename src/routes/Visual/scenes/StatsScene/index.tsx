@@ -4,14 +4,14 @@ import { useContext, useRef } from 'react';
 import styled from 'styled-components';
 
 import PageContext from '../../../../components/Page/PageContext';
-import ParallaxScreen from '../../../../components/ParallaxScreen';
+import Screen from '../../../../components/Screen';
 import { animationDurations } from '../../../../utils/ParallaxUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
 import { screenSizes } from '../../../../utils/StyleUtils';
 
 import SceneBackground from './images/scene-background.jpg';
 
-const StyledParallaxScreen = styled(ParallaxScreen)`
+const StyledScreen = styled(Screen)`
   mask-image: radial-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0) 1%, rgba(0, 0, 0, 0) 100%);
   mask-size: cover;
   opacity: 0;
@@ -130,7 +130,7 @@ const StatsScene = ({ sceneIndex }: SceneProps) => {
   }, []); 
 
   return (
-    <StyledParallaxScreen innerRef={screenRef} backgroundImage={SceneBackground} title="Photography Stats">
+    <StyledScreen innerRef={screenRef} backgroundImage={SceneBackground} title="Photography Stats">
       {/* Stats last updated on 2024-01-05, excludes shots from Luang Prabang trip onwards */}
       <Header>Photos by the numbers</Header>
       <Stats>
@@ -175,7 +175,7 @@ const StatsScene = ({ sceneIndex }: SceneProps) => {
           <StatType>Mobile Shots</StatType>
         </Stat>
       </Stats>
-    </StyledParallaxScreen>
+    </StyledScreen>
   );
 };
 

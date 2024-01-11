@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 
 import PageContext from '../../../../components/Page/PageContext';
-import ParallaxScreen from '../../../../components/ParallaxScreen';
+import Screen from '../../../../components/Screen';
 import { Overlay, PaddedPageWrapper } from '../../../../components/static';
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
 import { animationDurations } from '../../../../utils/ParallaxUtils';
@@ -418,7 +418,7 @@ const CasualDiningScene = ({ sceneIndex }: SceneProps) => {
   });
 
   return (
-    <ParallaxScreen
+    <Screen
       innerRef={screenRef}
       backgroundImage={SceneBackground}
       title="Casual Dining & Street Food Experiences"
@@ -436,7 +436,7 @@ const CasualDiningScene = ({ sceneIndex }: SceneProps) => {
       <Overlay ref={endOverlayRef}>
         <EndHeader ref={endHeaderRef}>It&apos;s not just food</EndHeader>
       </Overlay>
-    </ParallaxScreen>
+    </Screen>
   );
 };
 

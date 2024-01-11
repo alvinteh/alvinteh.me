@@ -8,7 +8,7 @@ import {
   fadeInAnimation,
   pageTransitionDuration
 } from '../../../../components/static';
-import ParallaxScreen from '../../../../components/ParallaxScreen';
+import Screen from '../../../../components/Screen';
 import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
 
 import HeroMask from './images/hero-mask.png';
@@ -189,7 +189,7 @@ const Link = styled(LinkRR)`
 
 const MainScene = () => {
   return (
-    <ParallaxScreen title="">
+    <Screen title="">
       <PaddedPageWrapper>
         <PageTitle>About</PageTitle>
         <HeroTitle><AnimatedText>Alvin Teh</AnimatedText></HeroTitle>
@@ -206,7 +206,7 @@ const MainScene = () => {
           <Activity><Link to="/technology">Tech</Link></Activity>
         </Activities>
       </PaddedPageWrapper>
-    </ParallaxScreen>
+    </Screen>
   );
 };
 

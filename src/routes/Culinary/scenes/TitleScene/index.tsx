@@ -4,7 +4,7 @@ import { useContext, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 import PageContext from '../../../../components/Page/PageContext';
-import ParallaxScreen from '../../../../components/ParallaxScreen';
+import Screen from '../../../../components/Screen';
 import { PageTitle, PaddedPageWrapper, pageTransitionDuration } from '../../../../components/static';
 import { screenSizes } from '../../../../utils/StyleUtils';
 
@@ -130,7 +130,7 @@ const TitleScene = ({ sceneIndex }: { sceneIndex: number }) => {
   }, []);
 
   return (
-    <ParallaxScreen
+    <Screen
       innerRef={screenRef}
       title=""
     >
@@ -150,7 +150,7 @@ const TitleScene = ({ sceneIndex }: { sceneIndex: number }) => {
           <QuoteAuthor>Anthony Bourdain</QuoteAuthor>
         </Quote>
       </PaddedPageWrapper>
-    </ParallaxScreen>
+    </Screen>
   );
 };
 

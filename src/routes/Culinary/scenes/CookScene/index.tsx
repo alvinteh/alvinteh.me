@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import Accordion, { AccordionItem, AccordionItemContent, AccordionItemHeader } from '../../../../components/Accordion';
 import PageContext from '../../../../components/Page/PageContext';
-import ParallaxScreen from '../../../../components/ParallaxScreen';
+import Screen from '../../../../components/Screen';
 import { PageWrapper } from '../../../../components/static';
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
 import { animationDurations } from '../../../../utils/ParallaxUtils';
@@ -609,7 +609,7 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
   });
 
   return (
-    <ParallaxScreen
+    <Screen
       innerRef={screenRef}
       backgroundImage={SceneBackground}
       title="Cooks & Bakes"
@@ -695,7 +695,7 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
           </Accordion>
         </FaqWrapper>
       </PageWrapper>
-    </ParallaxScreen>
+    </Screen>
   );
 };
 

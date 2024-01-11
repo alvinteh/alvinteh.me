@@ -4,7 +4,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import PageContext from '../../../../components/Page/PageContext';
-import ParallaxScreen from '../../../../components/ParallaxScreen';
+import Screen from '../../../../components/Screen';
 import { PageWrapper } from '../../../../components/static';
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
 import { animationDurations } from '../../../../utils/ParallaxUtils';
@@ -274,7 +274,7 @@ const FineDiningScene = ({ sceneIndex }: SceneProps) => {
   });
 
   return (
-    <ParallaxScreen
+    <Screen
       innerRef={screenRef}
       backgroundImage={SceneBackground}
       title="Fine Dining Experiences"
@@ -290,7 +290,7 @@ const FineDiningScene = ({ sceneIndex }: SceneProps) => {
           It&apos;s not just all fancy
         </Header>
       </PageWrapper>
-    </ParallaxScreen>
+    </Screen>
   );
 };
 

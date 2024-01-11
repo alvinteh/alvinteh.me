@@ -1,14 +1,14 @@
 import { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-import { setPageTitle } from '../../utils/PageUtils';
 import PageContext from '../Page/PageContext';
+import { setPageTitle } from '../../utils/PageUtils';
 
-interface ParallaxScreenElementAttrs {
+interface ScreenElementAttrs {
   $backgroundImage?: string;
 }
 
-const ParallaxScreenElement = styled.div.attrs<ParallaxScreenElementAttrs>(({ $backgroundImage }) => ({
+const ScreenElement = styled.div.attrs<ScreenElementAttrs>(({ $backgroundImage }) => ({
   style: {
     backgroundImage: $backgroundImage ? `url(${$backgroundImage})` : 'none'
   }
@@ -32,7 +32,7 @@ const ScrollTracker = styled.div`
   position: relative;
 `;
 
-const ParallaxScreen = ({ innerRef, className, children, backgroundImage, title }: {
+const Screen = ({ innerRef, className, children, backgroundImage, title }: {
   innerRef?: React.MutableRefObject<HTMLDivElement>,
   className?: string,
   children?: React.ReactNode,
@@ -60,12 +60,12 @@ const ParallaxScreen = ({ innerRef, className, children, backgroundImage, title 
   });
 
   return (
-    <ParallaxScreenElement ref={innerRef} className={className ?? ''} $backgroundImage={backgroundImage}>
+    <ScreenElement ref={innerRef} className={className ?? ''} $backgroundImage={backgroundImage}>
       <ScrollTracker ref={scrollRef}>
         {children}
       </ScrollTracker>
-    </ParallaxScreenElement>
+    </ScreenElement>
   );
 };
 
-export default ParallaxScreen;
+export default Screen;

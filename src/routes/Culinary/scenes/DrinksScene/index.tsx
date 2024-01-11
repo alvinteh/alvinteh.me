@@ -4,7 +4,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import PageContext from '../../../../components/Page/PageContext';
-import ParallaxScreen from '../../../../components/ParallaxScreen';
+import Screen from '../../../../components/Screen';
 import { PageWrapper } from '../../../../components/static';
 import { randomize } from '../../../../utils/ArrayUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
@@ -31,7 +31,7 @@ interface DrinkAttrs {
   $backgroundImage: string;
 }
 
-const DrinksParallaxScreen = styled(ParallaxScreen)`
+const DrinksScreen = styled(Screen)`
   background-position: center bottom;
 `;
 
@@ -234,7 +234,7 @@ const DrinksScene = ({ sceneIndex }: SceneProps) => {
   });
 
   return (
-    <DrinksParallaxScreen
+    <DrinksScreen
       innerRef={screenRef}
       backgroundImage={SceneBackground}
       title="Cocktail Bar Experiences"
@@ -252,7 +252,7 @@ const DrinksScene = ({ sceneIndex }: SceneProps) => {
           {drinkElements}
         </Drinks>
       </PageWrapper>
-    </DrinksParallaxScreen>
+    </DrinksScreen>
   );
 };
 

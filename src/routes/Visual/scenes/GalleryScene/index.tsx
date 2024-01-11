@@ -4,7 +4,7 @@ import { useContext, useRef } from 'react';
 import styled from 'styled-components';
 
 import PageContext from '../../../../components/Page/PageContext';
-import ParallaxScreen from '../../../../components/ParallaxScreen';
+import Screen from '../../../../components/Screen';
 import { animationDurations } from '../../../../utils/ParallaxUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
 import Gallery from './components/Gallery';
@@ -35,11 +35,11 @@ const GalleryScene = ({ sceneIndex }: SceneProps) => {
   }, []); 
 
   return (
-    <ParallaxScreen innerRef={screenRef} title="Photo Gallery">
+    <Screen innerRef={screenRef} title="Photo Gallery">
       <GalleryWrapper>
         <Gallery images={images} itemHeight={270} />
       </GalleryWrapper>
-    </ParallaxScreen>
+    </Screen>
   );
 };
 

@@ -6,7 +6,7 @@ import { v4 as uuid } from 'uuid';
 import { APIProvider } from '@vis.gl/react-google-maps';
 
 import PageContext from '../../../../components/Page/PageContext';
-import ParallaxScreen from '../../../../components/ParallaxScreen';
+import Screen from '../../../../components/Screen';
 import { animationDurations } from '../../../../utils/ParallaxUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
 import { screenSizes } from '../../../../utils/StyleUtils';
@@ -180,7 +180,7 @@ const MapScene = ({ sceneIndex }: SceneProps) => {
   }, []);
 
   return (
-    <ParallaxScreen
+    <Screen
       innerRef={screenRef}
       title="Food & Drink Experiences"
       backgroundImage={SceneBackground}
@@ -216,7 +216,7 @@ const MapScene = ({ sceneIndex }: SceneProps) => {
             </Subscreen3Header>
           </Overlay>
       </Subscreen>
-    </ParallaxScreen>
+    </Screen>
   );
 };
 
