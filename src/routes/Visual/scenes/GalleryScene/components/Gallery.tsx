@@ -28,8 +28,6 @@ interface ImageElementAttrs {
 }
 
 interface FullImageAttrs {
-  $x: number;
-  $y: number;
   $width: number;
   $height: number;
   $backgroundImage?: string;
@@ -73,12 +71,11 @@ const FullImageViewerElement = styled.div`
   overflow: hidden;
 `;
 
-const FullImage = styled.div.attrs<FullImageAttrs>(({ $x, $y, $width, $height, $backgroundImage }) => ({
+const FullImage = styled.div.attrs<FullImageAttrs>(({ $width, $height, $backgroundImage }) => ({
   style: {
     backgroundImage: $backgroundImage ? `url(${$backgroundImage})` : 'none',
     width: `${$width}px`,
     height: `${$height}px`,
-    transform: `translate3d(${$x}px, ${$y}px, 0)`,
   }
 }))`
   position: absolute;
@@ -178,8 +175,6 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
         <FullImageViewerElement ref={fullImageViewerRef}>
           <FullImage
             ref={fullImageRef}
-            $x={galleryImage.x + galleryItemPadding}
-            $y={galleryImage.y + galleryItemPadding}
             $width={Math.round(galleryImage.image.aspectRatio * galleryItemHeight)}
             $height={galleryItemHeight}
             $backgroundImage={galleryImage.image.src}
@@ -212,6 +207,9 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
     }
 
     const image: Image = galleryImage.image;
+    // We can ignore the linting error as the element exists
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const galleryImageElement: HTMLDivElement = document.querySelector(`div[data-id="${galleryImage.id}"]`)!;
     const galleryElement: HTMLDivElement = galleryRef.current;
     const galleryBounds: DOMRect = galleryElement.getBoundingClientRect();
     const galleryTranslate: number[] = getElementTranslation(galleryElement);
@@ -252,8 +250,9 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
     const timeline = gsap.timeline({});
 
     // Stage 1: start image from gallery image position
-    const stage1X: number = galleryImage.x + galleryTranslateX + galleryItemPadding;
-    const stage1Y: number = galleryImage.y + galleryTranslateY + galleryItemPadding;
+    const [galleryImageX, galleryImageY] = getElementTranslation(galleryImageElement);
+    const stage1X: number = galleryImageX + galleryTranslateX + galleryItemPadding;
+    const stage1Y: number = galleryImageY + galleryTranslateY + galleryItemPadding;
 
     fullImageElement.style.width = `${stage1ImageWidth}px`;
     fullImageElement.style.height = `${stage1ImageHeight}px`;
