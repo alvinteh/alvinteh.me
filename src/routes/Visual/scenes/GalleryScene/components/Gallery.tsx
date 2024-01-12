@@ -34,17 +34,18 @@ interface FullImageAttrs {
   $backgroundImage?: string;
 }
 
-const GalleryElement = styled.div`
+// Note: we use !important to override GSAP's cursor styles
+const GalleryElement = styled.div<{ $isInteractive: boolean }>`
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  cursor: grab;
+  cursor: ${(props) => { return props.$isInteractive ? 'grab' : 'auto !important'; }};
   user-select: none;
 
   &:active {
-    cursor: grabbing;
+    cursor: ${(props) => { return props.$isInteractive ? 'grabbing' : 'auto !important'; }};
   }
 `;
 
@@ -196,7 +197,7 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
 
     // Ensure gallery top is aligned to screen top
     // Assumption is that the gallery is the same height as the scene (each scene is 100vh tall)
-    if (document.documentElement.scrollTop !== 0) {
+    if (document.documentElement.scrollTop !== scrollTop) {
       window.scrollTo({ top: scrollTop, behavior: 'smooth' });
     }
 
@@ -287,13 +288,19 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
   );
 };
 
-const Gallery = ({ images, itemHeight, scrollTop }: { images: Image[], itemHeight: number, scrollTop: number }) => {
+const Gallery = ({ images, itemHeight, scrollTop, isInteractive }: {
+  images: Image[],
+  itemHeight: number,
+  scrollTop: number,
+  isInteractive: boolean,
+}) => {
   const galleryRef =  useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const galleryImageRefs = useRef<React.RefObject<HTMLDivElement>[]>([]);
 
   const [galleryImages, setGalleryImages] = useState<Record<string, GalleryImage>>({});
   const [activeGalleryImage, setActiveGalleryImage] = useState<GalleryImage>();
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [draggable, setDraggable] = useState<Draggable>();
   const { isOverlayToggled } = useContext(LayoutContext);
 
   gsap.registerPlugin(Draggable, InertiaPlugin);
@@ -425,21 +432,34 @@ const Gallery = ({ images, itemHeight, scrollTop }: { images: Image[], itemHeigh
     }
   }, [galleryImageHeight]);
 
-  const handleDragStart = (): void => {
+  const handleDragStart = useCallback(function(event: MouseEvent) {
+    // Technically speaking, the condition below should not be needed as we kill the draggable, but it has been
+    // been retained for safety
+    if (!isInteractive) {
+      // @ts-expect-error We can ignore the linting issue as this is set by GSAP
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      this.endDrag(event);
+      return;
+    }
+
     setIsDragging(true);
-  };
+  }, [isInteractive]);
 
   const handleDragEnd = (): void => {
     setIsDragging(false);
   };
 
   const handleGalleryImageClick = useCallback((id: string): void => {
+    if (!isInteractive) {
+      return;
+    }
+
     if (isDragging) {
       return;
     }
 
     setActiveGalleryImage(galleryImages[id]);
-  }, [setActiveGalleryImage, galleryImages, isDragging]);
+  }, [isInteractive, galleryImages, isDragging]);
 
   useEffect((): void => {
     const galleryElement: HTMLDivElement = galleryRef.current;
@@ -483,12 +503,26 @@ const Gallery = ({ images, itemHeight, scrollTop }: { images: Image[], itemHeigh
     setActiveGalleryImage(undefined);
   }, [isOverlayToggled, setActiveGalleryImage]);
 
+  useEffect((): void => {
+    if (!draggable) {
+      return;
+    }
+
+    if (!isInteractive) {
+      draggable.kill();
+    }
+  }, [draggable, isInteractive]);
+
   useGSAP((): void => {
     if (Object.keys(galleryImages).length === 0) {
       return;
     }
 
-    Draggable.create(galleryRef.current, {
+    if (!isInteractive) {
+      return;
+    }
+
+    setDraggable((Draggable.create(galleryRef.current, {
       type: 'x,y',
       inertia: true,
       zIndexBoost: false,
@@ -497,8 +531,8 @@ const Gallery = ({ images, itemHeight, scrollTop }: { images: Image[], itemHeigh
       onDrag: handleDrag,
       onDragEnd: handleDragEnd,
       onThrowUpdate: handleDrag,
-    });
-  }, [galleryImages]);
+    }))[0]);
+  }, [galleryImages, isInteractive, handleDragStart, handleDrag]);
 
   const imageElements = [];
   
@@ -522,7 +556,7 @@ const Gallery = ({ images, itemHeight, scrollTop }: { images: Image[], itemHeigh
 
   return (
     <>
-      <GalleryElement ref={galleryRef}>
+      <GalleryElement ref={galleryRef} $isInteractive={isInteractive}>
         {imageElements}
       </GalleryElement>
       <FullImageViewer
