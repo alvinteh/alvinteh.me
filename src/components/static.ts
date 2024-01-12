@@ -78,7 +78,7 @@ const Overlay = styled.div<{ $isToggled?: boolean, $type?: OverlayType }>`
   right: 0;
   height: 100vh;
   background: rgba(0, 0, 0, ${(props) => { return props.$type === OverlayTypes.STRONG ? 0.95 : 0.5; }});
-  opacity: ${(props) => { return props.$isToggled ? 1 : 0; }};
+  opacity: ${(props) => { return props.$isToggled === false ? 0 : 1; }};
   pointer-events: ${(props) => { return props.$isToggled ? 'auto' : 'none'; }};
   transition: opacity ${cubicBezier} 800ms;
   z-index: 999;
