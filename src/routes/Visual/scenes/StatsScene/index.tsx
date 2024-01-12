@@ -91,8 +91,8 @@ const StatsScene = ({ sceneIndex }: SceneProps) => {
 
   // Screen animation
   useGSAP((): void => {
-    const timeline = gsap.timeline({});
-
+    const timeline = gsap.timeline({ data: { isCustomTransition: true }});
+    
     const textAnimation: gsap.TweenVars = {
       innerText: 0,
       snap : { innerText: 1, },
@@ -114,7 +114,7 @@ const StatsScene = ({ sceneIndex }: SceneProps) => {
     timeline.to(screenRef.current, {
       opacity: 1,
       'mask-image': 'radial-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 1) 99%, rgba(0, 0, 0, 0) 100%)',
-      duration: animationDurations.MEDIUM,
+      duration: animationDurations.SLOW,
     });
     timeline.from(countriesVisitedRef.current, textAnimation);
     timeline.from(citiesVisitedRef.current, textAnimation, '<');

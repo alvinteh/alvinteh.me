@@ -85,7 +85,9 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
       if (i < sceneTimelines.length - 1) {
         timeline.add(gsap.to(nextSceneRef.current, {
           transform: 'translate3d(0, -100vh, 0)',
-          duration: animationDurations.XSLOW,
+          // We can ignore the linting issue as data is typed as any
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          duration: sceneTimeline.data?.isCustomTransition ? animationDurations.XFAST : animationDurations.XSLOW,
         }));
       }
     }
