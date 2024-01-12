@@ -58,13 +58,14 @@ const GalleryScene = ({ sceneIndex }: SceneProps) => {
     
     timeline.fromTo(galleryWrapperElement, {
       opacity: 0,
-      y: `-=${itemHeight * 1}px`,
       scale: 2,
+      y: `${itemHeight * 1}px`,
     },
     {
       opacity: 1,
       scale: 1,
       y: `${itemHeight * 1}px`,
+      ease: 'power1.out',
       duration: animationDurations.XSLOW,
     });
 
@@ -73,30 +74,36 @@ const GalleryScene = ({ sceneIndex }: SceneProps) => {
     },
     {
       background: 'rgba(20, 20, 20, 1)',
+      ease: 'power1.out',
       duration: animationDurations.XSLOW,
     }, '<');
 
+    timeline.to(screenRef.current, {
+      // Do nothing to simulate a pause
+      duration: animationDurations.FAST,
+    });
+
     timeline.to(galleryWrapperElement, {
       y: 0,
-      height: `100vh`,
-      duration: animationDurations.MEDIUM,
+      ease: 'power1.inOut',
+      duration: animationDurations.XSLOW,
     });
 
     timeline.fromTo(startOverlayElement, {
       opacity: 0,
     }, {
       opacity: 1,
-      ease: 'power1.easeInOut',
-      duration: animationDurations.FAST,
-    });
+      ease: 'power1.inOut',
+      duration: animationDurations.MEDIUM,
+    }, '<');
 
     timeline.from(startHeaderElement, {
       filter: 'blur(0.5rem)',
       opacity: 0,
       top: '+=30px',
-      ease: 'power1.easeInOut',
+      ease: 'power1.inOut',
       duration: animationDurations.FAST,
-    }, '<');
+    }, `<+=${animationDurations.FAST}`);
 
     timeline.to(startHeaderElement, {
       // Do nothing to simulate a pause
