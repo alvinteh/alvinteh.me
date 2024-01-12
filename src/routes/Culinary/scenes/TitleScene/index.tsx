@@ -6,7 +6,7 @@ import styled, { keyframes } from 'styled-components';
 import PageContext from '../../../../components/Page/PageContext';
 import Screen from '../../../../components/Screen';
 import { PageTitle, PaddedPageWrapper, pageTransitionDuration } from '../../../../components/static';
-import { screenSizes } from '../../../../utils/StyleUtils';
+import { screenSizes } from '../../../../utils/ResponsiveUtils';
 
 const revealAnimation = keyframes`
   0% {

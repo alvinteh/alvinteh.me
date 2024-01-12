@@ -9,7 +9,7 @@ import {
   pageTransitionDuration
 } from '../../../../components/static';
 import Screen from '../../../../components/Screen';
-import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
+import { aspectRatios, screenSizes } from '../../../../utils/ResponsiveUtils';
 
 import HeroMask from './images/hero-mask.png';
 

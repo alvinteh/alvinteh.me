@@ -9,8 +9,8 @@ import Screen from '../../../../components/Screen';
 import { Overlay, PaddedPageWrapper } from '../../../../components/static';
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
 import { animationDurations } from '../../../../utils/ParallaxUtils';
+import { aspectRatios, screenSizes } from '../../../../utils/ResponsiveUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
-import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
 import { Continents, Dish } from '../../common';
 
 import SceneBackground from './images/screen-casualdining.jpg'

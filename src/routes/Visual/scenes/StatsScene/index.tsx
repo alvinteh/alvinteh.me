@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import PageContext from '../../../../components/Page/PageContext';
 import Screen from '../../../../components/Screen';
 import { animationDurations } from '../../../../utils/ParallaxUtils';
+import { screenSizes } from '../../../../utils/ResponsiveUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
-import { screenSizes } from '../../../../utils/StyleUtils';
 
 import SceneBackground from './images/scene-background.jpg';
 

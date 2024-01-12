@@ -7,8 +7,8 @@ import PageContext from '../../../../components/Page/PageContext';
 import Screen from '../../../../components/Screen';
 import { PageWrapper } from '../../../../components/static';
 import { randomize } from '../../../../utils/ArrayUtils';
+import { aspectRatios, screenSizes } from '../../../../utils/ResponsiveUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
-import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
 
 import SceneBackground from './images/scene-drinks.jpg'
 import Drink1Background from './images/drink-1.png';

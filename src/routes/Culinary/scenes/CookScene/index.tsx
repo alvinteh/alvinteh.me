@@ -10,8 +10,8 @@ import Screen from '../../../../components/Screen';
 import { PageWrapper } from '../../../../components/static';
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
 import { animationDurations } from '../../../../utils/ParallaxUtils';
+import { aspectRatios, screenSizes } from '../../../../utils/ResponsiveUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
-import { aspectRatios, screenSizes } from '../../../../utils/StyleUtils';
 import { Dish } from '../../common';
 import { dishData, extraBakeDishData, extraCookDishData } from './data/dish-data';
 

@@ -1,7 +1,7 @@
 import keyMirror from 'keymirror';
 import styled, { keyframes } from 'styled-components';
 
-import { screenSizes } from '../utils/StyleUtils';
+import { screenSizes } from '../utils/ResponsiveUtils';
 
 type OverlayType = 'NORMAL' | 'STRONG';
 
