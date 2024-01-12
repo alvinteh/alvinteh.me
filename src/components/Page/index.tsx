@@ -88,7 +88,7 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
           transform: 'translate3d(0, -100vh, 0)',
           // We can ignore the linting issue as data is typed as any
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          duration: sceneTimeline.data?.isCustomTransition ? animationDurations.XFAST : animationDurations.XSLOW,
+          duration: sceneTimelines[i + 1].data?.isCustomTransition ? animationDurations.XFAST : animationDurations.XSLOW,
         }));
       }
     }
