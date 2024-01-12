@@ -11,6 +11,7 @@ import PageContext from './PageContext';
 
 import styled from 'styled-components';
 import { animationDurations } from '../../utils/ParallaxUtils';
+import { flattenLabels } from '../../utils/AnimationUtils';
 
 // Note: this is intentionally unstyled as GSAP automatically applies styles
 const ParallaxSpacer = styled.div``;
@@ -91,6 +92,8 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
         }));
       }
     }
+
+    flattenLabels(timeline);
 
     setPageTimeline(timeline);
   }, [children, sceneRefs, sceneTimelines]);
