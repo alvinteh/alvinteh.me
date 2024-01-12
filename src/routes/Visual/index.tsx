@@ -8,8 +8,8 @@ const Visual = () => {
   return (
     <Page titleSuffix="Visual" shouldHaveScrollPrompt={true}>
       <TitleScene sceneIndex={0} />
-      <GalleryScene sceneIndex={1} />
-      <WorldScene sceneIndex={2} />
+      <WorldScene sceneIndex={1} />
+      <GalleryScene sceneIndex={2} />
       <StatsScene sceneIndex={3} />
     </Page>
   );
