@@ -417,7 +417,7 @@
     "src": "a20872a0-ecc4-41c9-b211-394c4f1999a5/1.jpg",
     "aspectRatio": 1.777,
     "albumName": "Grand Canyon",
-    "isAlbumCover": false
+    "isAlbumCover": true
   },
   {
     "caption": "Yavapai Point",
@@ -732,7 +732,7 @@
     "src": "c8e8de23-a38e-49bd-a7b7-e9878942edfe/0.jpg",
     "aspectRatio": 1.5,
     "albumName": "Mt Fuji",
-    "isAlbumCover": false
+    "isAlbumCover": true
   },
   {
     "caption": "Mt Fuji from Chureito Pagoda",
@@ -1152,7 +1152,7 @@
     "src": "b852b68b-e07b-43c0-b40a-253053e16fc2/5.jpg",
     "aspectRatio": 1.5,
     "albumName": "Zion National Park",
-    "isAlbumCover": false
+    "isAlbumCover": true
   },
   {
     "caption": "Landscapes",
