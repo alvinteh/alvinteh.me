@@ -9,7 +9,10 @@ import { v4 as uuid } from 'uuid';
 import LayoutContext from '../../../../../components/Layout/LayoutContext';
 import ScrollPromptContext from '../../../../../components/ScrollPrompt/ScrollPromptContext';
 import { Image } from '../types';
+import { randomize } from '../../../../../utils/ArrayUtils';
 import { getElementTranslation, setElementTranslation } from '../../../../../utils/StyleUtils';
+
+import TestImage from '../data/import-test.png';
 
 interface GalleryImage {
   id : string;
@@ -297,6 +300,7 @@ const Gallery = ({ images, itemHeight, scrollTop, isInteractive }: {
   const galleryRef =  useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const galleryImageRefs = useRef<React.RefObject<HTMLDivElement>[]>([]);
 
+  const [, setAlbums] = useState<Record<string, Image[]>>({});
   const [galleryImages, setGalleryImages] = useState<Record<string, GalleryImage>>({});
   const [activeGalleryImage, setActiveGalleryImage] = useState<GalleryImage>();
   const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -313,9 +317,13 @@ const Gallery = ({ images, itemHeight, scrollTop, isInteractive }: {
     return Math.round(21 / 9 * itemHeight) + galleryItemPadding * 2;
   }, [itemHeight]);
 
-  const galleryImageHeight = useMemo((): number => {
+  const galleryImageHeight: number = useMemo((): number => {
     return itemHeight + galleryItemPadding * 2;
   }, [itemHeight]);
+
+  const imagePath: string = useMemo((): string => {
+    return `${TestImage.substr(0, TestImage.lastIndexOf('/') + 1)}images/`;
+  }, []);
 
   const handleDrag = useCallback(function(): void {
     // @ts-expect-error We can ignore the linting issue as this is set by GSAP
@@ -466,24 +474,57 @@ const Gallery = ({ images, itemHeight, scrollTop, isInteractive }: {
     const galleryWidth: number = galleryElement.clientWidth;
     const galleryHeight: number = galleryElement.clientHeight;
     
+    const albums: Record<string, Image[]> = {};
+    let albumCovers: Image[] = [];
+
+    // Create dictionary of album names to images
+    for (const image of images) {
+      const { caption, src, albumName, aspectRatio, isAlbumCover } = image;
+
+      // Create album if it doess not already exist
+      // We can ignore the linting issue as we are populating the dictionary
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (!albums[albumName]) {
+        albums[albumName] = [];
+      }
+
+      // Create a new image object with the adjusted src
+      const updatedImage: Image = {
+        caption,
+        albumName,
+        src: `${imagePath}${src}`,
+        aspectRatio,
+        isAlbumCover,
+      };
+
+      albums[albumName].push(updatedImage);
+
+      // Add to album covers if applicable
+      if (isAlbumCover) {
+        albumCovers.push(updatedImage);
+      }
+    }
+
+    albumCovers = randomize(albumCovers) as Image[];
+
     const galleryImages: Record<string, GalleryImage> = {};
-    let imagesIndex = 0;
+    let albumCoversIndex = 0;
     
-    // Populate gallery with images, buffering an additional image outside the gallery viewport
+    // Populate gallery with album images, buffering an additional image outside the gallery viewport
     for (let currentY = -galleryImageHeight; currentY < galleryHeight + galleryImageHeight;
       currentY += galleryImageHeight) {
       
       for (let currentX = -galleryImageMaxWidth; currentX < galleryWidth + galleryImageMaxWidth;
-        currentX += getGalleryImageWidth(images[imagesIndex]), imagesIndex++) {
+        currentX += getGalleryImageWidth(albumCovers[albumCoversIndex]), albumCoversIndex++) {
         
         // Repeat images
-        if (imagesIndex === images.length) {
-          imagesIndex = 0;
+        if (albumCoversIndex === albumCovers.length) {
+          albumCoversIndex = 0;
         }
 
         const galleryImage: GalleryImage = {
           id: uuid().split('-')[0],
-          image: images[imagesIndex],
+          image: albumCovers[albumCoversIndex],
           x: currentX,
           y: currentY,
         };
@@ -492,8 +533,9 @@ const Gallery = ({ images, itemHeight, scrollTop, isInteractive }: {
       }
     }
 
+    setAlbums(albums);
     setGalleryImages(galleryImages);
-  }, [images, itemHeight, galleryImageHeight, galleryImageMaxWidth, getGalleryImageWidth]);
+  }, [images, itemHeight, imagePath, galleryImageHeight, galleryImageMaxWidth, getGalleryImageWidth]);
 
   useEffect((): void => {
     if (isOverlayToggled) {

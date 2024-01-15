@@ -9,7 +9,8 @@ import { Overlay } from '../../../../components/static';
 import { animationDurations } from '../../../../utils/ParallaxUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
 import Gallery from './components/Gallery';
-import images from './data/image-data';
+import rawImages from './data/image-data.json';
+import { Image } from './types';
 
 const Header = styled.h2`
   position: absolute;
@@ -47,6 +48,7 @@ const GalleryScene = ({ sceneIndex }: SceneProps) => {
 
   const itemHeight = 270;
   const galleryReadyLabel = 'gallery-ready';
+  const images: Image[] = rawImages as unknown as Image[];
 
   // Screen animation
   useGSAP((): void => {
