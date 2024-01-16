@@ -16,6 +16,11 @@ interface NavItemAttrs {
   $backgroundImage: string;
 }
 
+interface MainAttrs {
+  $isPageOpen: boolean;
+  $currentPageIndex: number;
+}
+
 const NavItemStates: Record<NavItemState, NavItemState> = keyMirror({
   DEFAULT: null,
   CURRENT: null,
@@ -265,26 +270,15 @@ const Nav = styled.nav<{ $isNavOpen: boolean }>`
   }
 `;
 
-const Main = styled.main<{ $isPageOpen: boolean, $currentPageIndex: number }>`
+const Main = styled.main.attrs<MainAttrs>(({ $isPageOpen, $currentPageIndex }) => ({
+  style: {
+    transform: `translate3d(${$isPageOpen ? Math.max(0, $currentPageIndex) * 4 * 1.19 : 0}%, 0, 0)`,
+    zIndex: $isPageOpen ? 3 : 0,
+  }
+}))`
   position: relative;
-  left: ${(props) => { return (props.$isPageOpen ? Math.max(0, props.$currentPageIndex) * 4 : 0); }}%;
   width: 84%;
   min-height: 100vh;
-  z-index: ${(props) => { return (props.$isPageOpen ? 3 : 0); }};
-
-  &::after {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: rgba(255, 0, 0, 0);
-    content: "";
-    pointer-events: none;
-    z-index: 99;
-    transition: background-color ${cubicBezier} 1200ms;
-  }
 `;
 
 const NavWrapper = styled.div<{ $isNavOpen: boolean, $isPageOpen: boolean }>`
