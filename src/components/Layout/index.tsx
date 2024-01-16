@@ -272,7 +272,7 @@ const Nav = styled.nav<{ $isNavOpen: boolean }>`
 
 const Main = styled.main.attrs<MainAttrs>(({ $isPageOpen, $currentPageIndex }) => ({
   style: {
-    transform: `translate3d(${$isPageOpen ? Math.max(0, $currentPageIndex) * 4 * 1.19 : 0}%, 0, 0)`,
+    transform: `translate3d(${$isPageOpen ? Math.max(0, $currentPageIndex) * 4 : 0}cqw, 0, 0)`,
     zIndex: $isPageOpen ? 3 : 0,
   }
 }))`
@@ -318,6 +318,7 @@ const NavWrapper = styled.div<{ $isNavOpen: boolean, $isPageOpen: boolean }>`
 const Wrapper = styled.div`
   position: relative;
   height: 100vh;
+  container-type: size;
 `;
 
 const FullScreenOverlayElement = styled(Overlay)`
