@@ -1,4 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { gsap } from 'gsap';
+import { Observer } from 'gsap/Observer';
+import { useCallback, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
@@ -125,46 +127,27 @@ const ScrollPromptWrapper = styled.span.attrs<ScrollPromptWrapperAttrs>(({ $posi
   }
 `;
 
-const ScrollPrompt = ({ pageRef }: { pageRef: React.MutableRefObject<HTMLDivElement> }) => {
-  const { isEnabled } = useContext(ScrollPromptContext);
+const ScrollPrompt = () => {
+  const { isEnabled, pageObserverName } = useContext(ScrollPromptContext);
   const location = useLocation();
 
   const currentSlug: string = location.pathname.substring(1);
   const currentSlugIndex: number = navItemData.findIndex((navItemData: NavItemData) => {
     return navItemData.slug === currentSlug;
   });
-  const [isVisible, setVisible] = useState(false);
 
-  const handleClick = (): void => {
-    if (isVisible) {
-      window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
-    }
-  };
+  gsap.registerPlugin(Observer);
 
-  const handleScroll = (): void => {    
-    // We can ignore the linter error as the parent element always exists
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    if (window.innerHeight + window.scrollY >= pageRef.current.parentElement!.scrollHeight) {
-      setVisible(false);
-    }
-    else {
-      setVisible(true);
-    }
-  };
-
-  useEffect((): () => void => {
-    window.addEventListener('scroll', handleScroll);
-
-    return (): void => {
-      window.removeEventListener('scroll', handleScroll);
-    }
-  });
+  const handleClick = useCallback((): void => {
+    const observer: Observer = Observer.getById(pageObserverName) as Observer;
+    observer.vars.onUp?.(observer);
+  }, [pageObserverName]);
 
   return (
     <ScrollPromptWrapper
       onClick={handleClick}
       $positionAdjFactor={currentSlugIndex}
-      $isVisible={isEnabled && isVisible}
+      $isVisible={isEnabled}
     >
       <ScrollPromptText>Scroll Down</ScrollPromptText>
     </ScrollPromptWrapper>

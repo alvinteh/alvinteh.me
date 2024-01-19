@@ -3,6 +3,7 @@ import { Observer } from 'gsap/Observer';
 import { useGSAP } from '@gsap/react';
 import { Children, useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { v4 as uuid } from 'uuid';
 
 import {
   AnimationDirection,
@@ -31,6 +32,7 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
   const [sceneRefs, setSceneRefs] = useState<React.MutableRefObject<HTMLDivElement>[]>([]);
   const [sceneTimelines, setSceneTimelines] = useState<gsap.core.Timeline[]>([]);
   const [isScrollPromptEnabled, setIsScrollPromptEnabled] = useState<boolean>(true);
+  const [pageObserverName, setPageObserverName] = useState<string>('');
 
   gsap.registerPlugin(Observer);
 
@@ -157,13 +159,23 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
           timeline.data.isAnimationPlaying = false;
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           timeline.data.currentLabelIndex = sortedLabels.indexOf(targetLabel);
+
+          // We can ignore the linting error as we set these members
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          if (timeline.data.currentLabelIndex === sortedLabels.length - 1) {
+            setIsScrollPromptEnabled(false);
+          }
+          else {
+            setIsScrollPromptEnabled(true);
+          }
         }
       });
     }
 
     // Create scroll observer
+    const pageObserverName: string = uuid();
     Observer.create({
-      id: 'page-observer',
+      id: pageObserverName,
       wheelSpeed: -1,
       onDown: (): void => {
         playAnimation(animationDirections.REVERSE);
@@ -174,6 +186,8 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
       tolerance: 10,
       preventDefault: true
     });
+
+    setPageObserverName(pageObserverName);
   }, [children, sceneRefs, sceneTimelines]);
  
   const registerScene = useCallback((index: number, ref: React.MutableRefObject<HTMLDivElement>,
@@ -197,11 +211,12 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
     <PageContext.Provider value={{ titleSuffix, registerScene }}>
       <ScrollPromptContext.Provider value={{
           isEnabled: isScrollPromptEnabled,
-          setIsEnabled: setIsScrollPromptEnabled
+          setIsEnabled: setIsScrollPromptEnabled,
+          pageObserverName,
         }}>
         <ParallaxPageWrapper ref={pageRef}>
           {children}
-          {shouldHaveScrollPrompt && <ScrollPrompt pageRef={pageRef} />}
+          {shouldHaveScrollPrompt && <ScrollPrompt />}
         </ParallaxPageWrapper>
       </ScrollPromptContext.Provider>
     </PageContext.Provider>
