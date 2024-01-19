@@ -126,6 +126,8 @@ const StatsScene = ({ sceneIndex }: SceneProps) => {
       snap: { innerText: 0.1 }, stagger: { each: 0.1 }}), '<');
     timeline.from(mobileShotsRef.current, textAnimation, '<');
 
+    timeline.addLabel(`scene-${sceneIndex}-intro`);
+
     registerScene(sceneIndex, screenRef, timeline);
   }, []); 
 

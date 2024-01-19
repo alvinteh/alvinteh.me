@@ -210,6 +210,8 @@ const FineDiningScene = ({ sceneIndex }: SceneProps) => {
       });
     }
 
+    timeline.addLabel(`scene-${sceneIndex}-intro`);
+
     timeline.to(exploreTextLineElements, { transform: 'translate3d(0, -40vh, 0)', duration: animationDurations.MEDIUM });
 
     for (let i = 0; i < dishes.length; i++) {
@@ -220,14 +222,12 @@ const FineDiningScene = ({ sceneIndex }: SceneProps) => {
       .to(dishElement, { transform: 'translate3d(0, -72vh, 0)', duration: animationDurations.MEDIUM })
       .from(dishInfoElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)', duration:
         animationDurations.FAST })
-      .to(dishInfoElement, { opacity: 0, duration: animationDurations.FAST })
-      .to(dishElement, { transform: 'translate3d(0, -145vh, 0)', duration: animationDurations.MEDIUM });  
-    }
 
-    timeline.from(closureTextRef.current, {
-      // Do nothing to simulate a pause
-      duration: animationDurations.FAST,
-    });
+      timeline.addLabel(`scene-${sceneIndex}-dish-${i}`);
+
+      timeline.to(dishInfoElement, { opacity: 0, duration: animationDurations.FAST })
+      .to(dishElement, { transform: 'translate3d(0, -145vh, 0)', duration: animationDurations.MEDIUM });
+    }
 
     for (let i = 0, length = exploreTextLineElements.length; i < length; i++) {
       timeline.to(exploreTextLineElements[i], {
@@ -244,6 +244,8 @@ const FineDiningScene = ({ sceneIndex }: SceneProps) => {
       transform: 'scale(0.95) translate3d(0, 30px, 0)',
       duration: animationDurations.FAST
     });
+
+    timeline.addLabel(`scene-${sceneIndex}-outro`);
 
     registerScene(sceneIndex, screenRef, timeline);
   }, [dishes]);

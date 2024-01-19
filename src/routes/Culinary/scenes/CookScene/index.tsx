@@ -328,14 +328,15 @@ const ExtraDishName = styled.div`
 `;
 
 const FaqWrapper = styled.div`
-  position: relative;
-  top: 18vh;
-  margin: 0 auto;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
   box-sizing: border-box;
   aspect-ratio: 1460/1760;
   padding: 12% 8.5% 8% 5.5%;
   height: 85%;
   background: url(${FaqWrapperBackground}) top center/cover no-repeat;
+  transform: translate3d(-50%, 100%, 0);
 
   @media ${screenSizes.tablet} {
     top: 35vh;
@@ -435,7 +436,7 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
       },
       {
         drawSVG: '100%',
-        duration: animationDurations.XFAST,
+        duration: animationDurations.XXFAST,
       });
     }
 
@@ -451,9 +452,11 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
       },
       {
         drawSVG: '100%',
-        duration: animationDurations.XFAST,
+        duration: animationDurations.XXFAST,
       });
     }
+
+    timeline.addLabel(`scene-${sceneIndex}-intro`);
 
     timeline.to(header2Ref.current.children, {
       opacity: 0,
@@ -483,6 +486,8 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
         duration: animationDurations.FAST,
       });
 
+      timeline.addLabel(`scene-${sceneIndex}-dish-${i}`);
+
       timeline.to(dishElement, {
         transform: 'translate3d(0, -100vh, 0)',
         ease: 'power1.out',
@@ -502,9 +507,11 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
       },
       {
         drawSVG: '100%',
-        duration: animationDurations.XFAST,
+        duration: animationDurations.XXFAST,
       });
     }
+
+    timeline.addLabel(`scene-${sceneIndex}-break`);
 
     timeline.to(header3Ref.current.children, {
       opacity: 0,
@@ -523,10 +530,7 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
       });
     }
 
-    timeline.to(header3Ref.current, {
-      // Do nothing to simulate a "pause"
-      duration: animationDurations.FAST,
-    });
+    timeline.addLabel(`scene-${sceneIndex}-dishes-extra`);
 
     for (let i = extraDishes.length - 1; i >= 0; i--) {
       const extraDishElement: HTMLLIElement = extraDishRefs.current[i];
@@ -546,7 +550,7 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
       },
       {
         drawSVG: '100%',
-        duration: animationDurations.XFAST,
+        duration: animationDurations.XFAST * 0.5,
       });
     }
 
@@ -561,11 +565,13 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
       duration: animationDurations.MEDIUM,
     });
 
-    timeline.from(faqWrapperRef.current, {
-      transform: 'translate3d(0, 100%, 0)',
+    timeline.to(faqWrapperRef.current, {
+      y: '0',
       ease: 'power1.out',
       duration: animationDurations.MEDIUM,
     }, '<');
+
+    timeline.addLabel(`scene-${sceneIndex}-outro`);
 
     registerScene(sceneIndex, screenRef, timeline);
   }, [dishes, extraDishes]);

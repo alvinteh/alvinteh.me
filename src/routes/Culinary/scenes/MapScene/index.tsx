@@ -57,11 +57,17 @@ const Subscreen1Header = styled(SubscreenHeader)`
 const Subscreen1HeaderS1 = styled.span`
   display: block;
   font-size: 3rem;
+  filter: blur(4rem);
+  opacity: 0;
+  transform: scale(0.95) translate3d(0, 75px, 0);
 `;
 
 const Subscreen1HeaderS2 = styled.span`
   display: block;
   font-size: 5rem;
+  filter: blur(4rem);
+  opacity: 0;
+  transform: scale(0.95) translate3d(0, 75px, 0);
 `;
 
 const Subscreen3Header = styled(SubscreenHeader)`
@@ -133,24 +139,23 @@ const MapScene = ({ sceneIndex }: SceneProps) => {
   useGSAP((): void => {      
     const timeline = gsap.timeline({});
 
-    timeline.from(subscreen1HeaderRef.current.children, {
-      filter: 'blur(4rem)',
-      opacity: 0,
-      transform: 'scale(0.95) translate3d(0, 75px, 0)',
+    timeline.to(subscreen1HeaderRef.current.children, {
+      filter: 'blur(0)',
+      opacity: 1,
+      transform: 'scale(1) translate3d(0, 0, 0)',
       ease: 'power1.out',
       duration: animationDurations.FAST,
       stagger: 0.25,
     });
+
+    timeline.addLabel(`scene-${sceneIndex}-intro`);
 
     timeline.to(subscreen2Ref.current, {
       top: '-=100vh',
       duration: animationDurations.XSLOW,
     });
 
-    // Do nothing to simulate a pause
-    timeline.to(subscreen2Ref.current, {
-      duration: animationDurations.FAST,
-    });
+    timeline.addLabel(`scene-${sceneIndex}-map`);
 
     timeline.to(subscreen1Ref.current, {
       top: '-=100vh',
@@ -159,7 +164,7 @@ const MapScene = ({ sceneIndex }: SceneProps) => {
 
     timeline.to(subscreen2Ref.current, {
       top: '-=200vh',
-      duration: animationDurations.XSLOW * 2,
+      duration: animationDurations.XSLOW,
     }, '<');
 
     timeline.to(subscreen3Ref.current, {
@@ -175,6 +180,8 @@ const MapScene = ({ sceneIndex }: SceneProps) => {
       duration: animationDurations.FAST,
       stagger: 0.25,
     });
+
+    timeline.addLabel(`scene-${sceneIndex}-outro`);
 
     registerScene(sceneIndex, screenRef, timeline);
   }, []);

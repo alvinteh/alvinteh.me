@@ -152,6 +152,8 @@ const TitleScene = ({ sceneIndex }: { sceneIndex: number }) => {
   useGSAP((): void => {
     const timeline = gsap.timeline({});
 
+    timeline.addLabel(`scene-${sceneIndex}-intro`);
+
     registerScene(sceneIndex, screenRef, timeline);
   }, []);
 

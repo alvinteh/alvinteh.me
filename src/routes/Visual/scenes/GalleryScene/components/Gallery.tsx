@@ -133,12 +133,11 @@ const GalleryImage = ({ id, innerRef, image, height, padding, initialX, initialY
   );
 };
 
-const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef, scrollTop } : {
+const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef } : {
   isActive: boolean,
   galleryImage: GalleryImage | undefined,
   galleryItemHeight: number,
   galleryRef: React.MutableRefObject<HTMLDivElement>,
-  scrollTop: number,
 }) => {
   const { isOverlayToggled, setIsOverlayToggled, setOverlayContent } = useContext(LayoutContext);
   const { setIsEnabled: setIsScrollPromptEnabled } = useContext(ScrollPromptContext);
@@ -197,12 +196,6 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
     const galleryTranslate: number[] = getElementTranslation(galleryElement);
     const galleryTranslateX: number = galleryTranslate[0];
     const galleryTranslateY: number = galleryTranslate[1];
-
-    // Ensure gallery top is aligned to screen top
-    // Assumption is that the gallery is the same height as the scene (each scene is 100vh tall)
-    if (document.documentElement.scrollTop !== scrollTop) {
-      window.scrollTo({ top: scrollTop, behavior: 'smooth' });
-    }
 
     const fullImageViewerElement: HTMLDivElement = fullImageViewerRef.current;
 
@@ -284,17 +277,16 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
       ease: 'power1.inOut',
       duration: 0.4,
     });
-  }, [isOverlayToggled, isActive, galleryImage, galleryItemHeight, galleryRef, scrollTop]);
+  }, [isOverlayToggled, isActive, galleryImage, galleryItemHeight, galleryRef]);
 
   return (
     <></>
   );
 };
 
-const Gallery = ({ images, itemHeight, scrollTop, isInteractive }: {
+const Gallery = ({ images, itemHeight, isInteractive }: {
   images: Image[],
   itemHeight: number,
-  scrollTop: number,
   isInteractive: boolean,
 }) => {
   const galleryRef =  useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
@@ -469,6 +461,11 @@ const Gallery = ({ images, itemHeight, scrollTop, isInteractive }: {
     setActiveGalleryImage(galleryImages[id]);
   }, [isInteractive, galleryImages, isDragging]);
 
+  const handlePress = (event: MouseEvent): void => {
+    // Note we need this event handler to prevent the page observer from impacting performance
+    event.stopPropagation();
+  };
+
   useEffect((): void => {
     const galleryElement: HTMLDivElement = galleryRef.current;
     const galleryWidth: number = galleryElement.clientWidth;
@@ -572,7 +569,9 @@ const Gallery = ({ images, itemHeight, scrollTop, isInteractive }: {
       onDragStart: handleDragStart,
       onDrag: handleDrag,
       onDragEnd: handleDragEnd,
+      onPress: handlePress,
       onThrowUpdate: handleDrag,
+
     }))[0]);
   }, [galleryImages, isInteractive, handleDragStart, handleDrag]);
 
@@ -606,7 +605,6 @@ const Gallery = ({ images, itemHeight, scrollTop, isInteractive }: {
         galleryImage={activeGalleryImage}
         galleryItemHeight={itemHeight}
         galleryRef={galleryRef}
-        scrollTop={scrollTop}
       />
     </>
   )

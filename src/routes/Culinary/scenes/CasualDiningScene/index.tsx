@@ -39,7 +39,6 @@ import Dish21Background from './images/casualdining-dish-21.jpg';
 interface DishAttrs {
   $backgroundImage: string;
   $jitterY: number;
-  $rotation: number;
 }
 
 const Header = styled.h3`
@@ -97,13 +96,14 @@ const Dishes = styled.ul`
   }
 `;
 
-const Dish = styled.li.attrs<DishAttrs>(({ $backgroundImage, $jitterY, $rotation }) => ({
+const Dish = styled.li.attrs<DishAttrs>(({ $backgroundImage, $jitterY }) => ({
   style: {
     top: `${$jitterY}rem`,
     backgroundImage: `url(${$backgroundImage})`,
-    transform: `rotate(${$rotation}deg)`,
+    transform: `translate3d(0, -130vh, 0) ` +
+      `rotate(${900 + Math.round(Math.random() * 540) * (Math.random() >= 0.5 ? 1 : 1)}deg)`,
   }
-}))<{ $aspectRatio: number, $rotation: number }>`
+}))<{ $aspectRatio: number }>`
   position: relative;
   margin: -6vw 0 0;
   border: solid 10px #ffffff;
@@ -361,21 +361,20 @@ const CasualDiningScene = ({ sceneIndex }: SceneProps) => {
       duration: animationDurations.FAST,
     });
 
+    timeline.addLabel(`scene-${sceneIndex}-intro`);
+
     for (let i = 0; i < dishes.length; i++) {
       const dishElement: HTMLLIElement = dishRefs.current[i];
 
-      timeline.from(dishElement, {
-        y: '-=130vh',
-        rotation: 900 + Math.round(Math.random() * 540) * (Math.random() >= 0.5 ? 1 : 1),
+      timeline.to(dishElement, {
+        y: 0,
+        rotation: -25 + Math.round(Math.random() * 10) * 5,
         ease: 'power1.out',
         duration: animationDurations.FAST,
       });
     }
 
-    timeline.from(endOverlayRef.current, {
-      // Do nothing to simulate a "pause"
-      duration: animationDurations.FAST,
-    });
+    timeline.addLabel(`scene-${sceneIndex}-dishes`);
 
     timeline.from(endOverlayRef.current, {
       background: 'rgba(0, 0, 0, 0)',
@@ -390,6 +389,8 @@ const CasualDiningScene = ({ sceneIndex }: SceneProps) => {
       ease: 'back.out(1)',
       duration: animationDurations.FAST,
     }, '<');
+
+    timeline.addLabel(`scene-${sceneIndex}-outro`);
 
     registerScene(sceneIndex, screenRef, timeline);
   }, [dishes]);
@@ -407,7 +408,6 @@ const CasualDiningScene = ({ sceneIndex }: SceneProps) => {
         $backgroundImage={dish.image}
         $aspectRatio={dish.imageAspectRatio}
         $jitterY={Math.round(Math.random() * 10) / 10}
-        $rotation={-25 + Math.round(Math.random() * 10) * 5}
       >
         <DishInfo>
           <DishName>{dish.name}</DishName>

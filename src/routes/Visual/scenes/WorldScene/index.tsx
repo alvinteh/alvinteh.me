@@ -118,6 +118,7 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
   useGSAP((): void => {
     const timeline = gsap.timeline({});
 
+    // Intro
     for (let i = 0, startHeaderSpanCount = startHeaderRef.current.children.length; i < startHeaderSpanCount; i++) {
       timeline.from(startHeaderRef.current.children[i], {
         filter: 'blur(0.5rem)',
@@ -125,9 +126,12 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
         top: '+=30px',
         ease: 'power1.easeInOut',
         duration: animationDurations.FAST,
-      });
+      }, i == 0 ? '>' : undefined);
     }
 
+    timeline.addLabel(`scene-${sceneIndex}-intro`);
+
+    // Subscreens
     for (let i = 0, subscreenCount = subscreenRefs.current.length; i < subscreenCount; i++) {
       const subscreenElement: HTMLDivElement = subscreenRefs.current[i];
       const headerAttributeElement: HTMLSpanElement = headerAttributeRefs.current[i];
@@ -160,12 +164,12 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
         }, `>+=${animationDurations.FAST}`);
       }
       
-      timeline.to(subscreenElement, {
-        // Do nothing to simulate a pause
-        duration: animationDurations.FAST,
-      });
+      if (i < subscreenCount - 1) {
+        timeline.addLabel(`scene-${sceneIndex}-subscreen-${i}`);
+      }
     }
 
+    // Outro
     timeline.to(headerRef.current, {
       // Do nothing to simulate a pause
       duration: animationDurations.FAST,
@@ -184,6 +188,8 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
       ease: 'power1.easeInOut',
       duration: animationDurations.MEDIUM,
     });
+
+    timeline.addLabel(`scene-${sceneIndex}-outro`);
 
     registerScene(sceneIndex, screenRef, timeline);
   }, []);

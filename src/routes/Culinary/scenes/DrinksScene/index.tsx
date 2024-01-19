@@ -174,21 +174,19 @@ const DrinksScene = ({ sceneIndex }: SceneProps) => {
       return;
     }
 
-    const wordAnimationCount: number = (headerRef.current.children.length) / 2;
-
-    const timeline = gsap.timeline({ data: { 
-      duration: (wordAnimationCount + (drinks.length * 4) + 1) * 150,
-    }});
+    const timeline = gsap.timeline({});
 
     timeline.from(headerRef.current.children, {
       filter: 'blur(4rem)',
       opacity: 0,
       textShadow: '2px 2px 2px rgba(0, 0, 0, 0)',
       transform: 'scale(0.95) translate3d(0, 30px, 0)',
-      duration: headerRef.current.children.length / 2,
-      ease: 'power.out',
+      duration: animationDurations.MEDIUM,
+      ease: 'power1.out',
       stagger: 0.5,
     });
+
+    timeline.addLabel(`scene-${sceneIndex}-intro`);
 
     for (let i = 0; i < drinks.length; i++) {
       const drinkElement: HTMLDivElement = drinkRefs.current[i];
@@ -198,7 +196,10 @@ const DrinksScene = ({ sceneIndex }: SceneProps) => {
       .from(drinkElement, { transform: 'translate3d(35vw, 0, 0)', duration: animationDurations.FAST, })
       .from(drinkInfoElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)',
         duration: animationDurations.FAST, })
-      .to(drinkElement, { duration: animationDurations.FAST, })
+      
+      timeline.addLabel(`scene-${sceneIndex}-drink-${i}`);
+      
+      timeline
       .to(drinkElement, { transform: 'translate3d(35vw, 0, 0)', duration: animationDurations.FAST, })
       .to(drinkInfoElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)',
         duration: animationDurations.FAST, }, '<');

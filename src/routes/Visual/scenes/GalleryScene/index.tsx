@@ -1,6 +1,6 @@
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import PageContext from '../../../../components/Page/PageContext';
@@ -35,7 +35,7 @@ const GalleryWrapper = styled.div`
 `;
 
 const GalleryScene = ({ sceneIndex }: SceneProps) => {
-  const { pageTimeline, registerScene } = useContext(PageContext);
+  const { registerScene } = useContext(PageContext);
 
   // Screen refs
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
@@ -43,21 +43,19 @@ const GalleryScene = ({ sceneIndex }: SceneProps) => {
   const startOverlayRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const startHeaderRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
 
-  const [scrollTop, setScrollTop] = useState<number>(0);
   const [isGalleryInteractive, setIsGalleryInteractive] = useState<boolean>(false);
 
   const itemHeight = 270;
-  const galleryReadyLabel = 'gallery-ready';
   const images: Image[] = rawImages as unknown as Image[];
 
   // Screen animation
   useGSAP((): void => {
-    const timeline = gsap.timeline({ data: { isCustomTransition: true }});
+    const timeline: gsap.core.Timeline = gsap.timeline({ data: { isCustomTransition: true }});
 
     const galleryWrapperElement: HTMLDivElement = galleryWrapperRef.current
     const startOverlayElement: HTMLDivElement = startOverlayRef.current;
     const startHeaderElement: HTMLHeadingElement = startHeaderRef.current;
-    
+
     timeline.fromTo(galleryWrapperElement, {
       opacity: 0,
       scale: 2,
@@ -79,11 +77,6 @@ const GalleryScene = ({ sceneIndex }: SceneProps) => {
       ease: 'power1.out',
       duration: animationDurations.XSLOW,
     }, '<');
-
-    timeline.to(screenRef.current, {
-      // Do nothing to simulate a pause
-      duration: animationDurations.FAST,
-    });
 
     timeline.to(galleryWrapperElement, {
       y: 0,
@@ -109,7 +102,7 @@ const GalleryScene = ({ sceneIndex }: SceneProps) => {
 
     timeline.to(startHeaderElement, {
       // Do nothing to simulate a pause
-      duration: animationDurations.MEDIUM,
+      duration: animationDurations.XFAST,
     });
 
     timeline.to(startHeaderElement, {
@@ -129,23 +122,16 @@ const GalleryScene = ({ sceneIndex }: SceneProps) => {
       },
     }, '<');
 
-    timeline.addLabel(galleryReadyLabel, '>');
+    timeline.addLabel(`scene-${sceneIndex}-intro`);
 
-    timeline.to(screenRef.current, {
+    // Note this pause is needed to ensure the gallery can be interacted with
+    timeline.to(startOverlayElement, {
       // Do nothing to simulate a pause
-      duration: animationDurations.MEDIUM,
+      duration: animationDurations.XFAST,
     });
 
     registerScene(sceneIndex, screenRef, timeline);
   }, []);
-
-  useEffect((): void => {
-    if (!pageTimeline.scrollTrigger) {
-      return;
-    }
-
-    setScrollTop(pageTimeline.scrollTrigger.labelToScroll(galleryReadyLabel));
-  }, [pageTimeline]);
 
   return (
     <Screen innerRef={screenRef} title="Photo Gallery">
@@ -156,7 +142,6 @@ const GalleryScene = ({ sceneIndex }: SceneProps) => {
         <Gallery
           images={images}
           itemHeight={itemHeight}
-          scrollTop={scrollTop}
           isInteractive={isGalleryInteractive}
         />
       </GalleryWrapper>
