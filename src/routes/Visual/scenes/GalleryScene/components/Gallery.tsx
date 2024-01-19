@@ -90,7 +90,6 @@ const GalleryImage = ({ id, innerRef, image, height, padding, initialX, initialY
   );
 };
 
-
 const Gallery = ({ images, itemHeight, isInteractive }: {
   images: Image[],
   itemHeight: number,
@@ -99,9 +98,10 @@ const Gallery = ({ images, itemHeight, isInteractive }: {
   const galleryRef =  useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const galleryImageRefs = useRef<React.RefObject<HTMLDivElement>[]>([]);
 
-  const [, setAlbums] = useState<Record<string, Image[]>>({});
+  const [albums, setAlbums] = useState<Record<string, Image[]>>({});
   const [galleryImages, setGalleryImages] = useState<Record<string, GalleryImage>>({});
   const [activeGalleryImage, setActiveGalleryImage] = useState<GalleryImage>();
+  const [activeAlbumImages, setActiveAlbumImages] = useState<Image[]>([]);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [draggable, setDraggable] = useState<Draggable>();
   const { isOverlayToggled } = useContext(LayoutContext);
@@ -265,8 +265,11 @@ const Gallery = ({ images, itemHeight, isInteractive }: {
       return;
     }
 
-    setActiveGalleryImage(galleryImages[id]);
-  }, [isInteractive, galleryImages, isDragging]);
+    const galleryImage: GalleryImage = galleryImages[id];
+
+    setActiveGalleryImage(galleryImage);
+    setActiveAlbumImages(albums[galleryImage.image.albumName]);
+  }, [isInteractive, albums, galleryImages, isDragging]);
 
   const handlePress = (event: MouseEvent): void => {
     // Note we need this event handler to prevent the page observer from impacting performance
@@ -412,6 +415,7 @@ const Gallery = ({ images, itemHeight, isInteractive }: {
         galleryImage={activeGalleryImage}
         galleryItemHeight={itemHeight}
         galleryRef={galleryRef}
+        relatedImages={activeAlbumImages}
       />
     </>
   )
