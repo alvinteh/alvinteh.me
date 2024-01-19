@@ -11,7 +11,7 @@ import PageContext from './PageContext';
 
 import styled from 'styled-components';
 import { animationDurations } from '../../utils/ParallaxUtils';
-import { flattenLabels, getSortedLabels } from '../../utils/AnimationUtils';
+import { flattenLabels, getSortedLabels } from '../../utils/GSAPUtils';
 
 const ParallaxPageWrapper = styled.div`
   position: relative;
