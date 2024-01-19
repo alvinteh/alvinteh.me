@@ -100,8 +100,6 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
     timeline.data.sortedLabels = getSortedLabels(timeline);
 
     const playAnimation = (direction: AnimationDirection): void => {
-      // We can ignore the linting error as we set these members
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const { isAnimationPlaying, sortedLabels, currentLabelIndex } = timeline.data as {
         isAnimationPlaying: boolean;
         sortedLabels: string[];
