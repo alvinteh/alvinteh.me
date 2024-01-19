@@ -82,12 +82,12 @@ const AccordionItemContext = createContext<AccordionItemContext>({
   setIsCollapsed: (): void => {}
 });
 
-const Accordion = ({ children }: { children: React.ReactNode }) => {
+const Accordion = ({ className, children }: { className?: string, children: React.ReactNode }) => {
   const [activeItemId, setActiveItemId] = useState('');
 
   return (
     <AccordionContext.Provider value={{ activeItemId, setActiveItemId }}>
-      <AccordionElement>
+      <AccordionElement className={className}>
         {children}
       </AccordionElement>
     </AccordionContext.Provider>
