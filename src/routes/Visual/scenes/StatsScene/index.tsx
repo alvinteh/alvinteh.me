@@ -199,7 +199,7 @@ const StatsScene = ({ sceneIndex }: SceneProps) => {
           <Stat>
             {/* Estimate based off 30+k from Africa trip, 20+k from Torres del Paine + Antarctica trip */}
             <StatValue><span ref={shotsRef}>75</span>k+</StatValue>
-            <StatType>Camera Shots</StatType>
+            <StatType>Shutter Count</StatType>
           </Stat>
           <Stat>
             {/* Obtained from S3 count of CR2/CR3 files */}
