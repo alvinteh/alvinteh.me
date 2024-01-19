@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import PageContext from '../../../../components/Page/PageContext';
 import Screen from '../../../../components/Screen';
 import { Overlay } from '../../../../components/static';
-import { animationDurations } from '../../../../utils/ParallaxUtils';
+import { animationDurations } from '../../../../utils/AnimationUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
 import Gallery from './components/Gallery';
 import rawImages from './data/image-data.json';

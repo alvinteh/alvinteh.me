@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import PageContext from '../../../../components/Page/PageContext';
 import Screen from '../../../../components/Screen';
-import { animationDurations } from '../../../../utils/ParallaxUtils';
+import { animationDurations } from '../../../../utils/AnimationUtils';
 import { screenSizes } from '../../../../utils/ResponsiveUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
 

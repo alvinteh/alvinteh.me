@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import PageContext from '../../../../components/Page/PageContext';
 import Screen from '../../../../components/Screen';
-import { animationDurations } from '../../../../utils/ParallaxUtils';
+import { animationDurations } from '../../../../utils/AnimationUtils';
 
 import ScreenBackground from './images/screen-background.jpg';
 import Subscreen1Background from './images/subscreen-1.jpg';

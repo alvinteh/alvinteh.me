@@ -2,16 +2,19 @@ import { gsap } from 'gsap';
 import { Observer } from 'gsap/Observer';
 import { useGSAP } from '@gsap/react';
 import { Children, useCallback, useRef, useState } from 'react';
+import styled from 'styled-components';
 
+import {
+  AnimationDirection,
+  animationDirections,
+  animationDurations,
+  pageTimelineId,
+} from '../../utils/AnimationUtils';
+import { flattenLabels, getSortedLabels } from '../../utils/GSAPUtils';
 import { setPageTitle } from '../../utils/PageUtils';
-import { AnimationDirection, animationDirections, pageTimelineId } from '../../utils/ParallaxUtils';
 import ScrollPromptContext from '../ScrollPrompt/ScrollPromptContext';
 import ScrollPrompt from '../ScrollPrompt';
 import PageContext from './PageContext';
-
-import styled from 'styled-components';
-import { animationDurations } from '../../utils/ParallaxUtils';
-import { flattenLabels, getSortedLabels } from '../../utils/GSAPUtils';
 
 const ParallaxPageWrapper = styled.div`
   position: relative;

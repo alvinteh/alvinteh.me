@@ -8,8 +8,8 @@ import Accordion, { AccordionItem, AccordionItemContent, AccordionItemHeader } f
 import PageContext from '../../../../components/Page/PageContext';
 import Screen from '../../../../components/Screen';
 import { PageWrapper } from '../../../../components/static';
+import { animationDurations } from '../../../../utils/AnimationUtils';
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
-import { animationDurations } from '../../../../utils/ParallaxUtils';
 import { aspectRatios, screenSizes } from '../../../../utils/ResponsiveUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
 import { Dish } from '../../common';

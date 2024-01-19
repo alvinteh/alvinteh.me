@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import PageContext from '../../../../components/Page/PageContext';
 import Screen from '../../../../components/Screen';
 import { PageWrapper } from '../../../../components/static';
+import { animationDurations } from '../../../../utils/AnimationUtils';
 import { randomize } from '../../../../utils/ArrayUtils';
 import { aspectRatios, screenSizes } from '../../../../utils/ResponsiveUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
@@ -16,7 +17,6 @@ import Drink2Background from './images/drink-2.png';
 import Drink3Background from './images/drink-3.png';
 import Drink4Background from './images/drink-4.png';
 import Drink5Background from './images/drink-5.png';
-import { animationDurations } from '../../../../utils/ParallaxUtils';
 
 interface Drink {
   name: string;
