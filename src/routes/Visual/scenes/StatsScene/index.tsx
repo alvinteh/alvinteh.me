@@ -18,6 +18,10 @@ const StyledScreen = styled(Screen)`
   mask-image: radial-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0) 1%, rgba(0, 0, 0, 0) 100%);
   mask-size: cover;
   opacity: 0;
+
+  @media ${screenSizes.desktopL} {
+    padding-top: 35vh;
+  }
 `;
 
 const Header = styled.h1`
@@ -27,10 +31,6 @@ const Header = styled.h1`
   font-size: 3rem;
   text-align: right;
   text-transform: uppercase;
-
-  @media ${screenSizes.desktopL} {
-    margin-top: 35vh;
-  }
 `;
 
 const StatsWrapper = styled.div``;
