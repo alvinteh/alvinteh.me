@@ -1,23 +1,12 @@
-import styled from 'styled-components';
+import Page from '../../components/Page';
+import TitleScene from './scenes/TitleScene';
 
-import { PaddedPageWrapper } from '../../components/static';
-
-const PageTitle = styled.h1`
-  margin: 0 0 10px;
-  color: #ffffff;
-  font-size: 10rem;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 600;
-  opacity: 0.85;
-  text-transform: uppercase;
-`;
-
-const Technology = () => {
+const Visual = () => {
   return (
-    <PaddedPageWrapper>
-      <PageTitle>Technology</PageTitle>
-    </PaddedPageWrapper>
+    <Page titleSuffix="Technology" shouldHaveScrollPrompt={true}>
+      <TitleScene sceneIndex={0} />
+    </Page>
   );
 };
 
-export default Technology;
+export default Visual;
