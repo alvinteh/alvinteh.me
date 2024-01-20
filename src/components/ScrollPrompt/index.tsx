@@ -1,15 +1,9 @@
 import { gsap } from 'gsap';
 import { Observer } from 'gsap/Observer';
 import { useCallback, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
-import { navItemData, NavItemData } from '../Layout/NavItemData';
 import ScrollPromptContext from './ScrollPromptContext';
-
-interface ScrollPromptWrapperAttrs {
-  $positionAdjFactor: number;
-}
 
 const scrollPromptLeftAnimation = keyframes`
   0% {
@@ -74,14 +68,11 @@ const ScrollPromptText = styled.span`
   user-select: none;
 `;
 
-const ScrollPromptWrapper = styled.span.attrs<ScrollPromptWrapperAttrs>(({ $positionAdjFactor }) => ({
-  style: {
-    left: `${42 + $positionAdjFactor * 4}%`
-  }
-}))<{ $isVisible: boolean }>`
+const ScrollPromptWrapper = styled.span<{ $isVisible: boolean }>`
   display: block;
   position: fixed;
   bottom: 10px;
+  left: 50%;
   margin-left: -45px;
   width: 90px;
   height: 60px;
@@ -129,12 +120,6 @@ const ScrollPromptWrapper = styled.span.attrs<ScrollPromptWrapperAttrs>(({ $posi
 
 const ScrollPrompt = () => {
   const { isEnabled, pageObserverName } = useContext(ScrollPromptContext);
-  const location = useLocation();
-
-  const currentSlug: string = location.pathname.substring(1);
-  const currentSlugIndex: number = navItemData.findIndex((navItemData: NavItemData) => {
-    return navItemData.slug === currentSlug;
-  });
 
   gsap.registerPlugin(Observer);
 
@@ -146,7 +131,6 @@ const ScrollPrompt = () => {
   return (
     <ScrollPromptWrapper
       onClick={handleClick}
-      $positionAdjFactor={currentSlugIndex}
       $isVisible={isEnabled}
     >
       <ScrollPromptText>Scroll Down</ScrollPromptText>
