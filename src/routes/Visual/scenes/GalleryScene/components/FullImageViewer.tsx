@@ -1,6 +1,6 @@
 import gsap from 'gsap';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import { v4 as uuid } from 'uuid';
 
 import LayoutContext from '../../../../../components/Layout/LayoutContext';
@@ -94,37 +94,11 @@ const RelatedImage = styled.li.attrs<RelatedImageAttrs>(({ $backgroundImage, $is
     border-color: #ffffff;
   }
 
-  &:nth-child(1) {
-    animation-delay: ${animationDurations.MEDIUM * 2 + animationDurations.XXFAST * 0}s;
-  }
-
-  &:nth-child(2) {
-    animation-delay: ${animationDurations.MEDIUM * 2 + animationDurations.XXFAST * 1}s;
-  }
-
-  &:nth-child(3) {
-    animation-delay: ${animationDurations.MEDIUM * 2 + animationDurations.XXFAST * 2}s;
-  }
-
-  &:nth-child(4) {
-    animation-delay: ${animationDurations.MEDIUM * 2 + animationDurations.XXFAST * 3}s;
-  }
-
-  &:nth-child(5) {
-    animation-delay: ${animationDurations.MEDIUM * 2 + animationDurations.XXFAST * 4}s;
-  }
-
-  &:nth-child(6) {
-    animation-delay: ${animationDurations.MEDIUM * 2 + animationDurations.XXFAST * 5}s;
-  }
-
-  &:nth-child(7) {
-    animation-delay: ${animationDurations.MEDIUM * 2 + animationDurations.XXFAST * 6}s;
-  }
-
-  &:nth-child(8) {
-    animation-delay: ${animationDurations.MEDIUM * 2 + animationDurations.XXFAST * 7}s;
-  }
+  ${[...Array(8).keys()].map((i: number) => {
+    return css`&:nth-child(${i + 1}) {
+      animation-delay: ${animationDurations.MEDIUM * 2 + animationDurations.XXFAST * i}s;
+    }`;
+  })}
 `;
 
 const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef, relatedImages } : {

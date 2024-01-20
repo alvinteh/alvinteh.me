@@ -1,7 +1,7 @@
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { useContext, useRef } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
 import PageContext from '../../../../components/Page/PageContext';
 import Screen from '../../../../components/Screen';
@@ -59,77 +59,11 @@ const QuoteText = styled.div`
     animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 17}ms both;
   }
 
-  & span:nth-child(1) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 0}ms both;
-  }
-
-  & span:nth-child(2) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 1}ms both;
-  }
-
-  & span:nth-child(3) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 2}ms both;
-  }
-
-  & span:nth-child(4) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 3}ms both;
-  }
-
-  & span:nth-child(5) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 4}ms both;
-  }
-
-  & span:nth-child(6) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 5}ms both;
-  }
-
-  & span:nth-child(7) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 6}ms both;
-  }
-
-  & span:nth-child(8) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 7}ms both;
-  }
-
-  & span:nth-child(9) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 8}ms both;
-  }
-
-  & span:nth-child(10) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 9}ms both;
-  }
-
-  & span:nth-child(11) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 10}ms both;
-  }
-
-  & span:nth-child(12) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 11}ms both;
-  }
-
-  & span:nth-child(13) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 12}ms both;
-  }
-
-  & span:nth-child(14) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 13}ms both;
-  }
-
-  & span:nth-child(15) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 14}ms both;
-  }
-
-  & span:nth-child(16) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 15}ms both;
-  }
-
-  & span:nth-child(17) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 16}ms both;
-  }
-
-  & span:nth-child(18) {
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 17}ms both;
-  }
+  ${[...Array(18).keys()].map((i: number) => {
+    return css`& span:nth-child(${i + 1}) {
+      animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * i}ms both;
+    }`;
+  })}
 `;
 
 const QuoteAuthor = styled.div`
