@@ -71,7 +71,7 @@ const PageTitle = styled.h1`
   }
 `;
 
-const Overlay = styled.div<{ $isToggled?: boolean, $type?: OverlayType }>`
+const Overlay = styled.div<{ $isToggled?: boolean, $type?: OverlayType, $isEventBlocking?: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -79,7 +79,7 @@ const Overlay = styled.div<{ $isToggled?: boolean, $type?: OverlayType }>`
   height: 100vh;
   background: rgba(0, 0, 0, ${(props) => { return props.$type === OverlayTypes.STRONG ? 0.95 : 0.5; }});
   opacity: ${(props) => { return props.$isToggled === false ? 0 : 1; }};
-  pointer-events: ${(props) => { return props.$isToggled ? 'auto' : 'none'; }};
+  pointer-events: ${(props) => { return props.$isEventBlocking === false || props.$isToggled ? 'auto' : 'none'; }};
   transition: opacity ${cubicBezier} 800ms;
   z-index: 999;
 `;
