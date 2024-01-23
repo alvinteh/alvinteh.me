@@ -57,7 +57,7 @@ const GlobalStyle = createGlobalStyle`
     color: #ffffff;
     font-family: Inter;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1;
     overscroll-behavior: none;
     -webkit-font-smoothing: antialiased;
