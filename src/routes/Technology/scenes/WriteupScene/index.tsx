@@ -153,13 +153,13 @@ const WriteupScene = ({ sceneIndex }: SceneProps) => {
               <Skills>
                 <Skill><FontAwesomeIcon icon={faCode} fixedWidth />Software Development</Skill>
                 <Skill><FontAwesomeIcon icon={faCubes} fixedWidth />System Architecture</Skill>
-                <Skill><FontAwesomeIcon icon={faGearCode} fixedWidth />SRE</Skill>
-                <Skill><FontAwesomeIcon icon={faCloud} fixedWidth />Cloud</Skill>
-                <Skill><FontAwesomeIcon icon={faHeadSideHeart} fixedWidth />UX</Skill>
+                <Skill><FontAwesomeIcon icon={faGearCode} fixedWidth />DevOps &amp; SRE</Skill>
+                <Skill><FontAwesomeIcon icon={faCloud} fixedWidth />Cloud Infrastructure</Skill>
+                <Skill><FontAwesomeIcon icon={faHeadSideHeart} fixedWidth />UX Design</Skill>
                 <Skill><FontAwesomeIcon icon={faHammerBrush} fixedWidth />Product Management</Skill>
                 <Skill><FontAwesomeIcon icon={faChartKanban} fixedWidth />Program Management</Skill>
-                <Skill><FontAwesomeIcon icon={faHandHoldingDollar} fixedWidth />Technical Sales</Skill>
-                <Skill><FontAwesomeIcon icon={faPeopleArrows} fixedWidth />Consulting</Skill>
+                <Skill><FontAwesomeIcon icon={faHandHoldingDollar} fixedWidth />Technology Sales</Skill>
+                <Skill><FontAwesomeIcon icon={faPeopleArrows} fixedWidth />Tech Consulting</Skill>
               </Skills>
             </SideContent>
           </Content>
