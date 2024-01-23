@@ -25,13 +25,12 @@ import SceneBackground from './images/scene-background.jpg';
 
 const StyledScreen = styled(Screen)`
   a, a:visited {
-    color: #e5e590;
+    color: #70e0e0;
   }
 
   a:hover {
-    color: #f5f5a0;
+    color: #80f5f5;
   }
-
 `;
 
 const Header = styled.h1`
@@ -81,14 +80,14 @@ const Skills = styled.ul`
 `;
 
 const Skill = styled.li`
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.75rem;
   padding: 0;
   font-family: Lato, sans-serif;
   font-size: 1.25rem;
   line-height: 1.5rem;
   
   & *:first-child {
-    margin-right: 5px;
+    margin-right: 10px;
   }
 `;
 
@@ -118,7 +117,7 @@ const WriteupScene = ({ sceneIndex }: SceneProps) => {
   }, []);
 
   return (
-    <StyledScreen innerRef={screenRef} backgroundImage={SceneBackground} title="Technology & Me">
+    <StyledScreen innerRef={screenRef} backgroundImage={SceneBackground} title="My Career in Tech">
       <Overlay $isEventBlocking={false}>
         <PaddedPageWrapper ref={contentWrapperRef}>
           <Content>
