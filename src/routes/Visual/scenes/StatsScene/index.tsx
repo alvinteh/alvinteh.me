@@ -82,7 +82,7 @@ const StatType = styled.span`
 
 const FaqWrapper = styled.div`
   position: absolute;
-  top: 0;
+  top: 30vh;
   right: 0;
   float: right;
   margin: 0;
