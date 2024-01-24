@@ -181,7 +181,7 @@ const CompaniesScene = ({ sceneIndex }: SceneProps) => {
   }, []);
 
   return (
-    <StyledScreen innerRef={screenRef} backgroundImage={SceneBackground} title="haha">
+    <StyledScreen innerRef={screenRef} backgroundImage={SceneBackground} title="Featured Employers & Clients">
       <Overlay $isEventBlocking={false}>
         <PaddedPageWrapper>
           <Content>
