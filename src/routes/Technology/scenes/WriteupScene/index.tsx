@@ -11,6 +11,7 @@ import {
   faPeopleArrows,
 } from '@fortawesome/sharp-regular-svg-icons';
 import { gsap } from 'gsap';
+import { SplitText } from 'gsap/SplitText';
 import { useGSAP } from '@gsap/react';
 import { useContext, useRef } from 'react';
 import styled from 'styled-components';
@@ -38,7 +39,9 @@ const Header = styled.h1`
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 4rem;
   line-height: 4rem;
+  overflow: hidden;
   text-transform: uppercase;
+  white-space: nowrap;
 `;
 
 const Content = styled.div`
@@ -63,10 +66,13 @@ const Writeup = styled.div`
 
 const SideHeader = styled.h3`
   margin: 0 0 2rem;
+  max-width: 0;
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 2rem;
   line-height: 2rem;
+  overflow: hidden;
   text-transform: uppercase;
+  white-space: nowrap;
 
   &:first-child {
     margin-top: 3rem;
@@ -96,20 +102,56 @@ const WriteupScene = ({ sceneIndex }: SceneProps) => {
 
   // Screen refs
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
-  const contentWrapperRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+  const mainHeaderRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
+  const writeupRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+  const sideHeaderRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
+  const skillsRef = useRef<HTMLUListElement>() as React.MutableRefObject<HTMLUListElement>;
+
+  gsap.registerPlugin(SplitText);
 
   // Screen animation
   useGSAP((): void => {
     const timeline: gsap.core.Timeline = gsap.timeline({});
 
-    timeline.fromTo(contentWrapperRef.current, {
-      opacity: 0,  
-    },
-    {
-      opacity: 1,
+    timeline.fromTo(mainHeaderRef.current, {
+      maxWidth: 0,
+    }, {
+      maxWidth: '100%',
       duration: animationDurations.MEDIUM,
       ease: 'power1.inOut',
     });
+
+    // Note we need this line as GSAP doesn't respect maxWidth 0 in the previous line
+    timeline.set(mainHeaderRef.current, { maxWidth: 0 }, '<');
+
+    const splitWriteup: SplitText = new SplitText(writeupRef.current, { type: 'lines' });
+    // Skip blank lines
+    const writeupLineElements: Element[] = splitWriteup.lines.filter((element: Element): boolean => {
+      return element.innerHTML !== '&nbsp;'
+    });
+
+    timeline.from(writeupLineElements, {
+      filter: 'blur(0.5rem)',
+      opacity: 0,
+      y: 10,
+      duration: animationDurations.FAST,
+      ease: 'power1.in',
+      stagger: animationDurations.FAST,
+    });
+
+    timeline.to(sideHeaderRef.current, {
+      maxWidth: '100%',
+      duration: animationDurations.MEDIUM,
+      ease: 'power1.inOut',
+    }, `<+${animationDurations.XXFAST}`);
+
+    timeline.from(skillsRef.current.children, {
+      opacity: 0,
+      x: '20px',
+      duration: animationDurations.FAST,
+      ease: 'power1.inOut',
+      stagger: animationDurations.XFAST,
+    }, '>');
 
     timeline.addLabel(`scene-${sceneIndex}-intro`);
 
@@ -119,11 +161,11 @@ const WriteupScene = ({ sceneIndex }: SceneProps) => {
   return (
     <StyledScreen innerRef={screenRef} backgroundImage={SceneBackground} title="My Career in Tech">
       <Overlay $isEventBlocking={false}>
-        <PaddedPageWrapper ref={contentWrapperRef}>
+        <PaddedPageWrapper>
           <Content>
             <MainContent>
-              <Header>My Approach to Tech</Header>
-              <Writeup>
+              <Header ref={mainHeaderRef}>My Approach to Tech</Header>
+              <Writeup ref={writeupRef}>
                 I am an entrepreneurial technologist with a passion for crafting digital products and platforms that
                 deliver an impact. I achieve this by harnessing a unique blend of product thinking, business acumen
                 and technical know-how to lead teams in building said experiences: be it creative digital campaigns
@@ -148,8 +190,8 @@ const WriteupScene = ({ sceneIndex }: SceneProps) => {
               </Writeup>
             </MainContent>
             <SideContent>
-              <SideHeader>Skills at a Glance</SideHeader>
-              <Skills>
+              <SideHeader ref={sideHeaderRef}>Skills at a Glance</SideHeader>
+              <Skills ref={skillsRef}>
                 <Skill><FontAwesomeIcon icon={faCode} fixedWidth />Software Development</Skill>
                 <Skill><FontAwesomeIcon icon={faCubes} fixedWidth />System Architecture</Skill>
                 <Skill><FontAwesomeIcon icon={faGearCode} fixedWidth />DevOps &amp; SRE</Skill>
