@@ -1,22 +1,11 @@
-import styled from 'styled-components';
-
-import { PaddedPageWrapper } from '../../components/static';
-
-const PageTitle = styled.h1`
-  margin: 0 0 10px;
-  color: #ffffff;
-  font-size: 10rem;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 600;
-  opacity: 0.85;
-  text-transform: uppercase;
-`;
+import Page from '../../components/Page';
+import TitleScene from './scenes/TitleScene';
 
 const Literary = () => {
   return (
-    <PaddedPageWrapper>
-      <PageTitle>Literary</PageTitle>
-    </PaddedPageWrapper>
+    <Page titleSuffix="Literary" shouldHaveScrollPrompt={false}>
+      <TitleScene sceneIndex={0} />
+    </Page>
   );
 };
 
