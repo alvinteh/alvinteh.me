@@ -106,10 +106,7 @@ const TitleScene = ({ sceneIndex }: { sceneIndex: number }) => {
   }, []);
 
   return (
-    <Screen
-      innerRef={screenRef}
-      title=""
-    >
+    <Screen innerRef={screenRef}>
       <PaddedPageWrapper>
         <PageTitle>Culinary</PageTitle>
         <Quote>

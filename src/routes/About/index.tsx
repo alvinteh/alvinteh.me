@@ -4,7 +4,7 @@ import MainScene from './scenes/MainScene';
 const About = () => {
   return (
     <Page titleSuffix="About" shouldHaveScrollPrompt={false}>
-      <MainScene />
+      <MainScene sceneIndex={0} />
     </Page>
   );
 };

@@ -130,11 +130,11 @@ const GalleryScene = ({ sceneIndex }: SceneProps) => {
       duration: animationDurations.XFAST,
     });
 
-    registerScene(sceneIndex, screenRef, timeline);
+    registerScene(sceneIndex, screenRef, timeline, 'Photo Gallery');
   }, []);
 
   return (
-    <Screen innerRef={screenRef} title="Photo Gallery">
+    <Screen innerRef={screenRef}>
       <Overlay ref={startOverlayRef}>
         <Header ref={startHeaderRef}>Witness more moments of magic.</Header>
       </Overlay>

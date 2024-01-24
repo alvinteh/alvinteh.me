@@ -177,11 +177,11 @@ const StatsScene = ({ sceneIndex }: SceneProps) => {
 
     timeline.addLabel(`scene-${sceneIndex}-outro`);
 
-    registerScene(sceneIndex, screenRef, timeline);
+    registerScene(sceneIndex, screenRef, timeline, 'Photography Stats');
   }, []); 
 
   return (
-    <StyledScreen innerRef={screenRef} backgroundImage={SceneBackground} title="Photography Stats">
+    <StyledScreen innerRef={screenRef} backgroundImage={SceneBackground}>
       {/* Stats last updated on 2024-01-05, excludes shots from Luang Prabang trip onwards */}
       <StatsWrapper ref={statsWrapperRef}>
         <Header>Photos by the numbers</Header>

@@ -191,7 +191,7 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
 
     timeline.addLabel(`scene-${sceneIndex}-outro`);
 
-    registerScene(sceneIndex, screenRef, timeline);
+    registerScene(sceneIndex, screenRef, timeline, 'Photos from around the World');
   }, []);
 
   const setSubscreenRef = (element: HTMLDivElement): HTMLDivElement => {
@@ -205,7 +205,7 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
   };
 
   return (
-    <Screen innerRef={screenRef} backgroundImage={ScreenBackground} title="Photos from around the World">
+    <Screen innerRef={screenRef} backgroundImage={ScreenBackground}>
       <StartHeader ref={startHeaderRef}>
         <span>What is this world to you?</span>
         <span>This world we live in.</span>

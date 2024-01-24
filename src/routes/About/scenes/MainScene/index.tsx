@@ -1,5 +1,10 @@
+import { gsap } from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { useContext, useRef } from 'react';
 import { Link as LinkRR } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
+
+import PageContext from '../../../../components/Page/PageContext';
 
 import {
   PageTitle,
@@ -187,9 +192,26 @@ const Link = styled(LinkRR)`
   }
 `;
 
-const MainScene = () => {
+const MainScene = ({ sceneIndex }: { sceneIndex: number }) => {
+  const { registerScene } = useContext(PageContext);
+
+  // Screen refs
+  const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+  
+  // Screen animation
+  useGSAP((): void => {
+    const timeline = gsap.timeline({});
+
+    // Add an empty tween as Page expects a non-empty timeline
+    timeline.to(screenRef.current, {});
+
+    timeline.addLabel(`scene-${sceneIndex}-intro`);
+
+    registerScene(sceneIndex, screenRef, timeline);
+  }, []);
+
   return (
-    <Screen title="">
+    <Screen innerRef={screenRef}>
       <PaddedPageWrapper>
         <PageTitle>About</PageTitle>
         <HeroTitle><AnimatedText>Alvin Teh</AnimatedText></HeroTitle>

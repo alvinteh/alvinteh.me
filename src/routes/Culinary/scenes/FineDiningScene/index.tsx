@@ -247,7 +247,7 @@ const FineDiningScene = ({ sceneIndex }: SceneProps) => {
 
     timeline.addLabel(`scene-${sceneIndex}-outro`);
 
-    registerScene(sceneIndex, screenRef, timeline);
+    registerScene(sceneIndex, screenRef, timeline, 'Fine Dining Experiences');
   }, [dishes]);
 
   const setDishRef = (element: HTMLLIElement): HTMLLIElement => {
@@ -279,7 +279,6 @@ const FineDiningScene = ({ sceneIndex }: SceneProps) => {
     <Screen
       innerRef={screenRef}
       backgroundImage={SceneBackground}
-      title="Fine Dining Experiences"
     >
       <PageWrapper>
         <Header ref={exploreTextRef}>

@@ -177,11 +177,11 @@ const CompaniesScene = ({ sceneIndex }: SceneProps) => {
 
     timeline.addLabel(`scene-${sceneIndex}-intro`);
 
-    registerScene(sceneIndex, screenRef, timeline);
+    registerScene(sceneIndex, screenRef, timeline, 'Featured Employers & Clients');
   }, []);
 
   return (
-    <StyledScreen innerRef={screenRef} backgroundImage={SceneBackground} title="Featured Employers & Clients">
+    <StyledScreen innerRef={screenRef} backgroundImage={SceneBackground}>
       <Overlay $isEventBlocking={false}>
         <PaddedPageWrapper>
           <Content>

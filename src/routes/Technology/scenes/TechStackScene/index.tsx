@@ -126,11 +126,11 @@ const TechStackScene = ({ sceneIndex }: SceneProps) => {
 
     timeline.addLabel(`scene-${sceneIndex}-intro`);
 
-    registerScene(sceneIndex, screenRef, timeline);
+    registerScene(sceneIndex, screenRef, timeline, 'Technology Stack');
   }, []);
 
   return (
-    <StyledScreen innerRef={screenRef} backgroundImage={SceneBackground} title="Technology Stack">
+    <StyledScreen innerRef={screenRef} backgroundImage={SceneBackground}>
       <Overlay $isEventBlocking={false}>
         <PaddedPageWrapper>
           <Content>

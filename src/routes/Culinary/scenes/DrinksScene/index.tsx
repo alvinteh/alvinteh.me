@@ -205,7 +205,7 @@ const DrinksScene = ({ sceneIndex }: SceneProps) => {
         duration: animationDurations.FAST, }, '<');
     }
 
-    registerScene(sceneIndex, screenRef, timeline);
+    registerScene(sceneIndex, screenRef, timeline, 'Cocktail Bar Experiences');
   }, [drinks]);
 
   const setDrinkRef = (element: HTMLDivElement): HTMLDivElement => {
@@ -238,7 +238,6 @@ const DrinksScene = ({ sceneIndex }: SceneProps) => {
     <DrinksScreen
       innerRef={screenRef}
       backgroundImage={SceneBackground}
-      title="Cocktail Bar Experiences"
     >
       <PageWrapper>
         <Header ref={headerRef}>

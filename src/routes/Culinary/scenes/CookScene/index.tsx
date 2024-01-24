@@ -573,7 +573,7 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
 
     timeline.addLabel(`scene-${sceneIndex}-outro`);
 
-    registerScene(sceneIndex, screenRef, timeline);
+    registerScene(sceneIndex, screenRef, timeline, 'Cooks & Bakes');
   }, [dishes, extraDishes]);
 
   const setDishRef = (element: HTMLDivElement): HTMLDivElement => {
@@ -618,7 +618,6 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
     <Screen
       innerRef={screenRef}
       backgroundImage={SceneBackground}
-      title="Cooks & Bakes"
     >
       <PageWrapper>
         <Header1 ref={header1Ref} />

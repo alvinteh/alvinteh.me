@@ -31,6 +31,7 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
   const pageRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const [sceneRefs, setSceneRefs] = useState<React.MutableRefObject<HTMLDivElement>[]>([]);
   const [sceneTimelines, setSceneTimelines] = useState<gsap.core.Timeline[]>([]);
+  const [sceneTitles, setSceneTitles] = useState<string[]>([]);
   const [isScrollPromptEnabled, setIsScrollPromptEnabled] = useState<boolean>(true);
   const [pageObserverName, setPageObserverName] = useState<string>('');
 
@@ -147,8 +148,24 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
           }
         }
       }
+
+      const updatePageTitle = (): void => {
+        const currentLabel: string = sortedLabels[currentLabelIndex];
+        const currentSceneIndex: number = Number.parseInt(currentLabel.split('-')[1], 10);
+        const targetSceneIndex: number = Number.parseInt(targetLabel.split('-')[1], 10);
+
+        if (currentSceneIndex !== targetSceneIndex) {
+          const targetSceneTitle = sceneTitles[targetSceneIndex];
+          setPageTitle(targetSceneTitle ? `${targetSceneTitle} | ${titleSuffix}` : titleSuffix);
+        }
+      };
       
       timeline.tweenTo(timeline.labels[targetLabel], {
+        onStart: (): void => {
+          if (direction === animationDirections.FORWARD) {
+            updatePageTitle();
+          }
+        },
         onComplete: (): void => {
           timeline.pause();
   
@@ -157,6 +174,10 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
           timeline.data.isAnimationPlaying = false;
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           timeline.data.currentLabelIndex = sortedLabels.indexOf(targetLabel);
+
+          if (direction === animationDirections.REVERSE) {
+            updatePageTitle();
+          }
 
           // We can ignore the linting error as we set these members
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -169,6 +190,9 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
         }
       });
     }
+
+    // Kill previous observers if any
+    Observer.getAll().forEach((o: Observer): void => { o.kill() });
 
     // Create scroll observer
     const pageObserverName: string = uuid();
@@ -186,10 +210,15 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
     });
 
     setPageObserverName(pageObserverName);
+    setPageTitle(titleSuffix);
   }, [children, sceneRefs, sceneTimelines]);
  
-  const registerScene = useCallback((index: number, ref: React.MutableRefObject<HTMLDivElement>,
-    timeline: gsap.core.Timeline): void => {
+  const registerScene = useCallback((
+    index: number,
+    ref: React.MutableRefObject<HTMLDivElement>,
+    timeline: gsap.core.Timeline,
+    title?: string
+  ): void => {
     setSceneRefs((prevSceneRefs: React.MutableRefObject<HTMLDivElement>[]) => {
       const newSceneRefs: React.MutableRefObject<HTMLDivElement>[] = prevSceneRefs.slice();
       newSceneRefs[index] = ref;
@@ -201,9 +230,13 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
       newSceneTimelines[index] = timeline;
       return newSceneTimelines;
     });
-  }, []);
 
-  setPageTitle(titleSuffix);
+    setSceneTitles((prevSceneTitles: string[]) => {
+      const newSceneTitles: string[] = prevSceneTitles.slice();
+      newSceneTitles[index] = title ?? '';
+      return newSceneTitles;
+    });
+  }, []);
 
   return (
     <PageContext.Provider value={{ titleSuffix, registerScene }}>

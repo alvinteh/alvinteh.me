@@ -155,11 +155,11 @@ const WriteupScene = ({ sceneIndex }: SceneProps) => {
 
     timeline.addLabel(`scene-${sceneIndex}-intro`);
 
-    registerScene(sceneIndex, screenRef, timeline);
+    registerScene(sceneIndex, screenRef, timeline, 'My Career in Tech');
   }, []);
 
   return (
-    <StyledScreen innerRef={screenRef} backgroundImage={SceneBackground} title="My Career in Tech">
+    <StyledScreen innerRef={screenRef} backgroundImage={SceneBackground}>
       <Overlay $isEventBlocking={false}>
         <PaddedPageWrapper>
           <Content>

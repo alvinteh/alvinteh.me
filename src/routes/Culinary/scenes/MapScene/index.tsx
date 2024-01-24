@@ -183,13 +183,12 @@ const MapScene = ({ sceneIndex }: SceneProps) => {
 
     timeline.addLabel(`scene-${sceneIndex}-outro`);
 
-    registerScene(sceneIndex, screenRef, timeline);
+    registerScene(sceneIndex, screenRef, timeline, 'Food & Drink Experience Map');
   }, []);
 
   return (
     <Screen
       innerRef={screenRef}
-      title="Food & Drink Experiences"
       backgroundImage={SceneBackground}
     >
       <Subscreen ref={subscreen1Ref}>
