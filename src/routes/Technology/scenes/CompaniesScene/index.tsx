@@ -59,7 +59,9 @@ const Header = styled.h1`
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 4rem;
   line-height: 4rem;
+  overflow: hidden;
   text-transform: uppercase;
+  white-space: nowrap;
 `;
 
 const Content = styled.div`
@@ -80,7 +82,9 @@ const SubHeader = styled.h3`
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 2rem;
   line-height: 2rem;
+  overflow: hidden;
   text-transform: uppercase;
+  white-space: nowrap;
 `;
 
 const Logos = styled.ul`
@@ -118,19 +122,57 @@ const CompaniesScene = ({ sceneIndex }: SceneProps) => {
 
   // Screen refs
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
-  const contentWrapperRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+  const mainHeaderRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
+  const employersHeaderRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
+  const employersRef = useRef<HTMLUListElement>() as React.MutableRefObject<HTMLUListElement>;
+  const clientsHeaderRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
+  const clientsRef = useRef<HTMLUListElement>() as React.MutableRefObject<HTMLUListElement>;
 
   // Screen animation
   useGSAP((): void => {
     const timeline: gsap.core.Timeline = gsap.timeline({});
 
-    timeline.fromTo(contentWrapperRef.current, {
-      opacity: 0,  
-    },
-    {
-      opacity: 1,
+    timeline.fromTo(mainHeaderRef.current, {
+      maxWidth: 0,
+    }, {
+      maxWidth: '100%',
       duration: animationDurations.MEDIUM,
       ease: 'power1.inOut',
+    });
+
+    // Note we need this line as GSAP doesn't respect maxWidth 0 in the previous line
+    timeline.set(mainHeaderRef.current, { maxWidth: 0 }, '<');
+
+    timeline.fromTo(employersHeaderRef.current, {
+      maxWidth: 0,
+    }, {
+      maxWidth: '100%',
+      duration: animationDurations.MEDIUM,
+      ease: 'power1.inOut',
+    });
+
+    timeline.from(employersRef.current.children, {
+      opacity: 0,
+      filter: 'blur(2rem)',
+      duration: animationDurations.MEDIUM,
+      ease: 'power1.inOut',
+      stagger: animationDurations.XFAST,
+    });
+
+    timeline.fromTo(clientsHeaderRef.current, {
+      maxWidth: 0,
+    }, {
+      maxWidth: '100%',
+      duration: animationDurations.MEDIUM,
+      ease: 'power1.inOut',
+    });
+
+    timeline.from(clientsRef.current.children, {
+      opacity: 0,
+      filter: 'blur(2rem)',
+      duration: animationDurations.MEDIUM,
+      ease: 'power1.inOut',
+      stagger: animationDurations.XFAST,
     });
 
     timeline.addLabel(`scene-${sceneIndex}-intro`);
@@ -141,12 +183,12 @@ const CompaniesScene = ({ sceneIndex }: SceneProps) => {
   return (
     <StyledScreen innerRef={screenRef} backgroundImage={SceneBackground} title="haha">
       <Overlay $isEventBlocking={false}>
-        <PaddedPageWrapper ref={contentWrapperRef}>
+        <PaddedPageWrapper>
           <Content>
             <MainContent>
-              <Header>Delivering Impact Everywhere I Go</Header>
-              <SubHeader>Employers</SubHeader>
-              <Logos>
+              <Header ref={mainHeaderRef}>Delivering Impact Everywhere I Go</Header>
+              <SubHeader ref={employersHeaderRef}>Employers</SubHeader>
+              <Logos ref={employersRef}>
                 <Logo><a href="https://www.cisco.com" rel="external noreferrer"><LogoImage $src={LogoCisco} $size="60%">Cisco</LogoImage></a></Logo>
                 <Logo><a href="https://www.techinasia.com" rel="external noreferrer"><LogoImage $src={LogoTechInAsia}>Tech in Asia</LogoImage></a></Logo>
                 <Logo><a href="https://www.publicissapient.com" rel="external noreferrer"><LogoImage $src={LogoPublicsSapient} $size="65%">Publicis Sapient</LogoImage></a></Logo>
@@ -154,8 +196,8 @@ const CompaniesScene = ({ sceneIndex }: SceneProps) => {
                 <Logo><a href="https://aws.amazon.com" rel="external noreferrer"><LogoImage $src={LogoAws} $size="60%">Amazon Web Services</LogoImage></a></Logo>
                 <Logo><a href="https://www.vmware.com" rel="external noreferrer"><LogoImage $src={LogoVmware} $size="90%">VMware</LogoImage></a></Logo>
               </Logos>
-              <SubHeader>Clients</SubHeader>
-              <Logos>
+              <SubHeader ref={clientsHeaderRef}>Clients</SubHeader>
+              <Logos ref={clientsRef}>
                 <Logo><a href="https://www.billabong.com" rel="external noreferrer"><LogoImage $src={LogoBillabong} $size="60%">Billabong</LogoImage></a></Logo>
                 <Logo><a href="https://www.bossini.com" rel="external noreferrer"><LogoImage $src={LogoBossini} $size="80%">Bossini</LogoImage></a></Logo>
                 <Logo><a href="https://www.bmw.com.sg" rel="external noreferrer"><LogoImage $src={LogoBmw} $size="50%">BMW</LogoImage></a></Logo>
