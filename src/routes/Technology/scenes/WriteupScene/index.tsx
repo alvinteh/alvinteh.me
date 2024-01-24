@@ -47,7 +47,7 @@ const Header = styled.h1`
 const Content = styled.div`
   display: flex;
   padding-top: 15vh;
-`
+`;
 
 const MainContent = styled.div`
   margin-right: 100px;
