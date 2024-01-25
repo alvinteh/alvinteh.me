@@ -106,4 +106,4 @@ const main = async (imageFolderPath: string): Promise<void> => {
   console.log('Done');
 };
 
-void main('../routes/Visual/scenes/GalleryScene/data/images');
+void main('../../routes/Visual/scenes/GalleryScene/data/images');
