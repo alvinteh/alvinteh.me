@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import sharp from 'sharp';
 import { v4 as uuid } from 'uuid';
 
-import { Album, Image } from '../routes/Visual/scenes/GalleryScene/types';
+import { Album, Image } from '../../routes/Visual/scenes/GalleryScene/types';
 
 const round = (n: number, decimalPlaces: number): number => {
   return  Math.trunc(n * Math.pow(10, decimalPlaces)) / Math.pow(10, decimalPlaces);
@@ -173,7 +173,7 @@ const main = async (
 };
 
 void main(
-  '../routes/Visual/scenes/GalleryScene/data/original-images',
-  '../routes/Visual/scenes/GalleryScene/data/images',
-  '../routes/Visual/scenes/GalleryScene/data/image-data.json'
+  '../../routes/Visual/scenes/GalleryScene/data/original-images',
+  '../../routes/Visual/scenes/GalleryScene/data/images',
+  '../../routes/Visual/scenes/GalleryScene/data/image-data.json'
 );
