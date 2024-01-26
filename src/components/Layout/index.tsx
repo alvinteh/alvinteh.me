@@ -402,6 +402,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     // Reset navigation animations on re-render
     resetAnimations();
   };
+
+  const handleFullScreenOverlayClick = (): void => {
+    setIsOverlayToggled(false);
+  };
  
   const navItems = navItemData.map((navItemData: NavItemData) => {
     let state: NavItemState = NavItemStates.DEFAULT;
@@ -436,10 +440,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       setPageTitle('');
     }
   });
-
-  const handleFullScreenOverlayClick = (): void => {
-    setIsOverlayToggled(false);
-  };
 
   return (
     <LayoutContext.Provider value={{ isOverlayToggled, setIsOverlayToggled, setOverlayContent }}>
