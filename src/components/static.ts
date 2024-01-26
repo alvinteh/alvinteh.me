@@ -97,7 +97,8 @@ const SiteHeader = styled.h2`
   filter: drop-shadow(3px 3px 6px rgb(255 255 255 / 0));
   mix-blend-mode: difference;
   z-index: 9;
-  transition: filter ${animationDurations.FAST}s ease-in-out;
+  transition: filter ${animationDurations.FAST}s ${cubicBezier};
+  animation: ${fadeInAnimation} ${animationDurations.FAST}s ${cubicBezier} ${pageTransitionDuration}ms 1 backwards;
 
   &:hover {
     filter: drop-shadow(3px 3px 6px rgb(255 255 255 / 0.6));
