@@ -111,6 +111,10 @@ const MenuLink = styled(MiscLink)<{ $isNavOpen: boolean, $isPageOpen: boolean }>
 
   &:hover {
     color: rgba(128, 128, 128, ${(props) => { return (props.$isNavOpen ? 0 : 1); }});
+
+    &::after {
+      color: #808080;
+    }
   }
 `;
 
