@@ -4,7 +4,7 @@ import { Link as LinkRR, useLocation, useNavigate } from 'react-router-dom';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 
 import { useDispatch, useSelector } from '../../core/hooks';
-import { open, toggle } from '../../slices/nav';
+import { close, open, toggle } from '../../slices/nav';
 import { cubicBezier, Overlay, OverlayType, OverlayTypes, pageTransitionDuration } from '../static';
 import { setPageTitle } from '../../utils/PageUtils';
 import { SiteHeader } from '../static';
@@ -287,6 +287,7 @@ const Main = styled.main.attrs<MainAttrs>(({ $isPageOpen, $currentPageIndex }) =
 `;
 
 const StyledSiteHeader = styled(SiteHeader)<{ $isVisible: boolean }>`
+  cursor: pointer;  
   opacity: ${(props) => { return (props.$isVisible ? 1 : 0); }};
   transition-delay: ${(props) => { return (props.$isVisible ? pageTransitionDuration : 0); }}ms;
 `;
@@ -367,6 +368,20 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const isFromInternalNav: boolean = location.state?.isFromInternalNav as boolean || false;
   const isNavOpen: boolean = useSelector((state) => { return state.nav.isOpen; });
 
+  const resetAnimations = (): void => {
+    const navAnimationNames: string[] = [];
+    navAnimationNames.push(slideInAnimation.name);
+    navAnimationNames.push(slideOutAnimation.name);
+
+    document.getAnimations().forEach((animation: Animation) => {
+      // @ts-expect-error TS incorrectly flags animationName as a non-existent property
+      if (navAnimationNames.includes(animation.animationName as string)) {
+        animation.cancel();
+        animation.play();
+      }
+    });
+  }
+
   const handleMenuLinkClick = (): void => {    
     if (isPageOpen) {
       // Redirect to home page
@@ -376,21 +391,16 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       // Update nav menu state
       dispatch(toggle());
       
-      // Restart navigation animations on re-render
-      ((): void => {
-        const navAnimationNames: string[] = [];
-        navAnimationNames.push(slideInAnimation.name);
-        navAnimationNames.push(slideOutAnimation.name);
-    
-        document.getAnimations().forEach((animation: Animation) => {
-          // @ts-expect-error TS incorrectly flags animationName as a non-existent property
-          if (navAnimationNames.includes(animation.animationName as string)) {
-            animation.cancel();
-            animation.play();
-          }
-        });
-      })();
+      // Reset navigation animations on re-render
+      resetAnimations();
     }
+  };
+  
+  const handleSiteHeaderClick = (): void => {
+    dispatch(close());
+
+    // Reset navigation animations on re-render
+    resetAnimations();
   };
  
   const navItems = navItemData.map((navItemData: NavItemData) => {
@@ -436,7 +446,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <GlobalStyle />
       <Wrapper>
         <NavWrapper $isNavOpen={isNavOpen} $isPageOpen={isPageOpen || isFromInternalNav}>
-          <StyledSiteHeader $isVisible={isNavOpen && !isPageOpen}><LinkRR to="/">Alvin Teh</LinkRR></StyledSiteHeader>
+          <StyledSiteHeader $isVisible={isNavOpen && !isPageOpen}>
+            <a onClick={handleSiteHeaderClick}>Alvin Teh</a>
+          </StyledSiteHeader>
           <Nav $isNavOpen={isNavOpen}>
             <NavList $isPageOpen={isPageOpen}>
               {navItems}
