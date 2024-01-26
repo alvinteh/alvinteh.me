@@ -1,7 +1,10 @@
 import keyMirror from 'keymirror';
 import styled, { keyframes } from 'styled-components';
 
+import { animationDurations } from '../utils/AnimationUtils';
 import { screenSizes } from '../utils/ResponsiveUtils';
+
+import LogoImage from './Layout/images/logo.svg';
 
 type OverlayType = 'NORMAL' | 'STRONG';
 
@@ -50,7 +53,7 @@ const PageWrapper = styled.div`
 const PaddedPageWrapper = styled.div`
   position: relative;
   box-sizing: border-box;
-  padding: 50px 40px 0;
+  padding: 75px 40px 50px;
   min-height: 100vh;
   animation: ${fadeInAnimation} 1ms ${cubicBezier} ${pageTransitionDuration}ms 1 backwards;
 `;
@@ -84,6 +87,31 @@ const Overlay = styled.div<{ $isToggled?: boolean, $type?: OverlayType, $isEvent
   z-index: 999;
 `;
 
+const SiteHeader = styled.h2`
+  position: absolute;
+  top: 5px;
+  left: calc(50% - 62.5px);
+  width: 125px;
+  height: 70px;
+  background: url(${LogoImage}) center no-repeat;
+  filter: drop-shadow(3px 3px 6px rgb(255 255 255 / 0));
+  mix-blend-mode: difference;
+  z-index: 9;
+  transition: filter ${animationDurations.FAST}s ease-in-out;
+
+  &:hover {
+    filter: drop-shadow(3px 3px 6px rgb(255 255 255 / 0.6));
+  }
+
+  a {
+    display: block;
+    height: 70px;
+    overflow: hidden;
+    text-indent: 100%;
+    white-space: nowrap;
+  }
+`;
+
 export type { OverlayType };
 export {
   cubicBezier,
@@ -97,4 +125,5 @@ export {
 
   Overlay,
   OverlayTypes,
+  SiteHeader,
 };

@@ -2,6 +2,7 @@ import { gsap } from 'gsap';
 import { Observer } from 'gsap/Observer';
 import { useGSAP } from '@gsap/react';
 import { Children, useCallback, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
 
@@ -15,6 +16,7 @@ import { flattenLabels, getSortedLabels } from '../../utils/GSAPUtils';
 import { setPageTitle } from '../../utils/PageUtils';
 import ScrollPromptContext from '../ScrollPrompt/ScrollPromptContext';
 import ScrollPrompt from '../ScrollPrompt';
+import { SiteHeader } from '../static';
 import PageContext from './PageContext';
 
 const ParallaxPageWrapper = styled.div`
@@ -245,6 +247,7 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
           setIsEnabled: setIsScrollPromptEnabled,
           pageObserverName,
         }}>
+        <SiteHeader><Link to="/">Alvin Teh</Link></SiteHeader>
         <ParallaxPageWrapper ref={pageRef}>
           {children}
           {shouldHaveScrollPrompt && <ScrollPrompt />}

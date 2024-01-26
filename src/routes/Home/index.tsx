@@ -1,6 +1,7 @@
+import { Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
-import { cubicBezier, FullPageWrapper } from '../../components/static';
+import { cubicBezier, FullPageWrapper, SiteHeader } from '../../components/static';
 import { useDispatch, useSelector } from '../../core/hooks';
 import { open } from '../../slices/nav';
 
@@ -253,6 +254,7 @@ const Home = () => {
   return (
     <FullPageWrapper>
       <Hero $isNavOpen={isNavOpen}>
+        <SiteHeader><Link to="/">Alvin Teh</Link></SiteHeader>
         <BirdContainers>
           <BirdContainer1>
             <Bird1 />
