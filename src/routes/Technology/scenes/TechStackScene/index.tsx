@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGithub, faLinkedin, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { useContext, useRef } from 'react';
@@ -32,8 +34,17 @@ const Header = styled.h1`
 `;
 
 const Content = styled.div`
+  display: flex;
   padding-top: 10vh;
+`;
+
+const MainContent = styled.div`
+  margin-right: 100px;
   max-width: 75rem;
+`;
+
+const SideContent = styled.div`
+  width: 15rem;
 `;
 
 const SubHeader = styled.h3`
@@ -66,6 +77,39 @@ const Tech = styled.li`
   line-height: 1.5rem;
 `;
 
+const SideHeader = styled.h3`
+  margin: 0 0 2rem;
+  max-width: 0;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2rem;
+  line-height: 2rem;
+  overflow: hidden;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  &:first-child {
+    margin-top: 3rem;
+  }
+`;
+
+const ProfileLinks = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+`;
+
+const ProfileLink = styled.li`
+  margin: 0 0 0.75rem;
+  padding: 0;
+  font-family: Lato, sans-serif;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+`;
+
+const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+  margin-right: 10px;
+`;
+
 const TechStackScene = ({ sceneIndex }: SceneProps) => {
   const { registerScene } = useContext(PageContext);
 
@@ -80,6 +124,8 @@ const TechStackScene = ({ sceneIndex }: SceneProps) => {
   const infraRef = useRef<HTMLUListElement>() as React.MutableRefObject<HTMLUListElement>;
   const othersHeaderRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
   const othersRef = useRef<HTMLUListElement>() as React.MutableRefObject<HTMLUListElement>;
+  const sideHeaderRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
+  const profileLinksRef = useRef<HTMLUListElement>() as React.MutableRefObject<HTMLUListElement>;
 
   // Screen animation
   useGSAP((): void => {
@@ -124,6 +170,20 @@ const TechStackScene = ({ sceneIndex }: SceneProps) => {
       });
     }
 
+    timeline.to(sideHeaderRef.current, {
+      maxWidth: '100%',
+      duration: animationDurations.MEDIUM,
+      ease: 'power1.inOut',
+    });
+
+    timeline.from(profileLinksRef.current.children, {
+      opacity: 0,
+      x: '20px',
+      duration: animationDurations.FAST,
+      ease: 'power1.inOut',
+      stagger: animationDurations.XFAST,
+    });
+
     timeline.addLabel(`scene-${sceneIndex}-intro`);
 
     registerScene(sceneIndex, screenRef, timeline, 'Technology Stack');
@@ -134,69 +194,79 @@ const TechStackScene = ({ sceneIndex }: SceneProps) => {
       <Overlay $isEventBlocking={false}>
         <PaddedPageWrapper>
           <Content>
-            <Header ref={mainHeaderRef}>Technologies I Work With</Header>
-            <SubHeader ref={languagesHeaderRef}>Languages</SubHeader>
-            <Technologies ref={languagesRef}>
-              <Tech><a href="https://html.spec.whatwg.org" rel="external noreferrer">HTML + CSS</a></Tech>
-              <Tech><a href="https://www.typescriptlang.org" rel="external noreferrer">JS/TypeScript</a></Tech>
-              <Tech><a href="https://nodejs.org" rel="external noreferrer">node.js</a></Tech>
-              <Tech><a href="https://www.python.org" rel="external noreferrer">Python</a></Tech>
-              <Tech><a href="https://www.php.net" rel="external noreferrer">PHP</a></Tech>
-              <Tech><a href="https://go.dev" rel="external noreferrer">Go</a></Tech>
-              <Tech><a href="https://www.java.com" rel="external noreferrer">Java</a></Tech>
-            </Technologies>
-            <SubHeader ref={databasesHeaderRef}>Databases</SubHeader>
-            <Technologies ref={databasesRef}>
-              <Tech><a href="https://www.postgresql.org" rel="external noreferrer">PostgreSQL</a></Tech>
-              <Tech><a href="https://www.mysql.com" rel="external noreferrer">MySQL <small>(Sun-certified)</small></a></Tech>
-              <Tech><a href="https://www.microsoft.com/sql-server" rel="external noreferrer">SQL Server</a></Tech>
-              <Tech><a href="https://aws.amazon.com/dynamodb" rel="external noreferrer">DynamoDB</a></Tech>
-              <Tech><a href="https://www.mongodb.com" rel="external noreferrer">mongo</a></Tech>
-              <Tech><a href="https://redis.io" rel="external noreferrer">Redis</a></Tech>
-              <Tech><a href="https://neo4j.com" rel="external noreferrer">neo4j</a></Tech>
-              <Tech><a href="https://aws.amazon.com/redshift" rel="external noreferrer">Redshift</a></Tech>
-            </Technologies>
-            <SubHeader ref={infraHeaderRef}>DevOps &amp; Infrastructure</SubHeader>
-            <Technologies ref={infraRef}>
-              <Tech><a href="https://aws.amazon.com" rel="external noreferrer">AWS <small>(11x certified)</small></a></Tech>
-              <Tech><a href="https://azure.microsoft.com" rel="external noreferrer">Azure</a></Tech>
-              <Tech><a href="https://cloud.google.com" rel="external noreferrer">Google Cloud</a></Tech>
-              <Tech><a href="https://www.vmware.com" rel="external noreferrer">VMware</a></Tech>
-              <Tech><a href="https://tanzu.vmware.com/" rel="external noreferrer">Tanzu</a></Tech>
-              <Tech><a href="https://github.com" rel="external noreferrer">GitHub</a></Tech>
-              <Tech><a href="https://www.atlassian.com" rel="external noreferrer">Atlassian suite</a></Tech>
-              <Tech><a href="https://www.jenkins.io" rel="external noreferrer">Jenkins</a></Tech>
-              <Tech><a href="https://kubernetes.io" rel="external noreferrer">Kubernetes</a></Tech>
-              <Tech><a href="https://prometheus.io" rel="external noreferrer">Prometheus</a></Tech>
-              <Tech><a href="https://grafana.com" rel="external noreferrer">Grafana</a></Tech>
-              <Tech><a href="https://helm.sh" rel="external noreferrer">Helm</a></Tech>
-              <Tech><a href="https://www.elastic.co" rel="external noreferrer">ELK/EFK</a></Tech>
-              <Tech><a href="https://www.jaegertracing.io" rel="external noreferrer">Jaeger</a></Tech>
-              <Tech><a href="https://newrelic.com" rel="external noreferrer">New Relic</a></Tech>
-              <Tech><a href="https://istio.io" rel="external noreferrer">Istio</a></Tech>
-              <Tech><a href="https://www.sonarsource.com/products/sonarqube/" rel="external noreferrer">Sonarqube</a></Tech>
-              <Tech><a href="https://www.microfocus.com/en-us/cyberres/application-security/webinspect" rel="external noreferrer">Fortify</a></Tech>
-              <Tech><a href="https://www.paloaltonetworks.com/prisma/cloud" rel="external noreferrer">Twistlock</a></Tech>
-              <Tech><a href="https://jfrog.com/artifactory" rel="external noreferrer">Artifactory</a></Tech>
-              <Tech><a href="https://www.chef.io" rel="external noreferrer">Chef</a></Tech>
-            </Technologies>
-            <SubHeader ref={othersHeaderRef}>Others</SubHeader>
-            <Technologies ref={othersRef}>
-              <Tech><a href="https://www.rabbitmq.com" rel="external noreferrer">RabbitMQ</a></Tech>
-              <Tech><a href="https://kafka.apache.org" rel="external noreferrer">Kafka</a></Tech>
-              <Tech><a href="https://graphql.org" rel="external noreferrer">GraphQL</a></Tech>
-              <Tech><a href="https://grpc.io" rel="external noreferrer">gRPC</a></Tech>
-              <Tech><a href="https://react.dev" rel="external noreferrer">React</a></Tech>
-              <Tech><a href="https://reactnative.dev" rel="external noreferrer">React Native</a></Tech>
-              <Tech><a href="https://www.selenium.dev" rel="external noreferrer">Selenium</a></Tech>
-              <Tech><a href="https://appium.io" rel="external noreferrer">Appium</a></Tech>
-              <Tech><a href="https://amplitude.com" rel="external noreferrer">Amplitude</a></Tech>
-              <Tech><a href="https://mixpanel.com" rel="external noreferrer">Mixpanel</a></Tech>
-              <Tech><a href="https://www.contentful.com" rel="external noreferrer">Contentful</a></Tech>
-              <Tech><a href="https://firebase.google.com" rel="external noreferrer">Firebase</a></Tech>
-              <Tech><a href="https://gohugo.io" rel="external noreferrer">Hugo</a></Tech>
-              <Tech><a href="https://www.twilio.com" rel="external noreferrer">Twilio</a></Tech>
-            </Technologies>
+            <MainContent>
+              <Header ref={mainHeaderRef}>Technologies I Work With</Header>
+              <SubHeader ref={languagesHeaderRef}>Languages</SubHeader>
+              <Technologies ref={languagesRef}>
+                <Tech><a href="https://html.spec.whatwg.org" rel="external noreferrer">HTML + CSS</a></Tech>
+                <Tech><a href="https://www.typescriptlang.org" rel="external noreferrer">JS/TypeScript</a></Tech>
+                <Tech><a href="https://nodejs.org" rel="external noreferrer">node.js</a></Tech>
+                <Tech><a href="https://www.python.org" rel="external noreferrer">Python</a></Tech>
+                <Tech><a href="https://www.php.net" rel="external noreferrer">PHP</a></Tech>
+                <Tech><a href="https://go.dev" rel="external noreferrer">Go</a></Tech>
+                <Tech><a href="https://www.java.com" rel="external noreferrer">Java</a></Tech>
+              </Technologies>
+              <SubHeader ref={databasesHeaderRef}>Databases</SubHeader>
+              <Technologies ref={databasesRef}>
+                <Tech><a href="https://www.postgresql.org" rel="external noreferrer">PostgreSQL</a></Tech>
+                <Tech><a href="https://www.mysql.com" rel="external noreferrer">MySQL <small>(Sun-certified)</small></a></Tech>
+                <Tech><a href="https://www.microsoft.com/sql-server" rel="external noreferrer">SQL Server</a></Tech>
+                <Tech><a href="https://aws.amazon.com/dynamodb" rel="external noreferrer">DynamoDB</a></Tech>
+                <Tech><a href="https://www.mongodb.com" rel="external noreferrer">mongo</a></Tech>
+                <Tech><a href="https://redis.io" rel="external noreferrer">Redis</a></Tech>
+                <Tech><a href="https://neo4j.com" rel="external noreferrer">neo4j</a></Tech>
+                <Tech><a href="https://aws.amazon.com/redshift" rel="external noreferrer">Redshift</a></Tech>
+              </Technologies>
+              <SubHeader ref={infraHeaderRef}>DevOps &amp; Infrastructure</SubHeader>
+              <Technologies ref={infraRef}>
+                <Tech><a href="https://aws.amazon.com" rel="external noreferrer">AWS <small>(11x certified)</small></a></Tech>
+                <Tech><a href="https://azure.microsoft.com" rel="external noreferrer">Azure</a></Tech>
+                <Tech><a href="https://cloud.google.com" rel="external noreferrer">Google Cloud</a></Tech>
+                <Tech><a href="https://www.vmware.com" rel="external noreferrer">VMware</a></Tech>
+                <Tech><a href="https://tanzu.vmware.com/" rel="external noreferrer">Tanzu</a></Tech>
+                <Tech><a href="https://github.com" rel="external noreferrer">GitHub</a></Tech>
+                <Tech><a href="https://www.atlassian.com" rel="external noreferrer">Atlassian suite</a></Tech>
+                <Tech><a href="https://www.jenkins.io" rel="external noreferrer">Jenkins</a></Tech>
+                <Tech><a href="https://kubernetes.io" rel="external noreferrer">Kubernetes</a></Tech>
+                <Tech><a href="https://prometheus.io" rel="external noreferrer">Prometheus</a></Tech>
+                <Tech><a href="https://grafana.com" rel="external noreferrer">Grafana</a></Tech>
+                <Tech><a href="https://helm.sh" rel="external noreferrer">Helm</a></Tech>
+                <Tech><a href="https://www.elastic.co" rel="external noreferrer">ELK/EFK</a></Tech>
+                <Tech><a href="https://www.jaegertracing.io" rel="external noreferrer">Jaeger</a></Tech>
+                <Tech><a href="https://newrelic.com" rel="external noreferrer">New Relic</a></Tech>
+                <Tech><a href="https://istio.io" rel="external noreferrer">Istio</a></Tech>
+                <Tech><a href="https://www.sonarsource.com/products/sonarqube/" rel="external noreferrer">Sonarqube</a></Tech>
+                <Tech><a href="https://www.microfocus.com/en-us/cyberres/application-security/webinspect" rel="external noreferrer">Fortify</a></Tech>
+                <Tech><a href="https://www.paloaltonetworks.com/prisma/cloud" rel="external noreferrer">Twistlock</a></Tech>
+                <Tech><a href="https://jfrog.com/artifactory" rel="external noreferrer">Artifactory</a></Tech>
+                <Tech><a href="https://www.chef.io" rel="external noreferrer">Chef</a></Tech>
+              </Technologies>
+              <SubHeader ref={othersHeaderRef}>Others</SubHeader>
+              <Technologies ref={othersRef}>
+                <Tech><a href="https://www.rabbitmq.com" rel="external noreferrer">RabbitMQ</a></Tech>
+                <Tech><a href="https://kafka.apache.org" rel="external noreferrer">Kafka</a></Tech>
+                <Tech><a href="https://graphql.org" rel="external noreferrer">GraphQL</a></Tech>
+                <Tech><a href="https://grpc.io" rel="external noreferrer">gRPC</a></Tech>
+                <Tech><a href="https://react.dev" rel="external noreferrer">React</a></Tech>
+                <Tech><a href="https://reactnative.dev" rel="external noreferrer">React Native</a></Tech>
+                <Tech><a href="https://www.selenium.dev" rel="external noreferrer">Selenium</a></Tech>
+                <Tech><a href="https://appium.io" rel="external noreferrer">Appium</a></Tech>
+                <Tech><a href="https://amplitude.com" rel="external noreferrer">Amplitude</a></Tech>
+                <Tech><a href="https://mixpanel.com" rel="external noreferrer">Mixpanel</a></Tech>
+                <Tech><a href="https://www.contentful.com" rel="external noreferrer">Contentful</a></Tech>
+                <Tech><a href="https://firebase.google.com" rel="external noreferrer">Firebase</a></Tech>
+                <Tech><a href="https://gohugo.io" rel="external noreferrer">Hugo</a></Tech>
+                <Tech><a href="https://www.twilio.com" rel="external noreferrer">Twilio</a></Tech>
+              </Technologies>
+            </MainContent>
+            <SideContent>
+              <SideHeader ref={sideHeaderRef}>Tech Profiles</SideHeader>
+              <ProfileLinks ref={profileLinksRef}>
+                <ProfileLink><a href="https://linkedin.com/in/alteh" target="_blank" rel="external noreferrer"><StyledFontAwesomeIcon icon={faLinkedin} fixedWidth />LinkedIn</a></ProfileLink>
+                <ProfileLink><a href="https://github.com/alvinteh" target="_blank" rel="external noreferrer"><StyledFontAwesomeIcon icon={faGithub} fixedWidth />GitHub</a></ProfileLink>
+                <ProfileLink><a href="https://stackoverflow.com/users/889190/alvin-teh" target="_blank" rel="external noreferrer"><StyledFontAwesomeIcon icon={faStackOverflow} fixedWidth />StackOverflow</a></ProfileLink>
+              </ProfileLinks>
+            </SideContent>
           </Content>
         </PaddedPageWrapper>
       </Overlay>
