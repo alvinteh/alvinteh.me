@@ -5,8 +5,9 @@ import styled, { createGlobalStyle, keyframes } from 'styled-components';
 
 import { useDispatch, useSelector } from '../../core/hooks';
 import { open, toggle } from '../../slices/nav';
-import { cubicBezier, Overlay, OverlayType, OverlayTypes } from '../static';
+import { cubicBezier, Overlay, OverlayType, OverlayTypes, pageTransitionDuration } from '../static';
 import { setPageTitle } from '../../utils/PageUtils';
+import { SiteHeader } from '../static';
 import LayoutContext from './LayoutContext';
 import { NavItemData, navItemData } from './NavItemData';
 
@@ -281,6 +282,11 @@ const Main = styled.main.attrs<MainAttrs>(({ $isPageOpen, $currentPageIndex }) =
   min-height: 100vh;
 `;
 
+const StyledSiteHeader = styled(SiteHeader)<{ $isVisible: boolean }>`
+  opacity: ${(props) => { return (props.$isVisible ? 1 : 0); }};
+  transition-delay: ${(props) => { return (props.$isVisible ? pageTransitionDuration : 0); }}ms;
+`;
+
 const NavWrapper = styled.div<{ $isNavOpen: boolean, $isPageOpen: boolean }>`
   display: block;
   position: fixed;
@@ -426,6 +432,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <GlobalStyle />
       <Wrapper>
         <NavWrapper $isNavOpen={isNavOpen} $isPageOpen={isPageOpen || isFromInternalNav}>
+          <StyledSiteHeader $isVisible={isNavOpen && !isPageOpen}><LinkRR to="/">Alvin Teh</LinkRR></StyledSiteHeader>
           <Nav $isNavOpen={isNavOpen}>
             <NavList $isPageOpen={isPageOpen}>
               {navItems}
