@@ -189,36 +189,36 @@ const CompaniesScene = ({ sceneIndex }: SceneProps) => {
               <Header ref={mainHeaderRef}>Delivering Impact Everywhere I Go</Header>
               <SubHeader ref={employersHeaderRef}>Employers</SubHeader>
               <Logos ref={employersRef}>
-                <Logo><a href="https://www.cisco.com" rel="external noreferrer"><LogoImage $src={LogoCisco} $size="60%">Cisco</LogoImage></a></Logo>
-                <Logo><a href="https://www.techinasia.com" rel="external noreferrer"><LogoImage $src={LogoTechInAsia}>Tech in Asia</LogoImage></a></Logo>
-                <Logo><a href="https://www.publicissapient.com" rel="external noreferrer"><LogoImage $src={LogoPublicsSapient} $size="65%">Publicis Sapient</LogoImage></a></Logo>
-                <Logo><a href="https://www.temasek.com.sg" rel="external noreferrer"><LogoImage $src={LogoTemasek} $size="90%">Temasek</LogoImage></a></Logo>
-                <Logo><a href="https://aws.amazon.com" rel="external noreferrer"><LogoImage $src={LogoAws} $size="60%">Amazon Web Services</LogoImage></a></Logo>
-                <Logo><a href="https://www.vmware.com" rel="external noreferrer"><LogoImage $src={LogoVmware} $size="90%">VMware</LogoImage></a></Logo>
+                <Logo><a href="https://www.cisco.com" target="_blank" rel="external noreferrer"><LogoImage $src={LogoCisco} $size="60%">Cisco</LogoImage></a></Logo>
+                <Logo><a href="https://www.techinasia.com" target="_blank" rel="external noreferrer"><LogoImage $src={LogoTechInAsia}>Tech in Asia</LogoImage></a></Logo>
+                <Logo><a href="https://www.publicissapient.com" target="_blank" rel="external noreferrer"><LogoImage $src={LogoPublicsSapient} $size="65%">Publicis Sapient</LogoImage></a></Logo>
+                <Logo><a href="https://www.temasek.com.sg" target="_blank" rel="external noreferrer"><LogoImage $src={LogoTemasek} $size="90%">Temasek</LogoImage></a></Logo>
+                <Logo><a href="https://aws.amazon.com" target="_blank" rel="external noreferrer"><LogoImage $src={LogoAws} $size="60%">Amazon Web Services</LogoImage></a></Logo>
+                <Logo><a href="https://www.vmware.com" target="_blank" rel="external noreferrer"><LogoImage $src={LogoVmware} $size="90%">VMware</LogoImage></a></Logo>
               </Logos>
               <SubHeader ref={clientsHeaderRef}>Clients</SubHeader>
               <Logos ref={clientsRef}>
-                <Logo><a href="https://www.billabong.com" rel="external noreferrer"><LogoImage $src={LogoBillabong} $size="60%">Billabong</LogoImage></a></Logo>
-                <Logo><a href="https://www.bossini.com" rel="external noreferrer"><LogoImage $src={LogoBossini} $size="80%">Bossini</LogoImage></a></Logo>
-                <Logo><a href="https://www.bmw.com.sg" rel="external noreferrer"><LogoImage $src={LogoBmw} $size="50%">BMW</LogoImage></a></Logo>
-                <Logo><a href="https://www.bca.co.id" rel="external noreferrer"><LogoImage $src={LogoBca} $size="85%">BCA</LogoImage></a></Logo>
-                <Logo><a href="https://sg.canon" rel="external noreferrer"><LogoImage $src={LogoCanon} $size="90%">Canon</LogoImage></a></Logo>
-                <Logo><a href="https://dbs.com.sg" rel="external noreferrer"><LogoImage $src={LogoDbs} $size="80%">DBS</LogoImage></a></Logo>
-                <Logo><a href="https://dell.com" rel="external noreferrer"><LogoImage $src={LogoDell} $size="50%">Dell</LogoImage></a></Logo>
-                <Logo><a href="https://www.fonterra.com" rel="external noreferrer"><LogoImage $src={LogoFonterra} $size="80%">Fonterra</LogoImage></a></Logo>
-                <Logo><a href="https://www.garena.sg" rel="external noreferrer"><LogoImage $src={LogoGarena} $size="80%">Garena</LogoImage></a></Logo>
-                <Logo><a href="https://www.kimberly-clark.com" rel="external noreferrer"><LogoImage $src={LogoKimberlyClark}>Kimberly-Clark</LogoImage></a></Logo>
-                <Logo><a href="https://www.manhattanfishmarket.com" rel="external noreferrer"><LogoImage $src={LogoMfm} $size="70%">Manhattan Fish Market</LogoImage></a></Logo>
-                <Logo><a href="https://www.ntuc.org.sg" rel="external noreferrer"><LogoImage $src={LogoNtuc} $size="70%">NTUC</LogoImage></a></Logo>
-                <Logo><a href="https://www.origins.hk" rel="external noreferrer"><LogoImage $src={LogoOrigins} $size="70%">Origins</LogoImage></a></Logo>
-                <Logo><a href="https://www.sephora.sg" rel="external noreferrer"><LogoImage $src={LogoSephora}>Sephora</LogoImage></a></Logo>
-                <Logo><a href="https://www.shiseido.com.hk" rel="external noreferrer"><LogoImage $src={LogoShiseido}>Shiseido</LogoImage></a></Logo>
-                <Logo><a href="https://shopee.sg" rel="external noreferrer"><LogoImage $src={LogoShopee} $size="90%">Shopee</LogoImage></a></Logo>
-                <Logo><a href="https://www.singaporeolympics.com/youth-olympic-games" rel="external noreferrer"><LogoImage $src={LogoSyog}>Singapore Youth Olympic Games</LogoImage></a></Logo>
-                <Logo><a href="https://www.spca.org.hk" rel="external noreferrer"><LogoImage $src={LogoSpca}>SPCA</LogoImage></a></Logo>
-                <Logo><a href="https://www.tigerbeer.com" rel="external noreferrer"><LogoImage $src={LogoTigerBeer} $size="75%">Tiger Beer</LogoImage></a></Logo>
-                <Logo><a href="https://www.wego.com" rel="external noreferrer"><LogoImage $src={LogoWego} $size="80%">Wego</LogoImage></a></Logo>
-                <Logo><a href="https://zalora.com" rel="external noreferrer"><LogoImage $src={LogoZalora}>Zalora</LogoImage></a></Logo>
+                <Logo><a href="https://www.billabong.com" target="_blank" rel="external noreferrer"><LogoImage $src={LogoBillabong} $size="60%">Billabong</LogoImage></a></Logo>
+                <Logo><a href="https://www.bossini.com" target="_blank" rel="external noreferrer"><LogoImage $src={LogoBossini} $size="80%">Bossini</LogoImage></a></Logo>
+                <Logo><a href="https://www.bmw.com.sg" target="_blank" rel="external noreferrer"><LogoImage $src={LogoBmw} $size="50%">BMW</LogoImage></a></Logo>
+                <Logo><a href="https://www.bca.co.id" target="_blank" rel="external noreferrer"><LogoImage $src={LogoBca} $size="85%">BCA</LogoImage></a></Logo>
+                <Logo><a href="https://sg.canon" target="_blank" rel="external noreferrer"><LogoImage $src={LogoCanon} $size="90%">Canon</LogoImage></a></Logo>
+                <Logo><a href="https://dbs.com.sg" target="_blank" rel="external noreferrer"><LogoImage $src={LogoDbs} $size="80%">DBS</LogoImage></a></Logo>
+                <Logo><a href="https://dell.com" target="_blank" rel="external noreferrer"><LogoImage $src={LogoDell} $size="50%">Dell</LogoImage></a></Logo>
+                <Logo><a href="https://www.fonterra.com" target="_blank" rel="external noreferrer"><LogoImage $src={LogoFonterra} $size="80%">Fonterra</LogoImage></a></Logo>
+                <Logo><a href="https://www.garena.sg" target="_blank" rel="external noreferrer"><LogoImage $src={LogoGarena} $size="80%">Garena</LogoImage></a></Logo>
+                <Logo><a href="https://www.kimberly-clark.com" target="_blank" rel="external noreferrer"><LogoImage $src={LogoKimberlyClark}>Kimberly-Clark</LogoImage></a></Logo>
+                <Logo><a href="https://www.manhattanfishmarket.com" target="_blank" rel="external noreferrer"><LogoImage $src={LogoMfm} $size="70%">Manhattan Fish Market</LogoImage></a></Logo>
+                <Logo><a href="https://www.ntuc.org.sg" target="_blank" rel="external noreferrer"><LogoImage $src={LogoNtuc} $size="70%">NTUC</LogoImage></a></Logo>
+                <Logo><a href="https://www.origins.hk" target="_blank" rel="external noreferrer"><LogoImage $src={LogoOrigins} $size="70%">Origins</LogoImage></a></Logo>
+                <Logo><a href="https://www.sephora.sg" target="_blank" rel="external noreferrer"><LogoImage $src={LogoSephora}>Sephora</LogoImage></a></Logo>
+                <Logo><a href="https://www.shiseido.com.hk" target="_blank" rel="external noreferrer"><LogoImage $src={LogoShiseido}>Shiseido</LogoImage></a></Logo>
+                <Logo><a href="https://shopee.sg" target="_blank" rel="external noreferrer"><LogoImage $src={LogoShopee} $size="90%">Shopee</LogoImage></a></Logo>
+                <Logo><a href="https://www.singaporeolympics.com/youth-olympic-games" target="_blank" rel="external noreferrer"><LogoImage $src={LogoSyog}>Singapore Youth Olympic Games</LogoImage></a></Logo>
+                <Logo><a href="https://www.spca.org.hk" target="_blank" rel="external noreferrer"><LogoImage $src={LogoSpca}>SPCA</LogoImage></a></Logo>
+                <Logo><a href="https://www.tigerbeer.com" target="_blank" rel="external noreferrer"><LogoImage $src={LogoTigerBeer} $size="75%">Tiger Beer</LogoImage></a></Logo>
+                <Logo><a href="https://www.wego.com" target="_blank" rel="external noreferrer"><LogoImage $src={LogoWego} $size="80%">Wego</LogoImage></a></Logo>
+                <Logo><a href="https://zalora.com" target="_blank" rel="external noreferrer"><LogoImage $src={LogoZalora}>Zalora</LogoImage></a></Logo>
               </Logos>
             </MainContent>
             <SideContent>
