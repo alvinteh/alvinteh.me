@@ -97,7 +97,7 @@ const MenuLink = styled(MiscLink)<{ $isNavOpen: boolean, $isPageOpen: boolean }>
   top: 25px;
   left: 50px;
   color: rgba(255, 255, 255, ${(props) => { return (props.$isNavOpen ? 0 : 1); }});
-  transition: all cubic-bezier(0.525, 0.06, 0.11, 0.995) 200ms;
+  transition: all ${cubicBezier} 200ms;
 
   &::after {
     display: block;
@@ -106,7 +106,7 @@ const MenuLink = styled(MiscLink)<{ $isNavOpen: boolean, $isPageOpen: boolean }>
     color: #ffffff;
     content: "${(props) => { return (props.$isPageOpen ? 'Back' : 'Close'); }}";
     opacity: ${(props) => { return (props.$isNavOpen ? 1 : 0); }};
-    transition: all cubic-bezier(0.525, 0.06, 0.11, 0.995) 400ms 200ms;
+    transition: all ${cubicBezier} 400ms 200ms;
   }
 
   &:hover {
@@ -159,7 +159,7 @@ const OverlayCloseLink = styled(MiscLink)<{ $isNavOpen: boolean, $isPageOpen: bo
   top: 25px;
   left: 50px;
   color: rgba(255, 255, 255, 1);
-  transition: all cubic-bezier(0.525, 0.06, 0.11, 0.995) 200ms;
+  transition: all ${cubicBezier} 200ms;
 
   &:hover {
     color: rgba(128, 128, 128, 1);
