@@ -247,7 +247,7 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
           setIsEnabled: setIsScrollPromptEnabled,
           pageObserverName,
         }}>
-        <SiteHeader><Link to="/">Alvin Teh</Link></SiteHeader>
+        <SiteHeader><Link to="/" state={{ isForcedHomeNavigation: true }}>Alvin Teh</Link></SiteHeader>
         <ParallaxPageWrapper ref={pageRef}>
           {children}
           {shouldHaveScrollPrompt && <ScrollPrompt />}

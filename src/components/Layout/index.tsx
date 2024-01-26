@@ -436,6 +436,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     if (isPageOpen && !isNavOpen) {
       dispatch(open());
     }
+    // We can ignore the linting issue as React Router has state typed as any; we have assertations as a failsafe
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    else if (location.state?.isForcedHomeNavigation === true) {
+      navigate('/', { replace: true });
+      dispatch(close());
+      resetAnimations();
+    }
     else if (!isPageOpen) {
       setPageTitle('');
     }
