@@ -6,6 +6,9 @@ import svgr from 'vite-plugin-svgr';
 import AssetPreloaderScriptCreator from './src/utils/server/AssetPreloaderScriptCreator';
 
 export default defineConfig({
+  build: {
+    assetsInlineLimit: 256,
+  },
   plugins: [
     react(),
     svgr({ svgrOptions: { ref: true }}),
