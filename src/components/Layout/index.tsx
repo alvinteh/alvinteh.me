@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { faEnvelope } from '@fortawesome/sharp-regular-svg-icons';
 import keyMirror from 'keymirror';
 import React, { useEffect, useState } from 'react';
 import { Link as LinkRR, useLocation, useNavigate } from 'react-router-dom';
@@ -322,6 +325,83 @@ const Wrapper = styled.div`
   container-type: size;
 `;
 
+const ConnectDialog = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: solid 1px rgba(255, 255, 255, 0.3);
+  width: 30rem;
+  height: fit-content;
+  background: #202020;
+  color: #ffffff;
+  font-family: "Barlow Condensed", sans-serif;
+  transform: translate3d(-50%, -50%, 0);
+`;
+
+const DialogTitle = styled.h4`
+  margin: 0;
+  padding: 10px 25px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  text-transform: uppercase;
+`;
+
+const DialogContent = styled.div`
+  border-top: solid 1px rgba(255, 255, 255, 0.3);
+  border-bottom: solid 1px rgba(255, 255, 255, 0.3);
+  padding: 25px;  
+  font-family: "Crimson Text", serif;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+`;
+
+const DialogButton = styled.button`
+  display: block;
+  margin: 10px 0;
+  border: none;
+  padding: 5px 20px;
+  float: right;
+  background: none;
+  color: #ffffff;
+  cursor: pointer;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.25rem;
+  line-height: 1.1rem;
+  outline: none;
+  text-transform: uppercase;
+
+  &:hover {
+    color: #80f5f5;
+  }
+`;
+
+const ProfileLinks = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+`;
+
+const ProfileLink = styled.li`
+  margin: 0 0 0.5rem;
+  padding: 0;
+  font-family: Lato, sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.25rem;
+
+  a:link, a:visited {
+    color: #ffffff;
+  }
+
+  a:hover {
+    color: #80f5f5;
+  }
+`;
+
+const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+  margin-right: 10px;
+`;
+
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const dispatch = useDispatch();
@@ -362,6 +442,32 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       // Reset navigation animations on re-render
       resetAnimations();
     }
+  };
+
+  const handleConnectDialogButtonClick = (): void => {
+    setIsDialogToggled(false);
+  };
+
+  const handleConnectLinkClick = (): void => {
+    const dialogContent: React.ReactNode = (
+      <ConnectDialog>
+        <DialogTitle>Connect with Me</DialogTitle>
+          <DialogContent>
+          Want to connect on a topic? Feel free to reach out on the following platforms:
+          <br />
+          <br />
+          <ProfileLinks>
+            <ProfileLink><a href="https://linkedin.com/in/alteh" target="_blank" rel="external noreferrer"><StyledFontAwesomeIcon icon={faLinkedin} fixedWidth />LinkedIn</a></ProfileLink>
+            <ProfileLink><a href="https://github.com/alvinteh" target="_blank" rel="external noreferrer"><StyledFontAwesomeIcon icon={faGithub} fixedWidth />GitHub</a></ProfileLink>
+            <ProfileLink><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#64;&#97;&#108;&#118;&#105;&#110;&#116;&#101;&#104;&#46;&#109;&#101;"><StyledFontAwesomeIcon icon={faEnvelope} fixedWidth />Email</a></ProfileLink>
+          </ProfileLinks>
+        </DialogContent>
+        <DialogButton onClick={handleConnectDialogButtonClick}>Return</DialogButton>
+      </ConnectDialog>
+    );
+
+    setDialogContent(dialogContent);
+    setIsDialogToggled(true);
   };
   
   const handleSiteHeaderClick = (): void => {
@@ -413,7 +519,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   });
 
   return (
-    <LayoutContext.Provider value={{ isDialogToggled: isDialogToggled, setIsDialogToggled: setIsDialogToggled, setDialogContent: setDialogContent }}>
+    <LayoutContext.Provider value={{ isDialogToggled: isDialogToggled, setIsDialogToggled, setDialogContent }}>
       <GlobalStyle />
       <Wrapper>
         <NavWrapper $isNavOpen={isNavOpen} $isPageOpen={isPageOpen || isFromInternalNav}>
@@ -427,7 +533,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </Nav>
         </NavWrapper>
         <MenuLink onClick={handleMenuLinkClick} $isNavOpen={isNavOpen} $isPageOpen={isPageOpen}>Menu</MenuLink>
-        <ConnectLink>Connect</ConnectLink>
+        <ConnectLink onClick={handleConnectLinkClick}>Connect</ConnectLink>
         <Main $isPageOpen={isPageOpen} $currentPageIndex={currentPageIndex}>
             {children}
             <Dialog>
