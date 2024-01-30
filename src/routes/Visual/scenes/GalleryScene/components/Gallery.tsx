@@ -14,8 +14,6 @@ import { galleryItemPadding } from './common';
 import FullImageViewer from './FullImageViewer';
 import { GalleryImage, ImageElementAttrs } from './types';
 
-import TestImage from '../data/import-test.png';
-
 interface GalleryLayoutElement {
   element: HTMLDivElement;
   x: number;
@@ -119,10 +117,6 @@ const Gallery = ({ images, itemHeight, isInteractive }: {
   const galleryImageHeight: number = useMemo((): number => {
     return itemHeight + galleryItemPadding * 2;
   }, [itemHeight]);
-
-  const imagePath: string = useMemo((): string => {
-    return `${TestImage.substr(0, TestImage.lastIndexOf('/') + 1)}images/`;
-  }, []);
 
   const handleDrag = useCallback(function(): void {
     // @ts-expect-error We can ignore the linting issue as this is set by GSAP
@@ -299,7 +293,7 @@ const Gallery = ({ images, itemHeight, isInteractive }: {
       const updatedImage: Image = {
         caption,
         albumName,
-        src: `${imagePath}${src}`,
+        src,
         aspectRatio,
         isAlbumCover,
       };
@@ -342,7 +336,7 @@ const Gallery = ({ images, itemHeight, isInteractive }: {
 
     setAlbums(albums);
     setGalleryImages(galleryImages);
-  }, [images, itemHeight, imagePath, galleryImageHeight, galleryImageMaxWidth, getGalleryImageWidth]);
+  }, [images, itemHeight, galleryImageHeight, galleryImageMaxWidth, getGalleryImageWidth]);
 
   useEffect((): void => {
     if (isOverlayToggled) {

@@ -34,6 +34,12 @@ const GalleryWrapper = styled.div`
   background: #202020;
 `;
 
+const images: Image[] = rawImages as unknown as Image[];
+
+images.forEach((image: Image) => {
+  image.src = `/gallery-images/${image.src}`;
+});
+
 const GalleryScene = ({ sceneIndex }: SceneProps) => {
   const { registerScene } = useContext(PageContext);
 
@@ -46,7 +52,6 @@ const GalleryScene = ({ sceneIndex }: SceneProps) => {
   const [isGalleryInteractive, setIsGalleryInteractive] = useState<boolean>(false);
 
   const itemHeight = 270;
-  const images: Image[] = rawImages as unknown as Image[];
 
   // Screen animation
   useGSAP((): void => {

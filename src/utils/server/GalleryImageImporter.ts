@@ -173,7 +173,7 @@ const main = async (
 };
 
 void main(
-  '../../routes/Visual/scenes/GalleryScene/data/original-images',
-  '../../routes/Visual/scenes/GalleryScene/data/images',
+  '../../../public/gallery-images-org',
+  '../../../public/gallery-images',
   '../../routes/Visual/scenes/GalleryScene/data/image-data.json'
 );
