@@ -35,7 +35,7 @@ const changeTextColorAnimation = keyframes`
 
 const Quote = styled.blockquote`
   position: relative;
-  top: 35vh;
+  top: 25vh;
   margin: 0 auto;
   max-width: 60rem;
   text-align: center;
