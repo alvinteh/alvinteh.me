@@ -52,8 +52,9 @@ const main = async (mapKmlUrl: string, destinationFilePath: string): Promise<voi
   const kmlData = (new XMLParser({ ignoreAttributes : false, attributeNamePrefix: '' })).parse(kml) as
     Record<string, unknown>;
   // We can ignore the linting errors as the elements always exist 
+  // @ts-expect-error KML type is not specified
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-  const kmlPlacemarks: KmlPlacemark[] = kmlData.kml.Document.Placemark;
+  const kmlPlacemarks: KmlPlacemark[] = kmlData.kml.Document.Placemark; 
 
   // Transform data
   console.log(`Transforming map data ${kmlPlacemarks.length}...`);
