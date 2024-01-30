@@ -7,9 +7,9 @@ import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
 
 import LayoutContext from '../../../../../components/Layout/LayoutContext';
-import { Image } from '../types';
 import { randomize } from '../../../../../utils/ArrayUtils';
 import { getElementTranslation, setElementTranslation } from '../../../../../utils/StyleUtils';
+import { Image } from '../types';
 import { galleryItemPadding } from './common';
 import FullImageViewer from './FullImageViewer';
 import { GalleryImage, ImageElementAttrs } from './types';
@@ -102,7 +102,7 @@ const Gallery = ({ images, itemHeight, isInteractive }: {
   const [activeAlbumImages, setActiveAlbumImages] = useState<Image[]>([]);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [draggable, setDraggable] = useState<Draggable>();
-  const { isDialogToggled: isOverlayToggled } = useContext(LayoutContext);
+  const { isDialogToggled } = useContext(LayoutContext);
 
   gsap.registerPlugin(Draggable, InertiaPlugin);
 
@@ -339,12 +339,12 @@ const Gallery = ({ images, itemHeight, isInteractive }: {
   }, [images, itemHeight, galleryImageHeight, galleryImageMaxWidth, getGalleryImageWidth]);
 
   useEffect((): void => {
-    if (isOverlayToggled) {
+    if (isDialogToggled) {
       return;
     }
 
     setActiveGalleryImage(undefined);
-  }, [isOverlayToggled, setActiveGalleryImage]);
+  }, [isDialogToggled, setActiveGalleryImage]);
 
   useEffect((): void => {
     if (!draggable) {
