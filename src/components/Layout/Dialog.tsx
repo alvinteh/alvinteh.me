@@ -1,15 +1,21 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { cubicBezier } from '../static';
+import { animationDurations } from '../../utils/AnimationUtils';
+import { cubicBezier, fadeInAnimation } from '../static';
 import LayoutContext from './LayoutContext';
 
-interface DialogContentAttrs {
+interface DialogXPositionAttrs {
   $x: number;
 }
 
-const DialogElement = styled.dialog`
-  position: fixed;
+// Note that there's no fade out animation due to an issue with ::backdrop
+// In addition, as of time of writing, styled-components does not support @starting-styles, making this
+// issue unresolvable (idiomatically) for the time being
+// Also note that $x adjustments are due to Chrome "swapping" the dialog positioning context to/fro the parent
+// element and the document root
+const DialogElement = styled.dialog<{ $x: number}>`
+  position: absolute;
   top: 0;
   left: 0;
   margin: 0;
@@ -17,21 +23,40 @@ const DialogElement = styled.dialog`
   padding: 0;
   max-width: none;
   max-height: none;
-  width: 100%;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.9);
-`;
-
-const DialogContent = styled.div.attrs<DialogContentAttrs>(({ $x = 0 }) => ({
-  style: {
-    transform: `translate3d(${$x}px, 0, 0)`,
-  }
-}))`
   width: 84vw;
   height: 100vh;
+  background: none;
+  outline: none;
+  overflow: visible;
+  transform: translate3d(0, 0, 0);
+  animation: none;
+
+  &[open] {
+    transform: translate3d(${(props) => { return props.$x; }}px, 0, 0);
+    animation: ${fadeInAnimation} ${cubicBezier} ${animationDurations.MEDIUM}s;
+
+    &::backdrop {
+      animation: ${fadeInAnimation} ${cubicBezier} ${animationDurations.MEDIUM}s;
+    }
+  }
+
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.9);
+    animation: none;
+  }
 `;
 
-const DialogCloseLink = styled.a`
+const DialogContent = styled.div`
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+`;
+
+const DialogCloseLink = styled.a.attrs<DialogXPositionAttrs>(({ $x }) => ({
+  style: {
+    transform: `translate3d(-${$x}px, 0, 0)`,
+  }
+}))`
   display: block;
   position: fixed;
   top: 25px;
@@ -46,7 +71,7 @@ const DialogCloseLink = styled.a`
   text-transform: uppercase;
   user-select: none;
   z-index: 99;
-  transition: all ${cubicBezier} 200ms;
+  transition: all ${cubicBezier} ${animationDurations.XFAST}s;
 
   &:hover {
     color: rgba(128, 128, 128, 1);
@@ -57,11 +82,21 @@ const Dialog = ({ children }: { children: React.ReactNode }) => {
   const { isDialogToggled, setIsDialogToggled } = useContext(LayoutContext);
   const [dialogPositionX, setDialogPositionX] = useState<number>(0);
   const dialogRef = useRef<HTMLDialogElement>() as React.MutableRefObject<HTMLDialogElement>;
-  const dialogContentRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 
   const handleDialogCloseLinkClick = (): void => {
     setIsDialogToggled(false);
   }
+
+  useEffect(() => {
+    const dialogElement: HTMLDialogElement = dialogRef.current;
+    
+    if (isDialogToggled) {
+      dialogElement.showModal();
+    }
+    else {
+      dialogElement.close();
+    }
+  }, [isDialogToggled]);
 
   useEffect(() => {
     const dialogElement: HTMLDialogElement = dialogRef.current;
@@ -71,21 +106,14 @@ const Dialog = ({ children }: { children: React.ReactNode }) => {
     const mainElementBounds: DOMRect = mainElement.getBoundingClientRect();
 
     setDialogPositionX(mainElementBounds.x);
-
-    if (isDialogToggled) {
-      dialogElement.showModal();
-    }
-    else {
-      dialogElement.close();
-    }
-  }, [isDialogToggled]);
+  }, []);
 
   return (
-    <DialogElement ref={dialogRef}>
-      <DialogContent ref={dialogContentRef} $x={dialogPositionX}>
+    <DialogElement ref={dialogRef} $x={dialogPositionX}>
+      <DialogContent>
         {children}
       </DialogContent>
-      <DialogCloseLink onClick={handleDialogCloseLinkClick}>Close</DialogCloseLink>
+      <DialogCloseLink $x={dialogPositionX} onClick={handleDialogCloseLinkClick}>Close</DialogCloseLink>
     </DialogElement>
   )
 };
