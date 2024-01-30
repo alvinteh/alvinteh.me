@@ -1,11 +1,12 @@
 import { gsap } from 'gsap';
 import { Observer } from 'gsap/Observer';
 import { useGSAP } from '@gsap/react';
-import { Children, useCallback, useRef, useState } from 'react';
+import { Children, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
 
+import LayoutContext from '../../components/Layout/LayoutContext';
 import {
   AnimationDirection,
   animationDirections,
@@ -36,6 +37,7 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
   const [sceneTitles, setSceneTitles] = useState<string[]>([]);
   const [isScrollPromptEnabled, setIsScrollPromptEnabled] = useState<boolean>(true);
   const [pageObserverName, setPageObserverName] = useState<string>('');
+  const { isDialogToggled } = useContext(LayoutContext);
 
   gsap.registerPlugin(Observer);
 
@@ -239,6 +241,16 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
       return newSceneTitles;
     });
   }, []);
+
+  useEffect((): void => {
+    // Toggle the page observer depending on whether the dialog is toggled
+    if (isDialogToggled && pageObserverName) {
+      Observer.getById(pageObserverName)?.disable();
+    }
+    else if (pageObserverName) {
+      Observer.getById(pageObserverName)?.enable();
+    }
+  }, [isDialogToggled, pageObserverName]);
 
   return (
     <PageContext.Provider value={{ titleSuffix, registerScene }}>
