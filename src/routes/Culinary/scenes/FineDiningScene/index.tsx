@@ -51,7 +51,7 @@ const Dish = styled.li.attrs<DishAttrs>(({ $backgroundImage }) => ({
   }
 }))`
   position: absolute;
-  bottom: -45vh;
+  top: 50%;
   left: 50%;
   margin-top: -22.5vh;
   margin-left: -22.5vh;
@@ -60,10 +60,6 @@ const Dish = styled.li.attrs<DishAttrs>(({ $backgroundImage }) => ({
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-
-  @media ${aspectRatios.a16x9} {
-    bottom: -48vh;
-  }
 `;
 
 const DishInfo = styled.div`
@@ -219,14 +215,14 @@ const FineDiningScene = ({ sceneIndex }: SceneProps) => {
       const dishInfoElement: HTMLDivElement = dishInfoRefs.current[i];
 
       timeline
-      .to(dishElement, { transform: 'translate3d(0, -72vh, 0)', duration: animationDurations.MEDIUM })
+      .from(dishElement, { y: '72.5vh', duration: animationDurations.MEDIUM })
       .from(dishInfoElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)', duration:
         animationDurations.FAST })
 
       timeline.addLabel(`scene-${sceneIndex}-dish-${i}`);
 
       timeline.to(dishInfoElement, { opacity: 0, duration: animationDurations.FAST })
-      .to(dishElement, { transform: 'translate3d(0, -145vh, 0)', duration: animationDurations.MEDIUM });
+      .to(dishElement, { y: '-72.5vh', duration: animationDurations.MEDIUM });
     }
 
     for (let i = 0, length = exploreTextLineElements.length; i < length; i++) {
