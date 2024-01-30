@@ -104,7 +104,7 @@ const Gallery = ({ images, itemHeight, isInteractive }: {
   const [activeAlbumImages, setActiveAlbumImages] = useState<Image[]>([]);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [draggable, setDraggable] = useState<Draggable>();
-  const { isOverlayToggled } = useContext(LayoutContext);
+  const { isDialogToggled: isOverlayToggled } = useContext(LayoutContext);
 
   gsap.registerPlugin(Draggable, InertiaPlugin);
 

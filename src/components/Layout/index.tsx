@@ -1,11 +1,11 @@
 import keyMirror from 'keymirror';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link as LinkRR, useLocation, useNavigate } from 'react-router-dom';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 
 import { useDispatch, useSelector } from '../../core/hooks';
 import { close, open, toggle } from '../../slices/nav';
-import { cubicBezier, Overlay, OverlayType, OverlayTypes, pageTransitionDuration } from '../static';
+import { cubicBezier, pageTransitionDuration } from '../static';
 import { setPageTitle } from '../../utils/PageUtils';
 import { SiteHeader } from '../static';
 import LayoutContext from './LayoutContext';
@@ -20,6 +20,10 @@ interface NavItemAttrs {
 interface MainAttrs {
   $isPageOpen: boolean;
   $currentPageIndex: number;
+}
+
+interface DialogContentAttrs {
+  $x: number;
 }
 
 const NavItemStates: Record<NavItemState, NavItemState> = keyMirror({
@@ -157,17 +161,6 @@ const Link = styled(LinkRR)`
   height: 100%;
   cursor: pointer;
   z-index: 1;
-`;
-
-const OverlayCloseLink = styled(MiscLink)<{ $isNavOpen: boolean, $isPageOpen: boolean }>`
-  top: 25px;
-  left: 50px;
-  color: rgba(255, 255, 255, 1);
-  transition: all ${cubicBezier} 200ms;
-
-  &:hover {
-    color: rgba(128, 128, 128, 1);
-  }
 `;
 
 // Note: background images should be at least 768/1037/3226px (cropped/hovered/expanded) * 2160px
@@ -332,25 +325,75 @@ const Wrapper = styled.div`
   container-type: size;
 `;
 
-const FullScreenOverlayElement = styled(Overlay)`
+const DialogElement = styled.dialog`
   position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  max-width: none;
+  max-height: none;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
 `;
 
-const FullScreenOverlay = ({ children, isToggled, overlayType, clickHandler }: {
-  children: React.ReactNode,
-  isToggled: boolean,
-  overlayType: OverlayType,
-  clickHandler: () => void,
-}) => {
+const DialogContent = styled.div.attrs<DialogContentAttrs>(({ $x = 0 }) => ({
+  style: {
+    transform: `translate3d(${$x}px, 0, 0)`,
+  }
+}))`
+  width: 84vw;
+  height: 100vh;
+`;
+
+const DialogCloseLink = styled(MiscLink)<{ $isNavOpen: boolean, $isPageOpen: boolean }>`
+  position: fixed;
+  top: 25px;
+  left: 50px;
+  color: rgba(255, 255, 255, 1);
+  transition: all ${cubicBezier} 200ms;
+
+  &:hover {
+    color: rgba(128, 128, 128, 1);
+  }
+`;
+
+const Dialog = ({ children }: { children: React.ReactNode }) => {
+  const { isDialogToggled, setIsDialogToggled } = useContext(LayoutContext);
+  const [dialogPositionX, setDialogPositionX] = useState<number>(0);
+  const dialogRef = useRef<HTMLDialogElement>() as React.MutableRefObject<HTMLDialogElement>;
+  const dialogContentRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+
+  const handleDialogCloseLinkClick = (): void => {
+    setIsDialogToggled(false);
+  }
+
+  useEffect(() => {
+    const dialogElement: HTMLDialogElement = dialogRef.current;
+    // We can ignore the linting error as the dialog's parent is the main element
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const mainElement: HTMLElement = dialogElement.parentElement!;
+    const mainElementBounds: DOMRect = mainElement.getBoundingClientRect();
+
+    setDialogPositionX(mainElementBounds.x);
+
+    if (isDialogToggled) {
+      dialogElement.showModal();
+    }
+    else {
+      dialogElement.close();
+    }
+  }, [isDialogToggled]);
+
   return (
-    <FullScreenOverlayElement
-      $isToggled={isToggled}
-      $type={overlayType}
-      onClick={clickHandler}
-    >
-      <OverlayCloseLink>Close</OverlayCloseLink>
-      {children}
-    </FullScreenOverlayElement>
+    <DialogElement ref={dialogRef}>
+      <DialogContent ref={dialogContentRef} $x={dialogPositionX}>
+        {children}
+      </DialogContent>
+      <DialogCloseLink onClick={handleDialogCloseLinkClick}>Close</DialogCloseLink>
+    </DialogElement>
   )
 };
 
@@ -358,8 +401,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isOverlayToggled, setIsOverlayToggled] = useState<boolean>(false);
-  const [overlayContent, setOverlayContent] = useState<React.ReactNode>(<></>);
+  const [isDialogToggled, setIsDialogToggled] = useState<boolean>(false);
+  const [dialogContent, setDialogContent] = useState<React.ReactNode>(<></>);
 
   const currentPage: string = location.pathname.substring(1).split('/')[0];
   const isPageOpen: boolean = currentPage !== '';
@@ -401,10 +444,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
     // Reset navigation animations on re-render
     resetAnimations();
-  };
-
-  const handleFullScreenOverlayClick = (): void => {
-    setIsOverlayToggled(false);
   };
  
   const navItems = navItemData.map((navItemData: NavItemData) => {
@@ -449,7 +488,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   });
 
   return (
-    <LayoutContext.Provider value={{ isOverlayToggled, setIsOverlayToggled, setOverlayContent }}>
+    <LayoutContext.Provider value={{ isDialogToggled: isDialogToggled, setIsDialogToggled: setIsDialogToggled, setDialogContent: setDialogContent }}>
       <GlobalStyle />
       <Wrapper>
         <NavWrapper $isNavOpen={isNavOpen} $isPageOpen={isPageOpen || isFromInternalNav}>
@@ -466,14 +505,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <ConnectLink>Connect</ConnectLink>
         <Main $isPageOpen={isPageOpen} $currentPageIndex={currentPageIndex}>
             {children}
+            <Dialog>
+              {dialogContent}
+            </Dialog>
         </Main>
-        <FullScreenOverlay
-          isToggled={isOverlayToggled}
-          overlayType={OverlayTypes.STRONG}
-          clickHandler={handleFullScreenOverlayClick}
-        >
-          {overlayContent}
-        </FullScreenOverlay>
       </Wrapper>
     </LayoutContext.Provider>
   );

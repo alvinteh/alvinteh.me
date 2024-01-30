@@ -18,6 +18,10 @@ interface RelatedImageAttrs {
 
 const FullImageViewerElement = styled.div`
   position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
   overflow: hidden;
 `;
 
@@ -36,6 +40,7 @@ const FullImage = styled.div.attrs<FullImageAttrs>(({ $width, $height, $backgrou
 const Caption = styled.div`
   position: absolute;
   width: 100%;
+  color: #ffffff;
   font-family: Lato, sans-serif;
   font-size: 1.1rem;
   font-weight: 400;
@@ -108,7 +113,7 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
   galleryRef: React.MutableRefObject<HTMLDivElement>,
   relatedImages: Image[],
 }) => {
-  const { isOverlayToggled, setIsOverlayToggled, setOverlayContent } = useContext(LayoutContext);
+  const { isDialogToggled, setIsDialogToggled, setDialogContent } = useContext(LayoutContext);
   const { setIsEnabled: setIsScrollPromptEnabled } = useContext(ScrollPromptContext);
   const [isInitialActiveImage, setIsInitialActiveImage] = useState<boolean>(true);
   const [activeImage, setActiveImage] = useState<Image>();
@@ -149,7 +154,7 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
         );
       });
 
-      const overlayContent: React.ReactNode = (
+      const dialogContent: React.ReactNode = (
         <FullImageViewerElement ref={fullImageViewerRef}>
           <FullImage
             ref={fullImageRef}
@@ -166,12 +171,12 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
       );
 
       setIsScrollPromptEnabled(false);
-      setOverlayContent(overlayContent);
-      setIsOverlayToggled(true);
+      setDialogContent(dialogContent);
+      setIsDialogToggled(true);
     }
     else {
       setIsScrollPromptEnabled(true);
-      setIsOverlayToggled(false);
+      setIsDialogToggled(false);
     }
   }, [
     isActive,
@@ -181,19 +186,18 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
     activeImage,
     isInitialActiveImage,
     setIsScrollPromptEnabled,
-    setIsOverlayToggled,
-    setOverlayContent
+    setIsDialogToggled,
+    setDialogContent
   ]);
 
   useEffect((): void => {
-    if (!isOverlayToggled || !isActive || !activeImage || !galleryImage) {
+    if (!isDialogToggled || !isActive || !activeImage || !galleryImage) {
       return;
     }
 
     const image: Image = activeImage;
     
     const galleryElement: HTMLDivElement = galleryRef.current;
-    const fullImageViewerElement: HTMLDivElement = fullImageViewerRef.current;
     const fullImageElement: HTMLDivElement = fullImageRef.current;
     const captionElement: HTMLDivElement = captionRef.current;
     const galleryBounds: DOMRect = galleryElement.getBoundingClientRect();
@@ -201,10 +205,15 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
     
     const timeline = gsap.timeline({});
     
-    const stage3ImageWidth: number = image.aspectRatio >= 1 ? galleryBounds.width :
+    let stage3ImageWidth: number = image.aspectRatio >= 1 ? galleryBounds.width :
         Math.round((galleryBounds.height + bottomHeightBuffer) * image.aspectRatio);
-    const stage3ImageHeight: number = image.aspectRatio < 1 ? galleryBounds.height - bottomHeightBuffer :
+    let stage3ImageHeight: number = image.aspectRatio < 1 ? galleryBounds.height - bottomHeightBuffer :
         Math.round(Math.pow(image.aspectRatio / galleryBounds.width, -1));
+
+    if (image.aspectRatio >= 1 && stage3ImageHeight >= galleryBounds.height) {
+      stage3ImageHeight = galleryBounds.height - bottomHeightBuffer;
+      stage3ImageWidth = Math.round(stage3ImageHeight * image.aspectRatio);
+    }
 
     if (isInitialActiveImage) {
       // We can ignore the linting error as the element exists
@@ -213,12 +222,6 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
       const galleryTranslate: number[] = getElementTranslation(galleryElement);
       const galleryTranslateX: number = galleryTranslate[0];
       const galleryTranslateY: number = galleryTranslate[1];
-
-      // Position full image viewer
-      fullImageViewerElement.style.top = `0px`;
-      fullImageViewerElement.style.width = `${galleryBounds.width}px`;
-      fullImageViewerElement.style.left = `${galleryBounds.x - galleryTranslateX}px`;
-      fullImageViewerElement.style.height = `${galleryBounds.height}px`;
 
       // Calculate image dimensions for all 3 stages
       // Stage 1: same size as gallery image
@@ -263,7 +266,8 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
     
     // Stage 3: further scale up image and reposition it
     const stage3X: number = Math.round((galleryBounds.width - stage3ImageWidth) / 2);
-    const stage3Y: number = image.aspectRatio < 1 ? 0 : Math.round((galleryBounds.height - stage3ImageHeight) / 2);
+    const stage3Y: number = stage3ImageHeight + bottomHeightBuffer === galleryBounds.height ? 0 :
+      Math.round((galleryBounds.height - stage3ImageHeight) / 2);
     const captionElementY: number = stage3Y + stage3ImageHeight + 10;
 
     const fullImageElementBounds: DOMRect = fullImageElement.getBoundingClientRect();
@@ -315,7 +319,7 @@ const FullImageViewer = ({ isActive, galleryImage, galleryItemHeight, galleryRef
       }
     }
   }, [
-    isOverlayToggled,
+    isDialogToggled,
     isInitialActiveImage,
     activeImage,
     isActive,
