@@ -51,7 +51,16 @@ const GalleryScene = ({ sceneIndex }: SceneProps) => {
 
   const [isGalleryInteractive, setIsGalleryInteractive] = useState<boolean>(false);
 
-  const itemHeight = 270;
+  const itemHeight: number = ((): number => {
+    if (window.innerWidth <= 1440) {
+      return 180;
+    }
+    else if (window.innerWidth <= 2560) {
+      return 270;
+    }
+    
+    return 480;
+  })();
 
   // Screen animation
   useGSAP((): void => {
