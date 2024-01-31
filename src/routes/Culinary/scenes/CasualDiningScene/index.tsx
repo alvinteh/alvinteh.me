@@ -37,8 +37,12 @@ import Dish20Background from './images/casualdining-dish-20.jpg';
 import Dish21Background from './images/casualdining-dish-21.jpg';
 
 interface DishAttrs {
+  $zIndex: number;
+}
+
+interface DishPhotoAttrs {
   $backgroundImage: string;
-  $jitterY: number;
+  $rotation: number;
 }
 
 const Header = styled.h3`
@@ -81,53 +85,63 @@ const HeaderS3 = styled.span`
 
 const Dishes = styled.ul`
   display: flex;
-  position: relative;
-  margin: calc(-50px - 12vw) auto 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0;
   padding: 0;
   flex-wrap: wrap;
-  width: calc(72vw + 80px);
-  height: 54vw;
+  width: 72vw;
+  height: fit-content;
+  align-items: center;
   list-style: none;
+  transform: translate3d(-50%, -50%, 0);
+`;
+
+const Dish = styled.li.attrs<DishAttrs>(({ $zIndex }) => ({
+  style: {
+    zIndex: $zIndex,
+  }
+}))`
+  display: flex;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  width: 18vw;
+  height: 18vw;
+  align-items: center;
 
   @media ${screenSizes.tablet} {
-    width: calc(54vw + 60px);
+    width: 24vw;
+    height: 24vw;
   }
 
-  @media ${screenSizes.desktopL} {
-    margin-top: calc(-50px - 6vw);
+  @media ${aspectRatios.a21x9} {
+    width: 12vw;
+    height: 12vw;
   }
 `;
 
-const Dish = styled.li.attrs<DishAttrs>(({ $backgroundImage, $jitterY }) => ({
+const DishPhoto = styled.div.attrs<DishPhotoAttrs>(({ $backgroundImage, $rotation }) => ({
   style: {
-    top: `${$jitterY}rem`,
     backgroundImage: `url(${$backgroundImage})`,
-    transform: `translate3d(0, -130vh, 0) ` +
-      `rotate(${900 + Math.round(Math.random() * 540) * (Math.random() >= 0.5 ? 1 : 1)}deg)`,
+    transform: `translate3d(0, 0, 0) rotate(${$rotation}deg)`
   }
 }))<{ $aspectRatio: number }>`
-  position: relative;
-  margin: -6vw 0 0;
   border: solid 10px #ffffff;
   border-bottom-width: 50px;
-  padding: 0;
-  width: 18vw;
-  height: ${(props) => { return Math.round(props.$aspectRatio * 18); }}vw;
+  width: 100%;
+  height: ${(props) => { return Math.round(props.$aspectRatio * 100); }}%;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   box-shadow: 3px 3px 3px #303030;
-
-  @media ${aspectRatios.a21x9} {
-    width: 14vw;
-  }
 `;
 
 const DishInfo = styled.div`
   position: relative;
   top: 100%;
   margin: 5px auto 0;
-  font-size: 1.1rem;
   text-align: center;
   opacity: 1;
 `;
@@ -137,6 +151,10 @@ const DishName = styled.p`
   font-family: Caveat, sans-serif;
   font-size: 1.3rem;
   font-weight: 600;
+
+  @media ${screenSizes.tablet} {
+    font-size: 1.1rem;
+  }
 `;
 
 const DishRestaurant = styled.h4`
@@ -146,11 +164,16 @@ const DishRestaurant = styled.h4`
   font-size: 0.9rem;
   font-weight: 700;
   text-transform: uppercase;
+
+  @media ${screenSizes.tablet} {
+    font-size: 0.75rem;
+  }
 `;
 
 const EndHeader = styled.h3`
-  position: relative;
-  top: 35vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
   color: #ffffff;
   opacity: 1;
   text-align: center;
@@ -159,6 +182,7 @@ const EndHeader = styled.h3`
   font-weight: 900;
   line-height: 8rem;
   text-transform: uppercase;
+  transform: translate3d(-50%, -50%, 0);
 `;
 
 const dishData: Record<string, Dish[]> = {
@@ -315,21 +339,24 @@ const CasualDiningScene = ({ sceneIndex }: SceneProps) => {
 
   // Initialize dish data
   useEffect((): void => {
-    const dishes: Dish[] = [];
-    const isUltrawide = window.innerWidth / window.innerHeight > 21 / 9;
+    if (dishes.length !== 0) {
+      return;
+    }
 
+    const newDishes: Dish[] = [];
+    
     for (const continent of Object.keys(dishData)) {
       const continentDishes: Dish[] = dishData[continent];
       // We can ignore the linting errors as the elements always exist
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      dishes.push(...getRandomElements(continentDishes, Math.min(continentDishes.length, isUltrawide ? 4: 3)));
+      newDishes.push(...getRandomElements(continentDishes, Math.min(continentDishes.length, 3)));
     }
   
-    randomize(dishes);
-    // Remove a dish to keep total to 15/12
-    dishes.splice(0, isUltrawide ? 2 : 1);
-    setDishes(dishes);
-  }, []);
+    randomize(newDishes);
+    // Remove a dish to keep total to 12 (4 continents of 3 dishes and 1 continent (Africa) with 1 dish)
+    newDishes.splice(0, 1);
+    setDishes(newDishes);
+  }, [dishes]);
 
   // Screen animation
   useGSAP((): void => {
@@ -368,9 +395,10 @@ const CasualDiningScene = ({ sceneIndex }: SceneProps) => {
     for (let i = 0; i < dishes.length; i++) {
       const dishElement: HTMLLIElement = dishRefs.current[i];
 
-      timeline.to(dishElement, {
-        y: 0,
-        rotation: -25 + Math.round(Math.random() * 10) * 5,
+      timeline.from(dishElement, {
+        y: '-100vh',
+        yPercent: -100,
+        rotation: Math.round(360 + Math.random() * 540) * (Math.random() >= 0.5 ? 1 : -1),
         ease: 'power1.out',
         duration: animationDurations.FAST,
       });
@@ -387,7 +415,7 @@ const CasualDiningScene = ({ sceneIndex }: SceneProps) => {
     timeline.from(endHeaderRef.current, {
       filter: 'blur(1.5rem)',
       opacity: 0,
-      transform: 'scale(0.05)',
+      scale: 0.05,
       ease: 'back.out(1)',
       duration: animationDurations.FAST,
     }, '<');
@@ -403,18 +431,29 @@ const CasualDiningScene = ({ sceneIndex }: SceneProps) => {
   };
 
   const dishElements: React.ReactNode[] = dishes.map((dish: Dish): React.ReactNode => {
+    // Note: the z-index and rotation are deterministic to avoid "jitters" upon scene re-render
+    const number: number = dish.name.split('').reduce((previous: number, letter: string): number => {
+      return previous + letter.charCodeAt(0);
+    }, 0);
+
+    const rotation = (number % 2 === 0 ? 1 : -1) * Math.round(number / 180);
+
     return (
       <Dish
         ref={setDishRef}
         key={dish.restaurant}
-        $backgroundImage={dish.image}
-        $aspectRatio={dish.imageAspectRatio}
-        $jitterY={Math.round(Math.random() * 10) / 10}
+        $zIndex={number}
       >
-        <DishInfo>
-          <DishName>{dish.name}</DishName>
-          <DishRestaurant>{dish.restaurant}</DishRestaurant>
-        </DishInfo>
+        <DishPhoto
+          $aspectRatio={dish.imageAspectRatio}
+          $backgroundImage={dish.image}
+          $rotation={rotation}
+        >
+          <DishInfo>
+            <DishName>{dish.name}</DishName>
+            <DishRestaurant>{dish.restaurant}</DishRestaurant>
+          </DishInfo>
+        </DishPhoto>
       </Dish>
     );
   });
