@@ -211,13 +211,13 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
         <span>This world we live in.</span>
         <span>Our world.</span>
       </StartHeader>
-      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen1Background} $backgroundPosition="center left" />
-      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen2Background} $backgroundPosition="top left" />
+      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen1Background} $backgroundPosition="25% center" />
+      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen2Background} $backgroundPosition="20% top" />
       <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen3Background} />
-      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen4Background} $backgroundPosition="bottom right" />
-      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen5Background} />
+      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen4Background} $backgroundPosition="70% bottom" />
+      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen5Background} $backgroundPosition="left bottom" />
       <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen6Background} />
-      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen7Background} $backgroundPosition="bottom center" />
+      <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen7Background} $backgroundPosition="center bottom" />
       <Header ref={headerRef}>
         <HeaderStart ref={headerStartRef}>Our world is&nbsp;</HeaderStart>
         <HeaderAttributes>
