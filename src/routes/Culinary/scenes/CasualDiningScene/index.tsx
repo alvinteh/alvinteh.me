@@ -42,11 +42,13 @@ interface DishAttrs {
 }
 
 const Header = styled.h3`
-  position: relative;
-  top: 30vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
   color: #ffffff;
   opacity: 1;
   text-align: center;
+  transform: translate3d(-50%, -50%, 0);
 
   & > span {
     display: block;
