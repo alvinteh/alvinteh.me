@@ -119,6 +119,10 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
     const timeline = gsap.timeline({});
 
     // Intro
+
+    // Note we need this meaningless tween as GSAP doesn't respect the from values in the next tween
+    timeline.fromTo(startHeaderRef.current, { z: '1px' }, { z: 0 });
+    
     for (let i = 0, startHeaderSpanCount = startHeaderRef.current.children.length; i < startHeaderSpanCount; i++) {
       timeline.from(startHeaderRef.current.children[i], {
         filter: 'blur(0.5rem)',
