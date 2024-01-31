@@ -82,7 +82,7 @@ const QuoteText = styled.div`
   &::after {
     position: absolute;
     content: close-quote;
-    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 17}ms both;
+    animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 400 + 200 * 15}ms both;
   }
 
   ${[...Array(15).keys()].map((i: number) => {
