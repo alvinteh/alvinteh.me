@@ -41,6 +41,10 @@ const Quote = styled.blockquote`
   max-width: 60rem;
   text-align: right;
 
+  @media ${screenSizes.tablet} {
+    top: 25vh;
+  }
+
   @media ${screenSizes.desktopM} {
     top: 25vh;
   }
@@ -49,14 +53,26 @@ const Quote = styled.blockquote`
     top: 30vh;
     max-width: 70rem;
   }
+
+  @media ${screenSizes.desktopXL} {
+    top: 35vh;
+  }
 `;
 
 const QuoteText = styled.div`
   margin: 0 0 1rem;
   font-family: 'Crimson Text', serif;
-  font-size: 5.5rem;
+  font-size: 4rem;
   font-weight: 600;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+
+  @media ${screenSizes.tablet} {
+    font-size: 3rem;
+  }
+
+  @media ${screenSizes.desktopM} {
+    font-size: 5.5rem;
+  }
 
   @media ${screenSizes.desktopL} {
     font-size: 6.5rem;
