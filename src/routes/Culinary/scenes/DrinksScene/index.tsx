@@ -39,13 +39,22 @@ const Header = styled.h3`
   position: absolute;
   top: 35vh;
   right: 5vw;
-  width: 55%;
+  width: 75%;
   max-width: 40rem;
   font-family: 'Crimson Text', serif;
   font-size: 4rem;
   font-weight: 600;
   text-align: right;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+
+  @media ${screenSizes.tablet} {
+    top: 40vh;
+    font-size: 3rem;
+  }
+
+  @media ${screenSizes.desktopM} {
+    width: 55%;
+  }
 `;
 
 const Drinks = styled.ul`
