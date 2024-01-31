@@ -133,6 +133,14 @@ const MapScene = ({ sceneIndex }: SceneProps) => {
   useGSAP((): void => {      
     const timeline = gsap.timeline({});
 
+    // Note we need this meaningless tween as GSAP doesn't respect the from values in the next tween
+    timeline.fromTo(subscreen1HeaderRef.current.children, {
+      z: '1px'
+    },
+    {
+      z: 0
+    });
+
     timeline.fromTo(subscreen1HeaderRef.current.children, {
       filter: 'blur(4rem)',
       opacity: 0,
@@ -148,14 +156,6 @@ const MapScene = ({ sceneIndex }: SceneProps) => {
       duration: animationDurations.FAST,
       stagger: 0.25,
     });
-
-    // Note we need this line as GSAP doesn't respect the from values in the previous line
-    timeline.set(subscreen1HeaderRef.current.children, {
-      filter: 'blur(4rem)',
-      opacity: 0,
-      scale: 0.05,
-      y: '75px',
-    }, '<');
 
     timeline.addLabel(`scene-${sceneIndex}-intro`);
 
