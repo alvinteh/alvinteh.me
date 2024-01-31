@@ -242,7 +242,7 @@ const StatsScene = ({ sceneIndex }: SceneProps) => {
         </Stats>
       </StatsWrapper>
       <FaqWrapper ref={faqWrapperRef}>
-        <Header>Travels &amp; Photography FAQ</Header>
+        <Header>Travel &amp; Photography FAQ</Header>
         <Faqs>
           <AccordionItem>
             <FaqHeader>
