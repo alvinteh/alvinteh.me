@@ -72,12 +72,25 @@ const Header3 = styled(Header3Svg)`
 
 const Header4 = styled(Header4Svg)`
   position: absolute;
-  top: 35vh;
+  top: 45vh;
   left: 50%;
-  margin-left: -17vw;
-  width: 34vw;
+  margin-left: -10vw;
+  width: 20vw;
+
+  @media ${screenSizes.tablet} {
+    top: 40vh;
+    margin-left: -14vw;
+    width: 28vw;
+  }
+
+  @media ${screenSizes.desktopM} {
+    top: 35vh;
+    margin-left: -17vw;
+    width: 34vw;
+  }
 
   @media ${aspectRatios.a21x9}, ${screenSizes.desktopXL} {
+    top: 40vh;
     width: 22vw;
     margin-left: -11vw;
   }
@@ -107,7 +120,7 @@ const Dishes = styled.ul`
     width: clamp(160px, 16vw, 240px);
   }
 
-  @media ${aspectRatios.a21x9} {
+  @media ${aspectRatios.a21x9}, ${screenSizes.desktopXL} {
     padding-top: 3vw;
   }
 `;
@@ -333,28 +346,29 @@ const FaqWrapper = styled.div`
   left: 50%;
   box-sizing: border-box;
   aspect-ratio: 1460/1760;
-  padding: 12% 8.5% 8% 5.5%;
+  padding: 10% 7.5% 9% 5%;
   height: 85%;
   background: url(${FaqWrapperBackground}) top center/cover no-repeat;
   transform: translate3d(-50%, 100%, 0);
 
   @media ${screenSizes.tablet} {
-    top: 35vh;
+    top: 30vh;
     padding: 17.5% 12.5% 10% 8.5%;
-    height: 65%;
+    height: 70%;
   }
 
   @media ${screenSizes.desktopM} {
+    padding: 10% 8% 8% 5%;
     max-width: 50%;
-    height: 65%;    
-  }
-
-  @media ${aspectRatios.a21x9} {
-    padding: 6% 5% 5% 3%;
+    height: 75%;    
   }
 
   @media ${screenSizes.desktopXL} {
     padding: 10% 7% 5% 4%;
+  }
+
+  @media ${aspectRatios.a21x9} {
+    padding: 6% 5% 5% 3%;
   }
 `;
 
@@ -365,7 +379,16 @@ const Faq = styled(AccordionItem)`
 
 // Note: we set the transforms on child elements to avoid awkward shifts in element position during transitions
 const FaqHeader = styled(AccordionItemHeader)`
+  font-size: 1.3rem;
+  line-height: 1.4rem;
+  min-height: 1.4rem;
   transform: rotate(-3.3deg);
+
+  @media ${screenSizes.desktopM} {
+    font-size: 1.4rem;
+    line-height: 1.5rem;
+    min-height: 1.5rem;
+  }
 
   @media ${screenSizes.desktopL} {
     font-size: 1.6rem;
@@ -377,8 +400,15 @@ const FaqHeader = styled(AccordionItemHeader)`
 // Note: we set the transform origin (and compensating translation) to avoid awkward shifts in element position
 // during transitions
 const FaqContent = styled(AccordionItemContent)`
+  font-size: 1.2rem;
+  line-height: 1.25rem;
   transform: translate3d(0, 1rem, 0) rotate(-3.3deg);
   transform-origin: 0 0;
+
+  @media ${screenSizes.desktopM} {
+    font-size: 1.4rem;
+    line-height: 1.5rem;
+  }
 
   @media ${screenSizes.desktopL} {
     transform: translate3d(0, 2rem, 0) rotate(-3.3deg);
@@ -436,7 +466,7 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
       },
       {
         drawSVG: '100%',
-        duration: animationDurations.XXFAST,
+        duration: animationDurations.XXFAST / 2,
       });
     }
 
@@ -452,7 +482,7 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
       },
       {
         drawSVG: '100%',
-        duration: animationDurations.XXFAST,
+        duration: animationDurations.XXFAST / 2,
       });
     }
 
@@ -475,7 +505,7 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
       const dishInfoElement: HTMLDivElement = dishInfoRefs.current[i];
 
       timeline.from(dishElement, {
-        transform: 'translate3d(0, 84vw, 0)',
+        transform: 'translate3d(0, 100vh, 0)',
         ease: 'power1.out',
         duration: animationDurations.MEDIUM,
       });
@@ -560,7 +590,7 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
     });
     
     timeline.to(header4Ref.current, {
-      transform: `translate3d(0, -${isPortrait ? 20 : 40}vh, 0)`,
+      transform: `translate3d(0, -${isPortrait ? 20 : (window.innerWidth >= 2560 ? 35 : 40)}vh, 0)`,
       ease: 'power1.out',
       duration: animationDurations.MEDIUM,
     });
