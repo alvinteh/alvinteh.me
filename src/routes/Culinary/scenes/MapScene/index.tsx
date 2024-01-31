@@ -57,17 +57,11 @@ const Subscreen1Header = styled(SubscreenHeader)`
 const Subscreen1HeaderS1 = styled.span`
   display: block;
   font-size: 3rem;
-  filter: blur(4rem);
-  opacity: 0;
-  transform: scale(0.95) translate3d(0, 75px, 0);
 `;
 
 const Subscreen1HeaderS2 = styled.span`
   display: block;
   font-size: 5rem;
-  filter: blur(4rem);
-  opacity: 0;
-  transform: scale(0.95) translate3d(0, 75px, 0);
 `;
 
 const Subscreen3Header = styled(SubscreenHeader)`
@@ -139,14 +133,29 @@ const MapScene = ({ sceneIndex }: SceneProps) => {
   useGSAP((): void => {      
     const timeline = gsap.timeline({});
 
-    timeline.to(subscreen1HeaderRef.current.children, {
-      filter: 'blur(0)',
+    timeline.fromTo(subscreen1HeaderRef.current.children, {
+      filter: 'blur(4rem)',
+      opacity: 0,
+      scale: 0.05,
+      y: '75px',
+    },
+    {
+      filter: 'blur(0rem)',
       opacity: 1,
-      transform: 'scale(1) translate3d(0, 0, 0)',
+      scale: 1,
+      y: 0,
       ease: 'power1.out',
       duration: animationDurations.FAST,
       stagger: 0.25,
     });
+
+    // Note we need this line as GSAP doesn't respect the from values in the previous line
+    timeline.set(subscreen1HeaderRef.current.children, {
+      filter: 'blur(4rem)',
+      opacity: 0,
+      scale: 0.05,
+      y: '75px',
+    }, '<');
 
     timeline.addLabel(`scene-${sceneIndex}-intro`);
 
@@ -175,7 +184,7 @@ const MapScene = ({ sceneIndex }: SceneProps) => {
     timeline.from(subscreen3HeaderRef.current.children, {
       filter: 'blur(4rem)',
       opacity: 0,
-      transform: 'scale(0.95) translate3d(0, 75px, 0)',
+      transform: 'scale(0.05) translate3d(0, 75px, 0)',
       ease: 'power1.out',
       duration: animationDurations.FAST,
       stagger: 0.25,
