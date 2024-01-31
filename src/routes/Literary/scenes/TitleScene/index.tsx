@@ -6,6 +6,7 @@ import styled, { css, keyframes } from 'styled-components';
 import PageContext from '../../../../components/Page/PageContext';
 import Screen from '../../../../components/Screen';
 import { PageTitle, PaddedPageWrapper, pageTransitionDuration } from '../../../../components/static';
+import { screenSizes } from '../../../../utils/ResponsiveUtils';
 
 const revealAnimation = keyframes`
   0% {
@@ -35,18 +36,43 @@ const changeTextColorAnimation = keyframes`
 
 const Quote = styled.blockquote`
   position: relative;
-  top: 28vh;
+  top: 20vh;
   margin: 0 auto;
-  max-width: 70rem;
+  max-width: 65rem;
   text-align: center;
+
+  @media ${screenSizes.tablet} {
+    top: 28vh;
+  }
+
+  @media ${screenSizes.desktopM} {
+    top: 20vh;
+  }
+
+  @media ${screenSizes.desktopL} {
+    top: 25vh;
+    max-width: 80rem;
+  }
 `;
 
 const QuoteText = styled.div`
   margin: 0 0 1rem;
   font-family: 'Crimson Text', serif;
-  font-size: 5rem;
+  font-size: 4rem;
   font-weight: 600;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+
+  @media ${screenSizes.tablet} {
+    font-size: 3rem;
+  }
+
+  @media ${screenSizes.desktopM} {
+    font-size: 5rem;
+  }
+
+  @media ${screenSizes.desktopL} {
+    font-size: 6.5rem;
+  }
 
   &::before {
     content: open-quote;
