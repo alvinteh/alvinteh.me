@@ -8,7 +8,7 @@ import Screen from '../../../../components/Screen';
 import { PageWrapper } from '../../../../components/static';
 import { animationDurations } from '../../../../utils/AnimationUtils';
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
-import { aspectRatios, screenSizes } from '../../../../utils/ResponsiveUtils';
+import { screenSizes } from '../../../../utils/ResponsiveUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
 import { Continents, Dish } from '../../common';
 
