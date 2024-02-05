@@ -11,6 +11,7 @@ import Screen from '../../../../components/Screen';
 import { Overlay, OverlayTypes, PaddedPageWrapper } from '../../../../components/static';
 import { animationDurations } from '../../../../utils/AnimationUtils';
 import { randomize } from '../../../../utils/ArrayUtils';
+import { screenSizes } from '../../../../utils/ResponsiveUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
 
 import SceneBackground from './images/scene-background.jpg';
@@ -103,13 +104,19 @@ const HeaderBase = styled.h2`
   left: 15%;
   margin: 0;
   width: 70%;
-  height: 3rem;
+  height: 2rem;
   color: #ffffff;
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 3rem;
-  line-height: 3rem;
+  font-size: 2rem;
+  line-height: 2rem;
   text-transform: uppercase;
   transform: translate3d(0, -50%, 0);
+
+  @media ${screenSizes.desktopM} {
+    font-size: 3rem;
+    line-height: 3rem;
+    height: 3rem;
+  }
 `;
 
 const CentralizedHeader = styled(HeaderBase)`
@@ -119,24 +126,41 @@ const CentralizedHeader = styled(HeaderBase)`
 // Note: we offset the left by 2rem to compensate for shorter header ends
 const SplitHeader = styled(HeaderBase)`
   display: flex;
-  left: calc(50% - 26.5rem);
-  width: 57rem;
-  height: 3rem;
+  left: calc(50% - 20rem);
+  width: 44rem;
+
+  @media ${screenSizes.tablet} {
+    left: 0;
+    width: 100%;
+  }
+
+  @media ${screenSizes.desktopM} {
+    left: calc(50% - 26.5rem);
+    width: 57rem;
+  }
 `;
 
 const SplitHeaderStart = styled.span`
-  width: 18rem;
-  height: 3rem;
+  width: 12rem;
+  height: 100%;
   text-align: right;
+
+  @media ${screenSizes.desktopM} {
+    width: 18rem;
+  }
 `;
 
 const SplitHeaderEnds = styled.span`
   display: flex;
   position: relative;
   flex-direction: column;
-  width: 39rem;
-  height: 3rem;
+  width: 26rem;
+  height: 100%;
   text-align: left;
+
+  @media ${screenSizes.desktopM} {
+    width: 39rem;
+  }
 `;
 
 const SplitHeaderEnd = styled.span`
@@ -144,7 +168,7 @@ const SplitHeaderEnd = styled.span`
   top: 0;
   left: 0;
   width: 39rem;
-  height: 3rem;
+  height: 100%;
 `;
 
 const Items = styled.ul`
@@ -155,11 +179,20 @@ const Items = styled.ul`
   margin: 0;
   padding: 0;
   width: 90%;
-  column-gap: 20px;
-  row-gap: 20px;
+  column-gap: 10px;
+  row-gap: 10px;
   grid-template-columns: repeat(7, 1fr);
   list-style: none;
   transform: translate3d(-50%, -50%, 0);
+
+  @media ${screenSizes.tablet} {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  @media ${screenSizes.desktopM} {
+    column-gap: 20px;
+    row-gap: 20px;
+  }
 `;
 
 const Item = styled.li`
@@ -183,18 +216,68 @@ const ItemImage = styled.div.attrs<ItemImageAttrs>(({ $src, $size }) => ({
 `;
 
 const Technology = styled(Item)`
-  height: 100px;
+  height: 80px;
 
   &:nth-child(n+15):nth-child(-n+21) {
     padding-bottom: 5rem;
   }
+
+  @media ${screenSizes.tablet} {
+    width: 90px;
+    height: 70px;
+
+    &:nth-child(n+15):nth-child(-n+21) {
+      padding-bottom: 0rem;
+    }
+
+    &:nth-child(n+16):nth-child(-n+20) {
+      padding-bottom: 5rem;
+    }
+
+    &:nth-child(n+41):nth-child(-n+42) {
+      display: none;
+    }
+  }
+
+  @media ${screenSizes.desktopM} {
+    max-width: 180px;
+    height: 100px;
+  }
+
+  @media ${screenSizes.desktopXL} {
+    max-width: 270px;
+    height: 150px;
+  }
 `;
 
 const Organization = styled(Item)`
-  height: 110px;
+  width: 90px;
+  height: 90px;
 
   &:nth-child(n+8):nth-child(-n+14) {
     padding-bottom: 8rem;
+  }
+
+  @media ${screenSizes.tablet} {
+    width: 90px;
+
+    &:nth-child(n+8):nth-child(-n+14) {
+      padding-bottom: 0rem;
+    }
+    &:nth-child(n+11):nth-child(-n+15) {
+      padding-bottom: 6rem;
+    }
+  }
+
+  @media ${screenSizes.desktopM} {
+    width: auto;
+    max-width: 185px;
+    height: 110px;
+  }
+
+  @media ${screenSizes.desktopXL} {
+    max-width: 225px;
+    height: 150px;
   }
 `;
 
@@ -202,25 +285,41 @@ const ProfileLinks = styled.ul`
   display: block;
   position: absolute;
   top: 50%;
-  left: 20%;
+  left: 10%;
   margin: 5rem 0 0;
   padding: 0;
-  width: 60%;
-  height: 2rem;
+  width: 80%;
+  height: 1.4rem;
   color: #ffffff;
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 1.75rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  line-height: 1.75rem;
+  line-height: 1.4rem;
   list-style: none;
   text-align: center;
   text-transform: uppercase;
+
+  @media ${screenSizes.desktopM} {
+    left: 20%;
+    width: 60%;
+    height: 2rem;
+    font-size: 2rem;
+    line-height: 2rem;
+  }
 `;
 
 const ProfileLink = styled.li`
   display: inline-block;
-  margin: 0 10rem 0 0;
+  margin: 0 3rem 0 0;
   padding: 0;
+
+  @media ${screenSizes.desktopM} {
+    margin-right: 8rem;
+  }
+
+  @media ${screenSizes.desktopL} {
+    margin-right: 10rem;
+  }
 
   &:last-child {
     margin-right: 0;
@@ -267,32 +366,45 @@ const WriteupWrapper = styled.div`
   left: 0;
   right: 0;
   box-sizing: border-box;
-  padding: 0 10vw;
   height: 100vh;
+  overflow: hidden;
+`;
+
+const WriteupPaddedBackground = styled(PaddedPageWrapper)`
   background-image: url(${WriteupBackground});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  overflow: hidden;
+  height: 100vh;
 `;
 
 const WriteupHeader = styled.h1`
   margin: 10vh auto 3rem;
   max-width: 60rem;
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 4rem;
-  line-height: 4rem;
+  font-size: 3rem;
+  line-height: 3rem;
   overflow: hidden;
   text-transform: uppercase;
   white-space: nowrap;
+
+  @media ${screenSizes.desktopM} {
+    font-size: 4rem;
+    line-height: 4rem;  
+  }
 `;
 
 const WriteupContent = styled.div`
   margin: 0 auto;
   max-width: 60rem;
   font-family: 'Crimson Text', serif;
-  font-size: 1.75rem;
-  line-height: 2.25rem;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  
+  @media ${screenSizes.desktopM} {
+    font-size: 1.75rem;
+    line-height: 2.25rem;
+  }
 
   a, a:visited {
     color: #70e5e5;
@@ -368,6 +480,8 @@ const BuilderScene = ({ sceneIndex }: SceneProps) => {
   // Screen animation
   useGSAP((): void => {
     const timeline: gsap.core.Timeline = gsap.timeline({});
+
+    timeline.to(skillsRef.current, { z: '1px' });
 
     timeline.set(skillsRef.current, { display: 'none' });
     timeline.set(organizationsRef.current, { display: 'none' });
@@ -622,7 +736,7 @@ const BuilderScene = ({ sceneIndex }: SceneProps) => {
         <WriteupShowLink ref={writeupShowLinkRef} onClick={handleWriteupShowLinkClick}>Read about My Approach to Tech</WriteupShowLink>
 
         <WriteupWrapper ref={writeupWrapperRef}>
-          <PaddedPageWrapper>
+          <WriteupPaddedBackground>
             <WriteupHeader>My Approach to Tech</WriteupHeader>
             <WriteupContent>
               I am an entrepreneurial technologist with a passion for crafting digital products and platforms that
@@ -648,7 +762,7 @@ const BuilderScene = ({ sceneIndex }: SceneProps) => {
               I am currently exploring my next move, reach out if you think I would add value to your organization!
             </WriteupContent>
             <WriteupHideLink onClick={handleWriteupHideLinkClick}>Back</WriteupHideLink>
-          </PaddedPageWrapper>
+          </WriteupPaddedBackground>
         </WriteupWrapper>
       </StyledOverlay>
     </Screen>
