@@ -1,18 +1,20 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub, faLinkedin, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
 import { gsap } from 'gsap';
+import { Observer } from 'gsap/Observer';
 import { useGSAP } from '@gsap/react';
-import React, { useContext, useRef } from 'react';
+import React, { useCallback, useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import PageContext from '../../../../components/Page/PageContext';
 import Screen from '../../../../components/Screen';
-import { Overlay, OverlayTypes } from '../../../../components/static';
+import { Overlay, OverlayTypes, PaddedPageWrapper } from '../../../../components/static';
 import { animationDurations } from '../../../../utils/AnimationUtils';
 import { randomize } from '../../../../utils/ArrayUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
 
 import SceneBackground from './images/scene-background.jpg';
+import WriteupBackground from './images/writeup-background.jpg';
 
 import LogoAWS from './images/technologies/logo-aws.svg';
 import LogoAzure from './images/technologies/logo-azure.svg';
@@ -114,10 +116,10 @@ const CentralizedHeader = styled(HeaderBase)`
   text-align: center;
 `;
 
-// Note: we offset the left by 1.5rem to compensate for shorter header ends
+// Note: we offset the left by 2rem to compensate for shorter header ends
 const SplitHeader = styled(HeaderBase)`
   display: flex;
-  left: calc(50% - 27rem);
+  left: calc(50% - 26.5rem);
   width: 57rem;
   height: 3rem;
 `;
@@ -180,8 +182,6 @@ const ItemImage = styled.div.attrs<ItemImageAttrs>(({ $src, $size }) => ({
   white-space: nowrap;
 `;
 
-const Technologies = styled(Items)``;
-
 const Technology = styled(Item)`
   height: 100px;
 
@@ -189,8 +189,6 @@ const Technology = styled(Item)`
     padding-bottom: 5rem;
   }
 `;
-
-const Organizations = styled(Items)``;
 
 const Organization = styled(Item)`
   height: 110px;
@@ -241,8 +239,90 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   margin-right: 10px;
 `;
 
+const WriteupShowLink = styled.a`
+  position: absolute;
+  top: 50%;
+  left: calc(50% - 10rem);
+  margin: 10rem 0 0;
+  width: 20rem;
+  height: 1.3rem;
+  color: #ffffff;
+  cursor: pointer;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.3rem;
+  list-style: none;
+  text-align: center;
+  text-transform: uppercase;
+
+  &:hover {
+    color: #80f5f5;
+  }
+`;
+
+const WriteupWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+  padding: 0 10vw;
+  height: 100vh;
+  background-image: url(${WriteupBackground});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+`;
+
+const WriteupHeader = styled.h1`
+  margin: 10vh auto 3rem;
+  max-width: 60rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 4rem;
+  line-height: 4rem;
+  overflow: hidden;
+  text-transform: uppercase;
+  white-space: nowrap;
+`;
+
+const WriteupContent = styled.div`
+  margin: 0 auto;
+  max-width: 60rem;
+  font-family: 'Crimson Text', serif;
+  font-size: 1.75rem;
+  line-height: 2.25rem;
+
+  a, a:visited {
+    color: #70e5e5;
+  }
+
+  a:hover {
+    color: #80f5f5;
+  }
+`;
+
+const WriteupHideLink = styled.a`
+  display: block;
+  margin: 2rem auto 0;
+  max-width: 60rem;
+  color: #ffffff;
+  cursor: pointer;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.25rem;
+  text-align: center;
+  text-transform: uppercase;
+
+  &:hover {
+    color: #80f5f5;
+  }
+`;
+
 const BuilderScene = ({ sceneIndex }: SceneProps) => {
-  const { registerScene } = useContext(PageContext);
+  const { pageObserverName, registerScene } = useContext(PageContext);
 
   // Screen refs
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
@@ -254,6 +334,8 @@ const BuilderScene = ({ sceneIndex }: SceneProps) => {
   const organizationsRef = useRef<HTMLUListElement>() as React.MutableRefObject<HTMLUListElement>;
   const endHeaderRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
   const profileLinksRef = useRef<HTMLUListElement>() as React.MutableRefObject<HTMLUListElement>;
+  const writeupShowLinkRef = useRef<HTMLAnchorElement>() as React.MutableRefObject<HTMLAnchorElement>;
+  const writeupWrapperRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 
   const setStartHeaderRefs = (element: HTMLHeadingElement): HTMLHeadingElement => {
     startHeaderRefs.current[startHeaderRefs.current.length] = element;
@@ -265,11 +347,27 @@ const BuilderScene = ({ sceneIndex }: SceneProps) => {
     return element;
   };
 
+  const handleWriteupShowLinkClick = useCallback((): void => {
+    Observer.getById(pageObserverName)?.disable();
+    gsap.to(writeupWrapperRef.current, {
+      maxHeight: '100vh',
+      ease: 'power1.out',
+      duration: animationDurations.XSLOW,
+    });
+  }, [pageObserverName]);
+
+  const handleWriteupHideLinkClick = useCallback((): void => {
+    Observer.getById(pageObserverName)?.enable();
+    gsap.to(writeupWrapperRef.current, {
+      maxHeight: 0,
+      ease: 'power1.out',
+      duration: animationDurations.XSLOW,
+    });
+  }, [pageObserverName]);
+
   // Screen animation
   useGSAP((): void => {
     const timeline: gsap.core.Timeline = gsap.timeline({});
-
-    timeline.to(screenRef.current, { z: 1 });
 
     timeline.set(skillsRef.current, { display: 'none' });
     timeline.set(organizationsRef.current, { display: 'none' });
@@ -394,13 +492,14 @@ const BuilderScene = ({ sceneIndex }: SceneProps) => {
 
     timeline.to(organizationsRef.current.children, {
       opacity: 0,
+      pointerEvents: 'none',
       ease: 'power1.out',
       duration: animationDurations.MEDIUM,
     }, '<');
 
     timeline.from(endHeaderRef.current, invisible);
 
-    timeline.from(profileLinksRef.current.children, {
+    timeline.from([profileLinksRef.current.children, writeupShowLinkRef.current], {
       opacity: 0,
       y: 20,
       duration: animationDurations.FAST,
@@ -408,11 +507,13 @@ const BuilderScene = ({ sceneIndex }: SceneProps) => {
       stagger: animationDurations.XFAST,
     });
 
+    // Note: we set this to avoid the animation issue on first playback
+    gsap.set(writeupWrapperRef.current, { maxHeight: 0 });
 
     timeline.addLabel(`scene-${sceneIndex}-outro`);
 
     registerScene(sceneIndex, screenRef, timeline, 'A Builder for You');
-  }, []);
+  }, [sceneIndex, registerScene]);
 
   return (
     <Screen innerRef={screenRef} backgroundImage={SceneBackground}>
@@ -434,7 +535,7 @@ const BuilderScene = ({ sceneIndex }: SceneProps) => {
 
         <CentralizedHeader ref={endHeaderRef}>A builder for you?</CentralizedHeader>
 
-        <Technologies ref={skillsRef}>
+        <Items ref={skillsRef}>
           <Technology data-category="infrastructure"><a href="https://aws.amazon.com" target="_blank" rel="external noreferrer"><ItemImage $src={LogoAWS} $size="40%">AWS</ItemImage></a></Technology>
           <Technology data-category="infrastructure"><a href="https://azure.microsoft.com" target="_blank" rel="external noreferrer"><ItemImage $src={LogoAzure} $size="30%">Azure</ItemImage></a></Technology>
           <Technology data-category="frontend"><a href="https://www.w3.org/TR/CSS/#css" target="_blank" rel="external noreferrer"><ItemImage $src={LogoCSS} $size="25%">CSS</ItemImage></a></Technology>
@@ -479,9 +580,9 @@ const BuilderScene = ({ sceneIndex }: SceneProps) => {
           <Technology data-category="frontend"><a href="https://webpack.js.org/" target="_blank" rel="external noreferrer"><ItemImage $src={LogoWebpack} $size="65%">Webpack</ItemImage></a></Technology>
           
           {/* <Item><a href="" target="_blank" rel="external noreferrer"><ItemImage $src={Logo} $size=""></ItemImage></a></Item> */}
-        </Technologies>
+        </Items>
 
-        <Organizations ref={organizationsRef}>
+        <Items ref={organizationsRef}>
           <Organization><a href="https://aws.amazon.com" target="_blank" rel="external noreferrer"><ItemImage $src={LogoAws} $size="50%">Amazon Web Services</ItemImage></a></Organization>
           <Organization><a href="https://www.billabong.com" target="_blank" rel="external noreferrer"><ItemImage $src={LogoBillabong} $size="50%">Billabong</ItemImage></a></Organization>
           <Organization><a href="https://www.bossini.com" target="_blank" rel="external noreferrer"><ItemImage $src={LogoBossini} $size="80%">Bossini</ItemImage></a></Organization>
@@ -510,13 +611,45 @@ const BuilderScene = ({ sceneIndex }: SceneProps) => {
           <Organization><a href="https://www.vmware.com" target="_blank" rel="external noreferrer"><ItemImage $src={LogoVmware} $size="80%">VMware</ItemImage></a></Organization>
           <Organization><a href="https://www.wego.com" target="_blank" rel="external noreferrer"><ItemImage $src={LogoWego} $size="70%">Wego</ItemImage></a></Organization>
           <Organization><a href="https://zalora.com" target="_blank" rel="external noreferrer"><ItemImage $src={LogoZalora} $size="55%">Zalora</ItemImage></a></Organization>
-        </Organizations>
+        </Items>
 
         <ProfileLinks ref={profileLinksRef}>
           <ProfileLink><a href="https://linkedin.com/in/alteh" target="_blank" rel="external noreferrer"><StyledFontAwesomeIcon icon={faLinkedin} fixedWidth />LinkedIn</a></ProfileLink>
           <ProfileLink><a href="https://github.com/alvinteh" target="_blank" rel="external noreferrer"><StyledFontAwesomeIcon icon={faGithub} fixedWidth />GitHub</a></ProfileLink>
           <ProfileLink><a href="https://stackoverflow.com/users/889190/alvin-teh" target="_blank" rel="external noreferrer"><StyledFontAwesomeIcon icon={faStackOverflow} fixedWidth />StackOverflow</a></ProfileLink>
         </ProfileLinks>
+
+        <WriteupShowLink ref={writeupShowLinkRef} onClick={handleWriteupShowLinkClick}>Read about My Approach to Tech</WriteupShowLink>
+
+        <WriteupWrapper ref={writeupWrapperRef}>
+          <PaddedPageWrapper>
+            <WriteupHeader>My Approach to Tech</WriteupHeader>
+            <WriteupContent>
+              I am an entrepreneurial technologist with a passion for crafting digital products and platforms that
+              deliver an impact. I achieve this by harnessing a unique blend of product thinking, business acumen
+              and technical know-how to lead teams in building said experiences: be it creative digital campaigns
+              that have bagged awards, complex and large-scale distributed systems serving hundreds of thousands of
+              concurrent users, or innovative apps that have been <a href="https://techcrunch.com/2012/04/11/farewell-app-store-netizine-turns-magazines-into-social-networks-runs-on-html5/"
+              target="_blank" rel="external noreferrer">covered by TechCrunch</a>, I have continued to help
+              organizations create value across my 15+ years of experience, which includes stints at&nbsp;
+              <a href="https://www.cisco.com/" target="_blank" rel="external noreferrer">Cisco</a>,&nbsp;
+              <a href="https://www.techinasia.com" target="_blank" rel="external noreferrer">Tech in Asia</a>,&nbsp;
+              <a href="https://www.publicissapient.com" target="_blank" rel="external noreferrer">Publicis Sapient</a>,&nbsp;
+              <a href="https://www.temasek.com.sg" target="_blank" rel="external noreferrer">Temasek</a> and&nbsp;
+              <a href="https://aws.amazon.com" rel="external noreferrer">Amazon Web Services</a>.
+              <br />
+              <br />
+              My diverse exposure across a range of environments from startups to corporates, and in-house to consultancy
+              to solution providers also allows me to approach problems more holistically. Be it architecting internet
+              scale systems, leading product design activities, managing the delivery of multi-million dollar programs,
+              establishing processes or collaborating on opportunities, I am at home.
+              <br />
+              <br />
+              I am currently exploring my next move, reach out if you think I would add value to your organization!
+            </WriteupContent>
+            <WriteupHideLink onClick={handleWriteupHideLinkClick}>Back</WriteupHideLink>
+          </PaddedPageWrapper>
+        </WriteupWrapper>
       </StyledOverlay>
     </Screen>
   );
