@@ -3,7 +3,7 @@ import { faGithub, faLinkedin, faStackOverflow } from '@fortawesome/free-brands-
 import { gsap } from 'gsap';
 import { Observer } from 'gsap/Observer';
 import { useGSAP } from '@gsap/react';
-import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import React, { useCallback, useContext, useRef } from 'react';
 import styled from 'styled-components';
 
 import PageContext from '../../../../components/Page/PageContext';
