@@ -2,6 +2,7 @@ import { createContext } from 'react';
 
 interface PageContext {
   titleSuffix: string;
+  pageObserverName: string;
   registerScene: (
     index: number,
     ref: React.MutableRefObject<HTMLDivElement>,
@@ -12,6 +13,7 @@ interface PageContext {
 
 const PageContext = createContext<PageContext>({
   titleSuffix: '',
+  pageObserverName: '',
   // We can ignore the linting error as this will be set later
   // eslint-disable-next-line  @typescript-eslint/no-empty-function
   registerScene: (): void => {},

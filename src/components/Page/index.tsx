@@ -253,7 +253,7 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
   }, [isDialogToggled, pageObserverName]);
 
   return (
-    <PageContext.Provider value={{ titleSuffix, registerScene }}>
+    <PageContext.Provider value={{ titleSuffix, pageObserverName, registerScene }}>
       <ScrollPromptContext.Provider value={{
           isEnabled: isScrollPromptEnabled,
           setIsEnabled: setIsScrollPromptEnabled,
