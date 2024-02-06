@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { memo, useContext, useEffect, useRef, useState } from 'react';
+import { createRef, memo, useContext, useEffect, useState } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList } from 'react-window';
 import styled from 'styled-components';
@@ -110,7 +110,6 @@ const priceOptions: Option[] = [1, 2, 3, 4, 5].map((value: number): Option => {
 const PlaceItem = ({ place, style }: { place: Place, style: React.CSSProperties }) => {
   const { activePlaceId, setActivePlaceId } = useContext(PlaceMapContext);
   const [isActive, setIsActive] = useState(false);
-  const placeRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 
   const handleClick = (): void => {
     // We can ignore linting errors as we populate place IDs before use
@@ -120,11 +119,6 @@ const PlaceItem = ({ place, style }: { place: Place, style: React.CSSProperties 
 
   useEffect((): void => {
     if (activePlaceId === place.id) {
-      placeRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'start',
-      });
       setIsActive(true);
     }
     else {
@@ -135,7 +129,7 @@ const PlaceItem = ({ place, style }: { place: Place, style: React.CSSProperties 
   const markerStyle: MarkerStyle = cuisineMarkerStyleMap[place.cuisine];
 
   return (
-    <Place ref={placeRef} $isActive={isActive} style={style} onClick={():void => { handleClick(); }}>
+    <Place $isActive={isActive} style={style} onClick={():void => { handleClick(); }}>
       <PlaceIcon><FontAwesomeIcon icon={markerStyle.icon} fixedWidth /></PlaceIcon>
       <PlaceName>{place.name} <PlaceCuisine>{place.cuisine}</PlaceCuisine></PlaceName> 
       <PlacePrice>{'$'.repeat(place.price)}</PlacePrice>
@@ -144,9 +138,11 @@ const PlaceItem = ({ place, style }: { place: Place, style: React.CSSProperties 
 };
 
 const PlacePanel = memo(function PlacePanel({ places }: { places: Place[] }) {
+  const { activePlaceId } = useContext(PlaceMapContext);
   const [cuisineFilter, setCuisineFilter] = useState('');
   const [priceFilter, setPriceFilter] = useState(-1);
   const [filteredPlaces, setFilteredPlaces] = useState(places);
+  const placesRef = createRef<FixedSizeList>();
 
   const handleCuisineFilterChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     setCuisineFilter(e.target.value);
@@ -172,6 +168,18 @@ const PlacePanel = memo(function PlacePanel({ places }: { places: Place[] }) {
     setFilteredPlaces(newPlaces);
   }, [cuisineFilter, priceFilter, places]);
 
+  useEffect((): void => {
+    if (!placesRef.current) {
+      return;
+    }
+
+    const placeIndex: number = filteredPlaces.findIndex((place: Place): boolean => { return place.id === activePlaceId; });
+
+    if (placeIndex !== -1) {
+      placesRef.current.scrollToItem(placeIndex, 'center');
+    }
+  }, [placesRef, filteredPlaces, activePlaceId]);
+
   return (
     <>
       <PlaceFilters>
@@ -193,6 +201,7 @@ const PlacePanel = memo(function PlacePanel({ places }: { places: Place[] }) {
         <AutoSizer>
           {({ width, height }: { width: number, height: number }) => (
           <FixedSizeList
+              ref={placesRef}
               itemCount={filteredPlaces.length}
               itemSize={40}
               height={height}
