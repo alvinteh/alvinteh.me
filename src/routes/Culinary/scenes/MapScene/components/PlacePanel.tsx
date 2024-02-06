@@ -1,5 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useContext, useEffect, useRef, useState } from 'react';
+import { memo, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import { FixedSizeList } from 'react-window';
 import styled from 'styled-components';
 
 import Select from '../../../../../components/Select';
@@ -30,18 +32,15 @@ const PriceSelect = styled(StyledSelect)`
   width: 3rem;
 `;
 
-const Places = styled.ul`
+const Places = styled.div`
   margin: 0;
   border-top: solid 1px #ffffff;
   border-bottom: solid 1px #ffffff;
   padding: 1rem 0;
   height: 55vh;
-  list-style: none;
-  overflow-x: hidden;
-  overflow-y: scroll;
 `;
 
-const Place = styled.li<{ $isActive: boolean }>`
+const Place = styled.div<{ $isActive: boolean }>`
   display: flex;
   margin: 0;
   padding: 0.5rem 0.3rem;
@@ -110,7 +109,7 @@ const priceOptions: Option[] = [1, 2, 3, 4, 5].map((value: number): Option => {
 const PlaceItem = ({ place }: { place: Place }) => {
   const { activePlaceId, setActivePlaceId } = useContext(PlaceMapContext);
   const [isActive, setIsActive] = useState(false);
-  const placeRef = useRef<HTMLLIElement>() as React.MutableRefObject<HTMLLIElement>;
+  const placeRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 
   const handleClick = (): void => {
     // We can ignore linting errors as we populate place IDs before use
@@ -143,14 +142,16 @@ const PlaceItem = ({ place }: { place: Place }) => {
   )
 };
 
-const PlacePanel = ({ places }: { places: Place[] }) => {
+const PlacePanel = memo(function PlacePanel({ places }: { places: Place[] }) {
   const [cuisineFilter, setCuisineFilter] = useState('');
   const [priceFilter, setPriceFilter] = useState(-1);
   const [filteredPlaces, setFilteredPlaces] = useState(places);
 
-  const placeElements: React.ReactNode[] = filteredPlaces.map((place: Place): React.ReactNode => {
-    return <PlaceItem key={place.id} place={place} />;
-  });
+  const placeElements: React.ReactNode[] = useMemo((): React.ReactNode[] => {
+    return filteredPlaces.map((place: Place): React.ReactNode => {
+      return <PlaceItem key={place.id} place={place} />;
+    });
+  }, [filteredPlaces]);
 
   const handleCuisineFilterChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     setCuisineFilter(e.target.value);
@@ -194,13 +195,28 @@ const PlacePanel = ({ places }: { places: Place[] }) => {
         />
       </PlaceFilters>
       <Places>
-        {placeElements}
+        <AutoSizer>
+          {({ width, height }: { width: number, height: number }) => (
+          <FixedSizeList
+              itemCount={placeElements.length}
+              itemSize={36.8}
+              height={height}
+              width={width}
+            >
+              {({ index }: { index: number }) => {
+                const place: Place = places[index];
+
+                return <PlaceItem key={place.id} place={place} />;
+              }}
+            </FixedSizeList> 
+          )}
+        </AutoSizer>
       </Places>
       <PlaceCount>
         Displaying {filteredPlaces.length} point{filteredPlaces.length === 1 ? '' : 's'} of interest
       </PlaceCount>
     </>
   );
-};
+});
 
 export default PlacePanel;

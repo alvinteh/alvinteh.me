@@ -1,4 +1,4 @@
-import { Map } from '@vis.gl/react-google-maps';
+import { Map, useApiIsLoaded } from '@vis.gl/react-google-maps';
 
 import { Place } from '../types';
 import PlaceMarker from './PlaceMarker';
@@ -7,6 +7,12 @@ import PlaceMarker from './PlaceMarker';
 const MAP_CENTER = { lat: 40.8497563, lng: 14.2633002 };
 
 const PlaceMap = ({ places }: { places: Place[] }) => {
+  const isGoogleMapsApiLoaded: boolean = useApiIsLoaded();
+
+  if (!isGoogleMapsApiLoaded) {
+    return <></>;
+  }
+
   const placeMarkerElements: JSX.Element[] = places.map((place: Place): JSX.Element => {
     return <PlaceMarker key={place.id} place={place} />;
   });
