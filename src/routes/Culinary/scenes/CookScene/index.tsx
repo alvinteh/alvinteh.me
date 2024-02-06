@@ -1,7 +1,7 @@
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import Accordion, { AccordionItem, AccordionItemContent, AccordionItemHeader } from '../../../../components/Accordion';
@@ -621,28 +621,32 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
     return element;
   };
 
-  const dishElements: React.ReactNode[] = dishes.map((dish: Dish): React.ReactNode => {
-    return (
-      <Dish
-        key={dish.name}
-      >
-        <DishName ref={setDishInfoRef}>{dish.name}</DishName>
-        <DishImage ref={setDishRef} $backgroundImage={dish.image} />
-      </Dish>
-    );
-  });
+  const dishElements: React.ReactNode[] = useMemo((): React.ReactNode[] => {
+    return dishes.map((dish: Dish): React.ReactNode => {
+      return (
+        <Dish
+          key={dish.name}
+        >
+          <DishName ref={setDishInfoRef}>{dish.name}</DishName>
+          <DishImage ref={setDishRef} $backgroundImage={dish.image} />
+        </Dish>
+      );
+    });
+  }, [dishes]);
 
-  const extraDishElements: React.ReactNode[] = extraDishes.map((extraDish: Dish): React.ReactNode => {
-    return (
-      <ExtraDish
-        key={extraDish.name}
-        ref={setExtraDishRef}
-        $backgroundImage={extraDish.image}
-      >
-        <ExtraDishName>{extraDish.name}</ExtraDishName>
-      </ExtraDish>
-    );
-  });
+  const extraDishElements: React.ReactNode[] = useMemo((): React.ReactNode[] => {
+    return extraDishes.map((extraDish: Dish): React.ReactNode => {
+      return (
+        <ExtraDish
+          key={extraDish.name}
+          ref={setExtraDishRef}
+          $backgroundImage={extraDish.image}
+        >
+          <ExtraDishName>{extraDish.name}</ExtraDishName>
+        </ExtraDish>
+      );
+    });
+}, [extraDishes]);
 
   return (
     <Screen

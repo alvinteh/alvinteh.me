@@ -1,6 +1,6 @@
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 
@@ -430,33 +430,35 @@ const CasualDiningScene = ({ sceneIndex }: SceneProps) => {
     return element;
   };
 
-  const dishElements: React.ReactNode[] = dishes.map((dish: Dish): React.ReactNode => {
-    // Note: the z-index and rotation are deterministic to avoid "jitters" upon scene re-render
-    const number: number = dish.name.split('').reduce((previous: number, letter: string): number => {
-      return previous + letter.charCodeAt(0);
-    }, 0);
+  const dishElements: React.ReactNode[] = useMemo((): React.ReactNode[] => {
+    return dishes.map((dish: Dish): React.ReactNode => {
+      // Note: the z-index and rotation are deterministic to avoid "jitters" upon scene re-render
+      const number: number = dish.name.split('').reduce((previous: number, letter: string): number => {
+        return previous + letter.charCodeAt(0);
+      }, 0);
 
-    const rotation = (number % 2 === 0 ? 1 : -1) * Math.round(number / 180);
+      const rotation = (number % 2 === 0 ? 1 : -1) * Math.round(number / 180);
 
-    return (
-      <Dish
-        ref={setDishRef}
-        key={dish.restaurant}
-        $zIndex={number}
-      >
-        <DishPhoto
-          $aspectRatio={dish.imageAspectRatio}
-          $backgroundImage={dish.image}
-          $rotation={rotation}
+      return (
+        <Dish
+          ref={setDishRef}
+          key={dish.restaurant}
+          $zIndex={number}
         >
-          <DishInfo>
-            <DishName>{dish.name}</DishName>
-            <DishRestaurant>{dish.restaurant}</DishRestaurant>
-          </DishInfo>
-        </DishPhoto>
-      </Dish>
-    );
-  });
+          <DishPhoto
+            $aspectRatio={dish.imageAspectRatio}
+            $backgroundImage={dish.image}
+            $rotation={rotation}
+          >
+            <DishInfo>
+              <DishName>{dish.name}</DishName>
+              <DishRestaurant>{dish.restaurant}</DishRestaurant>
+            </DishInfo>
+          </DishPhoto>
+        </Dish>
+      );
+    });
+  }, [dishes]);
 
   return (
     <Screen

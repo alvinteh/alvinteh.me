@@ -1,6 +1,6 @@
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import PageContext from '../../../../components/Page/PageContext';
@@ -227,21 +227,23 @@ const DrinksScene = ({ sceneIndex }: SceneProps) => {
     return element;
   };
   
-  const drinkElements: React.ReactNode[] = drinks.map((drink: Drink): React.ReactNode => {
-    return (
-      <Drink key={drink.bar}>
-        <DrinkImage
-          ref={setDrinkRef}
-          $backgroundImage={drink.image}
-        />
-        <DrinkInfo ref={setDrinkInfoRef}>
-          <DrinkName>{drink.name}</DrinkName>
-          <DrinkIngredients>{drink.ingredients}</DrinkIngredients>
-          <DrinkBar>{drink.bar}</DrinkBar>
-        </DrinkInfo>
-      </Drink>
-    );
-  });
+  const drinkElements: React.ReactNode[] = useMemo((): React.ReactNode[] => {
+    return drinks.map((drink: Drink): React.ReactNode => {
+      return (
+        <Drink key={drink.bar}>
+          <DrinkImage
+            ref={setDrinkRef}
+            $backgroundImage={drink.image}
+          />
+          <DrinkInfo ref={setDrinkInfoRef}>
+            <DrinkName>{drink.name}</DrinkName>
+            <DrinkIngredients>{drink.ingredients}</DrinkIngredients>
+            <DrinkBar>{drink.bar}</DrinkBar>
+          </DrinkInfo>
+        </Drink>
+      );
+    });
+  }, [drinks]);
 
   return (
     <DrinksScreen

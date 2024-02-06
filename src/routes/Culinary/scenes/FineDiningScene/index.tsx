@@ -1,6 +1,6 @@
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import PageContext from '../../../../components/Page/PageContext';
@@ -256,20 +256,22 @@ const FineDiningScene = ({ sceneIndex }: SceneProps) => {
     return element;
   };
 
-  const dishElements: React.ReactNode[] = dishes.map((dish: Dish): React.ReactNode => {
-    return (
-      <Dish
-        ref={setDishRef}
-        key={dish.restaurant}
-        $backgroundImage={dish.image}
-      >
-        <DishInfo ref={setDishInfoRef}>
-          <DishName>{dish.name}</DishName>
-          <DishRestaurant>{dish.restaurant}</DishRestaurant>
-        </DishInfo>
-      </Dish>
-    );
-  });
+  const dishElements: React.ReactNode[] = useMemo((): React.ReactNode[] => {
+    return dishes.map((dish: Dish): React.ReactNode => {
+      return (
+        <Dish
+          ref={setDishRef}
+          key={dish.restaurant}
+          $backgroundImage={dish.image}
+        >
+          <DishInfo ref={setDishInfoRef}>
+            <DishName>{dish.name}</DishName>
+            <DishRestaurant>{dish.restaurant}</DishRestaurant>
+          </DishInfo>
+        </Dish>
+      );
+    });
+  }, [dishes]);
 
   return (
     <Screen
