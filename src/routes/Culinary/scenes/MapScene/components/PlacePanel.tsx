@@ -43,6 +43,7 @@ const Places = styled.div`
 const Place = styled.div<{ $isActive: boolean }>`
   display: flex;
   margin: 0;
+  box-sizing: border-box;
   padding: 0.5rem 0.3rem;
   background: ${(props) => { return props.$isActive ? '#404040' : 'none'; }};
   cursor: pointer;
@@ -106,7 +107,7 @@ const priceOptions: Option[] = [1, 2, 3, 4, 5].map((value: number): Option => {
   }
 });
 
-const PlaceItem = ({ place }: { place: Place }) => {
+const PlaceItem = ({ place, style }: { place: Place, style: React.CSSProperties }) => {
   const { activePlaceId, setActivePlaceId } = useContext(PlaceMapContext);
   const [isActive, setIsActive] = useState(false);
   const placeRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
@@ -134,7 +135,7 @@ const PlaceItem = ({ place }: { place: Place }) => {
   const markerStyle: MarkerStyle = cuisineMarkerStyleMap[place.cuisine];
 
   return (
-    <Place ref={placeRef} $isActive={isActive} onClick={():void => { handleClick(); }}>
+    <Place ref={placeRef} $isActive={isActive} style={style} onClick={():void => { handleClick(); }}>
       <PlaceIcon><FontAwesomeIcon icon={markerStyle.icon} fixedWidth /></PlaceIcon>
       <PlaceName>{place.name} <PlaceCuisine>{place.cuisine}</PlaceCuisine></PlaceName> 
       <PlacePrice>{'$'.repeat(place.price)}</PlacePrice>
@@ -199,14 +200,13 @@ const PlacePanel = memo(function PlacePanel({ places }: { places: Place[] }) {
           {({ width, height }: { width: number, height: number }) => (
           <FixedSizeList
               itemCount={placeElements.length}
-              itemSize={36.8}
+              itemSize={40}
               height={height}
               width={width}
             >
-              {({ index }: { index: number }) => {
+              {({ index, style }: { index: number, style: React.CSSProperties }) => {
                 const place: Place = places[index];
-
-                return <PlaceItem key={place.id} place={place} />;
+                return <PlaceItem key={place.id} place={place} style={style} />;
               }}
             </FixedSizeList> 
           )}
