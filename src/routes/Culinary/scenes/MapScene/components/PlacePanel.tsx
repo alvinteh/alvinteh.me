@@ -18,9 +18,14 @@ const PlaceFilters = styled.div`
 
 const StyledSelect = styled(Select)`
   border: none;
+  background-color: none;
   color: #ffffff;
   font-size: 0.75rem;
   text-transform: uppercase;
+
+  & option {
+    background-color: #202020;
+  }
 `;
 
 const CuisineSelect = styled(StyledSelect)`
