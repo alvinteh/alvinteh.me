@@ -67,7 +67,6 @@ const InfoLink = styled.a`
 
 const PlaceMarker = ({ place }: { place: Place }) => {
   const { activePlaceId, setActivePlaceId } = useContext(PlaceMapContext);
-  const [isInfoWindowOpen, setIsInfoWindowOpen] = useState(false);
   const [markerRef, markerElement] = useAdvancedMarkerRef();
 
   const markerStyle: MarkerStyle = cuisineMarkerStyleMap[place.cuisine];
@@ -75,7 +74,6 @@ const PlaceMarker = ({ place }: { place: Place }) => {
     + `@${place.position.lat},${place.position.lng},15z`;
 
   const handleClick = (shouldOpenWindow: boolean): void => {
-    setIsInfoWindowOpen(shouldOpenWindow);
 
     if (shouldOpenWindow) {
       // We can ignore linting errors as we populate place IDs before use
@@ -84,14 +82,7 @@ const PlaceMarker = ({ place }: { place: Place }) => {
     }
   }
 
-  useEffect((): void => {
-    if (activePlaceId !== place.id) {
-      setIsInfoWindowOpen(false);
-    }
-    else if (activePlaceId === place.id) {
-      setIsInfoWindowOpen(true);
-    }
-  }, [activePlaceId, place.id]);
+  const isInfoWindowOpen: boolean = activePlaceId === place.id;
 
   return (
     <AdvancedMarker
