@@ -237,7 +237,6 @@ const ExtraDish = styled.li.attrs<ExtraDishAttrs>(({ $backgroundImage }) => ({
   padding: 0;
   width: 14vw;
   height: 14vw;
-  background-image: url(${(props) => { return props.$backgroundImage; }});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
