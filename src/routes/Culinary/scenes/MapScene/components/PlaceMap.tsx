@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { Map, useMapsLibrary } from '@vis.gl/react-google-maps';
+import { Map } from '@vis.gl/react-google-maps';
 
 import { Place } from '../types';
 import PlaceMarker from './PlaceMarker';
@@ -8,18 +7,9 @@ import PlaceMarker from './PlaceMarker';
 const MAP_CENTER = { lat: 40.8497563, lng: 14.2633002 };
 
 const PlaceMap = ({ places }: { places: Place[] }) => {
-  const coreLibrary = useMapsLibrary('core');
-  const [placeMarkerElements, setPlaceMarkerElements] = useState<React.ReactNode[]>([]);
-
-  useEffect((): void => {
-    if (!coreLibrary) {
-      return;
-    }
-
-    setPlaceMarkerElements(places.map((place: Place): React.ReactNode => {
-      return <PlaceMarker key={place.id} place={place} />;
-    }));
-  }, [places, coreLibrary]);
+  const placeMarkerElements: JSX.Element[] = places.map((place: Place): JSX.Element => {
+    return <PlaceMarker key={place.id} place={place} />;
+  });
 
   return (
       <Map
