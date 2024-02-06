@@ -107,7 +107,7 @@ const priceOptions: Option[] = [1, 2, 3, 4, 5].map((value: number): Option => {
   }
 });
 
-const PlaceItem = ({ place, style }: { place: Place, style: React.CSSProperties }) => {
+const PlaceItem = memo(function PlaceItem({ place, style }: { place: Place, style: React.CSSProperties }) {
   const { activePlaceId, setActivePlaceId } = useContext(PlaceMapContext);
   const [isActive, setIsActive] = useState(false);
 
@@ -135,7 +135,7 @@ const PlaceItem = ({ place, style }: { place: Place, style: React.CSSProperties 
       <PlacePrice>{'$'.repeat(place.price)}</PlacePrice>
     </Place>
   )
-};
+});
 
 const PlacePanel = memo(function PlacePanel({ places }: { places: Place[] }) {
   const { activePlaceId } = useContext(PlaceMapContext);
@@ -153,6 +153,10 @@ const PlacePanel = memo(function PlacePanel({ places }: { places: Place[] }) {
   };
 
   useEffect((): void => {
+    if (cuisineFilter === '' && priceFilter === -1) {
+      return;
+    }
+
     const newPlaces: Place[] = places.filter((place: Place): boolean => {
       if (cuisineFilter !== '' && cuisineFilter !== place.cuisine) {
         return false;
