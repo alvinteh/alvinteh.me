@@ -144,7 +144,7 @@ const PlaceItem = memo(function PlaceItem({ place, style }: { place: Place, styl
 
 const PlacePanel = memo(function PlacePanel({ places }: { places: Place[] }) {
   const { activePlaceId } = useContext(PlaceMapContext);
-  const [cuisineFilter, setCuisineFilter] = useState('');
+  const [cuisineFilter, setCuisineFilter] = useState('*');
   const [priceFilter, setPriceFilter] = useState(-1);
   const [filteredPlaces, setFilteredPlaces] = useState(places);
   const placesRef = createRef<FixedSizeList>();
@@ -158,12 +158,14 @@ const PlacePanel = memo(function PlacePanel({ places }: { places: Place[] }) {
   };
 
   useEffect((): void => {
-    if (cuisineFilter === '' && priceFilter === -1) {
+    if (cuisineFilter === '*' && priceFilter === -1) {
       return;
     }
 
+    const normalizedCuisineFilter = cuisineFilter === '*' ? '' : cuisineFilter;
+
     const newPlaces: Place[] = places.filter((place: Place): boolean => {
-      if (cuisineFilter !== '' && cuisineFilter !== place.cuisine) {
+      if (normalizedCuisineFilter !== '' && normalizedCuisineFilter !== place.cuisine) {
         return false;
       }
 
