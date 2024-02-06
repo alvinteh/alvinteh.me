@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { memo, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useContext, useEffect, useRef, useState } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList } from 'react-window';
 import styled from 'styled-components';
@@ -148,12 +148,6 @@ const PlacePanel = memo(function PlacePanel({ places }: { places: Place[] }) {
   const [priceFilter, setPriceFilter] = useState(-1);
   const [filteredPlaces, setFilteredPlaces] = useState(places);
 
-  const placeElements: React.ReactNode[] = useMemo((): React.ReactNode[] => {
-    return filteredPlaces.map((place: Place): React.ReactNode => {
-      return <PlaceItem key={place.id} place={place} />;
-    });
-  }, [filteredPlaces]);
-
   const handleCuisineFilterChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     setCuisineFilter(e.target.value);
   };
@@ -199,13 +193,13 @@ const PlacePanel = memo(function PlacePanel({ places }: { places: Place[] }) {
         <AutoSizer>
           {({ width, height }: { width: number, height: number }) => (
           <FixedSizeList
-              itemCount={placeElements.length}
+              itemCount={filteredPlaces.length}
               itemSize={40}
               height={height}
               width={width}
             >
               {({ index, style }: { index: number, style: React.CSSProperties }) => {
-                const place: Place = places[index];
+                const place: Place = filteredPlaces[index];
                 return <PlaceItem key={place.id} place={place} style={style} />;
               }}
             </FixedSizeList> 
