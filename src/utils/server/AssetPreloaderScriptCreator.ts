@@ -9,7 +9,7 @@ const AssetPreloaderCreator = {
 
     try {
       // Get list of images
-      let assets: string[] = readdirSync(`${srcPath}`, { recursive: true }) as string[];
+      let assets: string[] = readdirSync(srcPath, { recursive: true }) as string[];
       
       // Filter non-JPG/PNG/SVG assets and assets in ignored folders
       assets = assets.filter((asset: string): boolean => {
