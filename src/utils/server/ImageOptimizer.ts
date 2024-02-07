@@ -58,7 +58,7 @@ const main = async (imageFolderPath: string): Promise<void> => {
   console.log(`Obtaining list of files from ${fullImageFolderPath}...`);  
 
   try {
-    imageFilenames = await readdir(`${fullImageFolderPath}`, { recursive: true });
+    imageFilenames = await readdir(fullImageFolderPath, { recursive: true });
     
     // Filter non-JPG images
     imageFilenames = imageFilenames.filter((imageFilename: string): boolean => {
@@ -75,7 +75,7 @@ const main = async (imageFolderPath: string): Promise<void> => {
   // Process each image
   for (const imageFilename of imageFilenames) {
     try {
-      const image: sharp.Sharp = sharp(`${fullImageFolderPath + imageFilename}`);
+      const image: sharp.Sharp = sharp(fullImageFolderPath + imageFilename);
 
       // Determine aspect ratio of image
       console.log(`Checking aspect ratio of ${imageFilename}...`);
@@ -95,7 +95,7 @@ const main = async (imageFolderPath: string): Promise<void> => {
     
       // Rename new file
       console.log(`Renaming file ${imageFilename}...`);
-      await rename(`${fullImageFolderPath + imageFilename}.new`, `${fullImageFolderPath + imageFilename}`);
+      await rename(`${fullImageFolderPath + imageFilename}.new`, fullImageFolderPath + imageFilename);
     }
     catch (e) {
       console.error(`There was an issue processing the file (${(e as Error).message}).`)
