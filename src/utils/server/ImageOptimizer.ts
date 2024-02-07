@@ -23,7 +23,7 @@ const aspectRatios: number[] = [
   round(21/9, decimalPlaces),
 ];
 
-const getAspectRatio = async (image: sharp.Sharp): Promise<number> => {
+const getAspectRatio = async (image: sharp.Sharp, shouldFixAspectRatios: boolean): Promise<number> => {
   const metadata: sharp.Metadata = await image.metadata();
   let aspectRatio = -1;
 
@@ -33,23 +33,28 @@ const getAspectRatio = async (image: sharp.Sharp): Promise<number> => {
 
   const rawAspectRatio: number = round(metadata.width / metadata.height, decimalPlaces);
 
-  if (aspectRatios.includes(rawAspectRatio)) {
-    aspectRatio = rawAspectRatio;
-  }
-  else {
-    // Take care of edge cases that are a couple of pixels off
-    for (const cmpAspectRatio of aspectRatios) {
-      if (Math.abs(cmpAspectRatio - rawAspectRatio) <= 2 * Math.pow(10, -decimalPlaces)) {
-        aspectRatio = cmpAspectRatio;
-        break;
+  if (shouldFixAspectRatios) {
+    if (aspectRatios.includes(rawAspectRatio)) {
+      aspectRatio = rawAspectRatio;
+    }
+    else {
+      // Take care of edge cases that are a couple of pixels off
+      for (const cmpAspectRatio of aspectRatios) {
+        if (Math.abs(cmpAspectRatio - rawAspectRatio) <= 2 * Math.pow(10, -decimalPlaces)) {
+          aspectRatio = cmpAspectRatio;
+          break;
+        }
       }
     }
+  }
+  else {
+    aspectRatio = rawAspectRatio;
   }
   
   return aspectRatio;
 };
 
-const main = async (imageFolderPath: string): Promise<void> => {
+const main = async (imageFolderPath: string, shouldFixAspectRatios: boolean): Promise<void> => {
   const fullImageFolderPath = `${dirname(fileURLToPath(import.meta.url))}/${imageFolderPath}/`;
 
   let imageFilenames: string[] = [];
@@ -79,7 +84,7 @@ const main = async (imageFolderPath: string): Promise<void> => {
 
       // Determine aspect ratio of image
       console.log(`Checking aspect ratio of ${imageFilename}...`);
-      const aspectRatio: number = await getAspectRatio(image);
+      const aspectRatio: number = await getAspectRatio(image, shouldFixAspectRatios);
 
       if (aspectRatio === -1) {
         throw new Error(`The aspect ratio for ${imageFilename} does not match any expected aspect ratios`);
@@ -106,4 +111,4 @@ const main = async (imageFolderPath: string): Promise<void> => {
   console.log('Done');
 };
 
-void main('../../routes/Visual/scenes/GalleryScene/data/images');
+void main('../../routes/Literary/scenes/PoetryScene/images', false);
