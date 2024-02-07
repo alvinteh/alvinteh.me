@@ -251,7 +251,7 @@ const LifeScene = ({ sceneIndex }: { sceneIndex: number }) => {
         </Info>
       </Subscreen>
       <Subscreen ref={setSubscreenRef} $backgroundImage={Subscreen7Background} $backgroundPosition="center top">
-        <Header>A struggle for our values?</Header>
+        <Header>A fight for our values?</Header>
         <Info>
           <Title>La Liberté guidant le peuple</Title> 
           <Artist>Eugène Delacroix</Artist>
