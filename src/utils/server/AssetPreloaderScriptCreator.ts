@@ -22,7 +22,7 @@ const AssetPreloaderCreator = {
 
       // Create script string
       const imageUrlsScript: string[] = assets.map((asset: string): string => {
-        return `imageUrls.push('${asset.replace(/'/g, '\\')}');`;
+        return `'${asset.replace(/'/g, '\\')}', `;
       });
 
       const preloaderScript = `
@@ -50,9 +50,10 @@ const AssetPreloaderCreator = {
             });
           };
 
-          const imageUrls = [];
-          ${imageUrlsScript.join('\n')}
-
+          const imageUrls = [
+            ${imageUrlsScript.join('\n')}
+          ];
+          
           Promise.all(imageUrls.map((imageUrl) => { preloadImage(imageUrl); }));
         }
         </script>
