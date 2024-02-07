@@ -128,7 +128,7 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
         filter: 'blur(0.5rem)',
         opacity: 0,
         top: '+=30px',
-        ease: 'power1.easeInOut',
+        ease: 'power1.inOut',
         duration: animationDurations.FAST,
       }, i == 0 ? '>' : undefined);
     }
@@ -181,7 +181,7 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
 
     timeline.to(headerRef.current, {
       top: '-=10rem',
-      ease: 'power1.easeInOut',
+      ease: 'power1.inOut',
       duration: animationDurations.MEDIUM,
     });
 
@@ -189,7 +189,7 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
       filter: 'blur(0.5rem)',
       opacity: 0,
       top: '+=30px',
-      ease: 'power1.easeInOut',
+      ease: 'power1.inOut',
       duration: animationDurations.MEDIUM,
     });
 
