@@ -191,8 +191,8 @@ const DrinksScene = ({ sceneIndex }: SceneProps) => {
       textShadow: '2px 2px 2px rgba(0, 0, 0, 0)',
       transform: 'scale(0.95) translate3d(0, 30px, 0)',
       duration: animationDurations.MEDIUM,
-      ease: 'power1.out',
-      stagger: 0.5,
+      ease: 'power1.inOut',
+      stagger: animationDurations.XFAST,
     });
 
     timeline.addLabel(`scene-${sceneIndex}-intro`);
