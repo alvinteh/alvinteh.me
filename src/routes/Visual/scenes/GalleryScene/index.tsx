@@ -109,7 +109,7 @@ const GalleryScene = ({ sceneIndex }: SceneProps) => {
     timeline.from(startHeaderElement, {
       filter: 'blur(0.5rem)',
       opacity: 0,
-      top: '+=30px',
+      y: '+=30px',
       ease: 'power1.inOut',
       duration: animationDurations.FAST,
     }, `<+=${animationDurations.FAST}`);
