@@ -160,24 +160,24 @@ const MapScene = ({ sceneIndex }: SceneProps) => {
     timeline.addLabel(`scene-${sceneIndex}-intro`);
 
     timeline.to(subscreen2Ref.current, {
-      top: '-=100vh',
+      y: '-=100vh',
       duration: animationDurations.XSLOW,
     });
 
     timeline.addLabel(`scene-${sceneIndex}-map`);
 
     timeline.to(subscreen1Ref.current, {
-      top: '-=100vh',
+      y: '-=100vh',
       duration: animationDurations.XSLOW,
     });
 
     timeline.to(subscreen2Ref.current, {
-      top: '-=200vh',
+      y: '-=200vh',
       duration: animationDurations.XSLOW,
     }, '<');
 
     timeline.to(subscreen3Ref.current, {
-      top: '-=100vh',
+      y: '-=100vh',
       duration: animationDurations.XSLOW,
     }, '<');
 
