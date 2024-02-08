@@ -127,7 +127,7 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
       timeline.from(startHeaderRef.current.children[i], {
         filter: 'blur(0.5rem)',
         opacity: 0,
-        top: '+=30px',
+        y: '+=30px',
         ease: 'power1.inOut',
         duration: animationDurations.FAST,
       }, i == 0 ? '>' : undefined);
@@ -141,7 +141,7 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
       const headerAttributeElement: HTMLSpanElement = headerAttributeRefs.current[i];
 
       timeline.to(subscreenElement, {
-        top: '-=100vh',
+        y: '-=100vh',
         duration: animationDurations.XSLOW,
       });
 
@@ -180,7 +180,7 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
     });
 
     timeline.to(headerRef.current, {
-      top: '-=10rem',
+      y: '-=10rem',
       ease: 'power1.inOut',
       duration: animationDurations.MEDIUM,
     });
@@ -188,7 +188,7 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
     timeline.from(endHeaderRef.current, {
       filter: 'blur(0.5rem)',
       opacity: 0,
-      top: '+=30px',
+      y: '+=30px',
       ease: 'power1.inOut',
       duration: animationDurations.MEDIUM,
     });
