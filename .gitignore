@@ -41,6 +41,7 @@ dist-ssr
 *.ai
 *.psd
 /public/gallery-images-org/
+/public/poetry-cover-images-org/
 
 # Ignore personal notes
 /notes.md
