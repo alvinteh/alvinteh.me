@@ -553,7 +553,7 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
 
       timeline.from(extraDishElement, {
         y: '105vh', // Leave additional allowance given the rotation
-        left: 'calc(50% - 7vw - 10px)',
+        x: 'calc(50% - 7vw - 10px)',
         ease: 'power1.out',
         duration: animationDurations.FAST,
       });
@@ -566,7 +566,7 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
 
       timeline.to(extraDishElement, {
         y: '105vh',
-        left: 'calc(50% - 7vw - 10px)',
+        x: 'calc(50% - 7vw - 10px)',
         transform: 'rotate(0)',
         ease: 'power1.out',
         duration: animationDurations.FAST,
