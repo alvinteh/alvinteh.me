@@ -37,7 +37,7 @@ const GalleryWrapper = styled.div`
 const images: Image[] = rawImages as unknown as Image[];
 
 images.forEach((image: Image) => {
-  image.src = `/gallery-images/${image.src}`;
+  image.src = `/data/gallery/images/${image.src}`;
 });
 
 const GalleryScene = ({ sceneIndex }: SceneProps) => {

@@ -40,7 +40,7 @@ dist-ssr
 # Ignore image working files
 *.ai
 *.psd
-/public/gallery-images-org/
+/public/data/gallery/images-org/
 /public/data/works/images-org/
 
 # Ignore personal notes
