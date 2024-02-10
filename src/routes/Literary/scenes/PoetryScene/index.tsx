@@ -90,12 +90,14 @@ const Work = styled.li.attrs<WorkAttrs>(({ $backgroundImage }) => ({
   background-size: cover;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0);
   cursor: pointer;
+  filter: brightness(0.9);
   overflow: hidden;
   text-indent: 100%;
   white-space: nowrap;
   transition: box-shadow ${animationDurations.XFAST}s ${cubicBezier};
 
   &:hover {
+    filter: brightness(1) !important;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.7); 
   }
 `;
