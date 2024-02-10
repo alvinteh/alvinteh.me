@@ -116,7 +116,7 @@ const ViewMoreButton = styled.a`
 const extWorks: Work[] = (rawWorks as unknown) as Work[];
 
 extWorks.forEach((work: Work) => {
-  work.coverSrc = `/poetry-cover-images/${work.coverSrc}`;
+  work.coverSrc = `/data/works/images/${work.coverSrc}`;
 });
 
 const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
