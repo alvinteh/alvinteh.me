@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { animationDurations } from '../../utils/AnimationUtils';
 import { cubicBezier, fadeInAnimation } from '../static';
+import { animationDurations } from '../../utils/AnimationUtils';
+import { screenSizes } from '../../utils/ResponsiveUtils';
 import LayoutContext from './LayoutContext';
 
 interface DialogXPositionAttrs {
@@ -43,6 +44,10 @@ const DialogElement = styled.dialog<{ $x: number}>`
   &::backdrop {
     background: rgba(0, 0, 0, 0.9);
     animation: none;
+  }
+
+  @media ${screenSizes.phone} {
+    width: 100%;
   }
 `;
 

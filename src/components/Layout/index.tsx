@@ -9,6 +9,7 @@ import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { useDispatch, useSelector } from '../../core/hooks';
 import { close, open, toggle } from '../../slices/nav';
 import { cubicBezier, pageTransitionDuration } from '../static';
+import { screenSizes } from '../../utils/ResponsiveUtils';
 import { setPageTitle } from '../../utils/PageUtils';
 import { SiteHeader } from '../static';
 import Dialog from './Dialog';
@@ -336,6 +337,10 @@ const ConnectDialog = styled.div`
   color: #ffffff;
   font-family: "Barlow Condensed", sans-serif;
   transform: translate3d(-50%, -50%, 0);
+
+  @media ${screenSizes.phone} {
+    width: calc(100% - 40px);
+  }
 `;
 
 const DialogTitle = styled.h4`
