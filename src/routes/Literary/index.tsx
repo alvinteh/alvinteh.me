@@ -1,5 +1,6 @@
 import Page from '../../components/Page';
 import LifeScene from './scenes/LifeScene';
+import PoetryScene from './scenes/PoetryScene';
 import TitleScene from './scenes/TitleScene';
 
 const Literary = () => {
@@ -7,6 +8,7 @@ const Literary = () => {
     <Page titleSuffix="Literary" shouldHaveScrollPrompt={true}>
       <TitleScene sceneIndex={0} />
       <LifeScene sceneIndex={1} />
+      <PoetryScene sceneIndex={2} />
     </Page>
   );
 };
