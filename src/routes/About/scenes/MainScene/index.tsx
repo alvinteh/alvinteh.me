@@ -46,9 +46,9 @@ const HeroTitle = styled.h1`
   left: 0;
   box-sizing: border-box;
   margin: 0;
-  padding: 27.5vh 0 0;
+  padding: 27.5dvh 0 0;
   width:  84vw;
-  height: 100vh;
+  height: 100dvh;
   color: rgba(255, 255, 255, 0.5);
   font-size: 10rem;
   font-family: 'Barlow Condensed', sans-serif;
@@ -66,7 +66,7 @@ const HeroTitle = styled.h1`
   }
 
   @media ${aspectRatios.a21x9} {
-    padding-top: 18.5vh;
+    padding-top: 18.5dvh;
   }
 
   &::after {

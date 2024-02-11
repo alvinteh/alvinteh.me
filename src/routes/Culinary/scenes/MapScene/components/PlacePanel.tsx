@@ -42,7 +42,7 @@ const Places = styled.div`
   border-top: solid 1px #ffffff;
   border-bottom: solid 1px #ffffff;
   padding: 1rem 0;
-  height: 55vh;
+  height: 55dvh;
 `;
 
 const Place = styled.div<{ $isActive: boolean }>`

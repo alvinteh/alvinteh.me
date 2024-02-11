@@ -366,7 +366,7 @@ const WriteupWrapper = styled.div`
   left: 0;
   right: 0;
   box-sizing: border-box;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 `;
 
@@ -375,11 +375,11 @@ const WriteupPaddedBackground = styled(PaddedPageWrapper)`
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  height: 100vh;
+  height: 100dvh;
 `;
 
 const WriteupHeader = styled.h1`
-  margin: 10vh auto 3rem;
+  margin: 10dvh auto 3rem;
   max-width: 60rem;
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 3rem;
@@ -462,7 +462,7 @@ const BuilderScene = ({ sceneIndex }: SceneProps) => {
   const handleWriteupShowLinkClick = useCallback((): void => {
     Observer.getById(pageObserverName)?.disable();
     gsap.to(writeupWrapperRef.current, {
-      maxHeight: '100vh',
+      maxHeight: '100dvh',
       ease: 'power1.out',
       duration: animationDurations.XSLOW,
     });

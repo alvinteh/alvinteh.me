@@ -36,21 +36,21 @@ const changeTextColorAnimation = keyframes`
 
 const Quote = styled.blockquote`
   position: relative;
-  top: 20vh;
+  top: 20dvh;
   margin: 0 5% 0 auto;
   max-width: 65rem;
   text-align: right;
 
   @media ${screenSizes.tablet} {
-    top: 25vh;
+    top: 25dvh;
   }
 
   @media ${screenSizes.phone} {
-    top: 10vh;
+    top: 10dvh;
   }
 
   @media ${screenSizes.desktopM} {
-    top: 25vh;
+    top: 25dvh;
   }
 `;
 

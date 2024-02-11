@@ -56,9 +56,16 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
   }
 
+  html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+
   body {
     margin: 0;
     padding: 0;
+    height: 100%;
     background: #000000;
     color: #ffffff;
     font-family: Inter;
@@ -67,6 +74,10 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1;
     overscroll-behavior: none;
     -webkit-font-smoothing: antialiased;
+  }
+
+  #root {
+    height: 100%;
   }
 
   a {
@@ -177,7 +188,7 @@ const Link = styled(LinkRR)`
   position: absolute;
   top: 0;
   left: 0;
-  padding-top: 80vh;
+  padding-top: 80dvh;
   width: 100%;
   height: 100%;
   cursor: pointer;
@@ -299,7 +310,7 @@ const NavList = styled.ul<{ $isPageOpen: boolean }>`
 
 const Nav = styled.nav<{ $isNavOpen: boolean }>`
   position: relative;
-  height: 100vh;
+  height: 100dvh;
   filter: blur(${(props) => { return (props.$isNavOpen ? 0 : '0px'); }});
   opacity: ${(props) => { return (props.$isNavOpen ? 1 : 0); }};
   transition: ${(props) => {
@@ -328,7 +339,7 @@ const Main = styled.main.attrs<MainAttrs>(({ $isPageOpen, $currentPageIndex }) =
 }))`
   position: relative;
   width: 84%;
-  min-height: 100vh;
+  min-height: 100dvh;
 
   @media ${screenSizes.phone} {
     width: 100%;
@@ -358,7 +369,7 @@ const NavWrapper = styled.div<{ $isNavOpen: boolean, $isPageOpen: boolean }>`
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100dvh;
     background: #1a1a1a;
     content: "";
     transform: translate3d(-100%, 0, 0);
@@ -378,7 +389,7 @@ const NavWrapper = styled.div<{ $isNavOpen: boolean, $isPageOpen: boolean }>`
 
 const Wrapper = styled.div`
   position: relative;
-  height: 100vh;
+  height: 100dvh;
   container-type: size;
 `;
 

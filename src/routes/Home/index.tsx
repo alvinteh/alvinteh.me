@@ -174,7 +174,7 @@ const Steam = styled.span<{ $value: number }>`
 
 const Hero = styled.div<{ $isNavOpen: boolean }>`
   position: relative;
-  height: 100vh;
+  height: 100dvh;
   background-image: url('${HeroBackground}');
   background-position: center;
   background-size: cover;

@@ -20,10 +20,10 @@ import SceneBackground from './images/screen-map.jpg';
 
 const Subscreen = styled.div`
   position: absolute;
-  top: 100vh;
+  top: 100dvh;
   padding: 0;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 
   &:nth-child(1) {
@@ -37,7 +37,7 @@ const Overlay = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  height: 100vh;
+  height: 100dvh;
   background: rgba(0, 0, 0, 0.5);
 `;
 
@@ -51,7 +51,7 @@ const SubscreenHeader = styled.h3`
 `;
 
 const Subscreen1Header = styled(SubscreenHeader)`
-  top: 40vh;
+  top: 40dvh;
 `;
 
 const Subscreen1HeaderS1 = styled.span`
@@ -65,7 +65,7 @@ const Subscreen1HeaderS2 = styled.span`
 `;
 
 const Subscreen3Header = styled(SubscreenHeader)`
-  top: 40vh;
+  top: 40dvh;
 `;
 
 const Subscreen3HeaderS1 = styled.span`
@@ -160,24 +160,24 @@ const MapScene = ({ sceneIndex }: SceneProps) => {
     timeline.addLabel(`scene-${sceneIndex}-intro`);
 
     timeline.to(subscreen2Ref.current, {
-      y: '-=100vh',
+      y: '-=100dvh',
       duration: animationDurations.XSLOW,
     });
 
     timeline.addLabel(`scene-${sceneIndex}-map`);
 
     timeline.to(subscreen1Ref.current, {
-      y: '-=100vh',
+      y: '-=100dvh',
       duration: animationDurations.XSLOW,
     });
 
     timeline.to(subscreen2Ref.current, {
-      y: '-=200vh',
+      y: '-=200dvh',
       duration: animationDurations.XSLOW,
     }, '<');
 
     timeline.to(subscreen3Ref.current, {
-      y: '-=100vh',
+      y: '-=100dvh',
       duration: animationDurations.XSLOW,
     }, '<');
 

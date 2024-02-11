@@ -53,10 +53,10 @@ const Dish = styled.li.attrs<DishAttrs>(({ $backgroundImage }) => ({
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-top: -22.5vh;
-  margin-left: -22.5vh;
-  width: 45vh;
-  height: 45vh;
+  margin-top: -22.5dvh;
+  margin-left: -22.5dvh;
+  width: 45dvh;
+  height: 45dvh;
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -208,28 +208,28 @@ const FineDiningScene = ({ sceneIndex }: SceneProps) => {
 
     timeline.addLabel(`scene-${sceneIndex}-intro`);
 
-    timeline.to(exploreTextLineElements, { transform: 'translate3d(0, -40vh, 0)', duration: animationDurations.MEDIUM });
+    timeline.to(exploreTextLineElements, { transform: 'translate3d(0, -40dvh, 0)', duration: animationDurations.MEDIUM });
 
     for (let i = 0; i < dishes.length; i++) {
       const dishElement: HTMLLIElement = dishRefs.current[i];
       const dishInfoElement: HTMLDivElement = dishInfoRefs.current[i];
 
       timeline
-      .from(dishElement, { y: '72.5vh', duration: animationDurations.MEDIUM })
+      .from(dishElement, { y: '72.5dvh', duration: animationDurations.MEDIUM })
       .from(dishInfoElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)', duration:
         animationDurations.FAST })
 
       timeline.addLabel(`scene-${sceneIndex}-dish-${i}`);
 
       timeline.to(dishInfoElement, { opacity: 0, duration: animationDurations.FAST })
-      .to(dishElement, { y: '-72.5vh', duration: animationDurations.MEDIUM });
+      .to(dishElement, { y: '-72.5dvh', duration: animationDurations.MEDIUM });
     }
 
     for (let i = 0, length = exploreTextLineElements.length; i < length; i++) {
       timeline.to(exploreTextLineElements[i], {
           filter: 'blur(4rem)',
           opacity: 0,
-          transform: 'translate3d(0, -50vh, 0)',
+          transform: 'translate3d(0, -50dvh, 0)',
           duration: animationDurations.FAST
       });
     }

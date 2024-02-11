@@ -14,17 +14,17 @@ import SceneBackground from './images/scene-background.jpg';
 
 const StyledScreen = styled(Screen)`
   box-sizing: border-box;
-  padding-top: 20vh;
+  padding-top: 20dvh;
   mask-image: radial-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0) 1%, rgba(0, 0, 0, 0) 100%);
   mask-size: cover;
   opacity: 0;
 
   @media ${screenSizes.desktopM} {
-    padding-top: 30vh;
+    padding-top: 30dvh;
   }
 
   @media ${screenSizes.desktopL} {
-    padding-top: 35vh;
+    padding-top: 35dvh;
   }
 `;
 
@@ -86,7 +86,7 @@ const StatType = styled.span`
 
 const FaqWrapper = styled.div`
   position: absolute;
-  top: 20vh;
+  top: 20dvh;
   right: 0;
   float: right;
   margin: 0;
@@ -100,12 +100,12 @@ const FaqWrapper = styled.div`
   }
 
   @media ${screenSizes.desktopM} {
-    top: 30vh;
+    top: 30dvh;
     width: 55rem;
   }
 
   @media ${screenSizes.desktopL} {
-    top: 35vh;
+    top: 35dvh;
   }
 `;
 

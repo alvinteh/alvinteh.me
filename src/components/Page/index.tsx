@@ -24,7 +24,7 @@ import PageContext from './PageContext';
 
 const ParallaxPageWrapper = styled.div<{ $isMobileReady: boolean }>`
   position: relative;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 
   &>*:not(:first-child):not(:last-child) {
@@ -93,13 +93,13 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, isMobileReady, children }: 
         if (sceneTimelines[i + 1].data?.isCustomTransition) {
           timeline.set(nextSceneRef.current, {
             data: { name: `scene-${i}-transition-custom` },
-            transform: 'translate3d(0, -100vh, 0)',
+            transform: 'translate3d(0, -100dvh, 0)',
           });
         }
         else {
           timeline.add(gsap.to(nextSceneRef.current, {
             data: { name: `scene-${i}-transition` }, 
-            transform: 'translate3d(0, -100vh, 0)',
+            transform: 'translate3d(0, -100dvh, 0)',
             duration: animationDurations.XSLOW,
           }));
         }

@@ -39,7 +39,7 @@ const FullPageWrapper = styled.div`
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 `;
 
@@ -47,14 +47,14 @@ const PageWrapper = styled.div`
   position: relative;
   box-sizing: border-box;
   padding: 0;
-  min-height: 100vh;
+  min-height: 100dvh;
 `;
 
 const PaddedPageWrapper = styled.div`
   position: relative;
   box-sizing: border-box;
   padding: 75px 40px 50px;
-  min-height: 100vh;
+  min-height: 100dvh;
   animation: ${fadeInAnimation} 1ms ${cubicBezier} ${pageTransitionDuration}ms 1 backwards;
 
   @media ${screenSizes.phone} {
@@ -83,7 +83,7 @@ const Overlay = styled.div<{ $isToggled?: boolean, $type?: OverlayType, $isEvent
   top: 0;
   left: 0;
   right: 0;
-  height: 100vh;
+  height: 100dvh;
   background: rgba(0, 0, 0, ${(props) => { return props.$type === OverlayTypes.STRONG ? 0.95 : 0.5; }});
   opacity: ${(props) => { return props.$isToggled === false ? 0 : 1; }};
   pointer-events: ${(props) => { return props.$isEventBlocking === false || props.$isToggled ? 'auto' : 'none'; }};

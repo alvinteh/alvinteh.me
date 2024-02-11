@@ -396,7 +396,7 @@ const CasualDiningScene = ({ sceneIndex }: SceneProps) => {
       const dishElement: HTMLLIElement = dishRefs.current[i];
 
       timeline.from(dishElement, {
-        y: '-100vh',
+        y: '-100dvh',
         yPercent: -100,
         rotation: Math.round(360 + Math.random() * 540) * (Math.random() >= 0.5 ? 1 : -1),
         ease: 'power1.out',

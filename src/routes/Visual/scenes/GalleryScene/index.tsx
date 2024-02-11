@@ -14,7 +14,7 @@ import { Image } from './types';
 
 const Header = styled.h2`
   position: absolute;
-  top: 45vh;
+  top: 45dvh;
   left: 0;
   margin: 0;
   width: 100%;
@@ -30,7 +30,7 @@ const Header = styled.h2`
 
 const GalleryWrapper = styled.div`
   position: relative;
-  height: 100vh;
+  height: 100dvh;
   background: #202020;
 `;
 

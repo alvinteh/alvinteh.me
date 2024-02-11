@@ -25,7 +25,7 @@ const DialogElement = styled.dialog<{ $x: number}>`
   max-width: none;
   max-height: none;
   width: 84vw;
-  height: 100vh;
+  height: 100dvh;
   background: none;
   outline: none;
   overflow: visible;
@@ -53,7 +53,7 @@ const DialogElement = styled.dialog<{ $x: number}>`
 
 const DialogContent = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 `;
 

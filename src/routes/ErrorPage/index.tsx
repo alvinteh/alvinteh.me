@@ -10,7 +10,7 @@ import HeroBackground from './images/hero.jpg';
 const Background = styled.div`
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   background-image: url('${HeroBackground}');
   background-position: center;
   background-size: cover;

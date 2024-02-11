@@ -62,7 +62,7 @@ const Subscreen = styled.div.attrs<SubscreenAttrs>(({ $backgroundImage, $backgro
   left: 0;
   padding: 0;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

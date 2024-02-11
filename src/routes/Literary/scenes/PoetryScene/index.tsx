@@ -54,7 +54,7 @@ const Header = styled.h2`
   @media ${screenSizes.desktopM} {
     font-size: 3.25rem;
     line-height: 3.25rem;
-    margin-top: 10vh;
+    margin-top: 10dvh;
   }
 `;
 

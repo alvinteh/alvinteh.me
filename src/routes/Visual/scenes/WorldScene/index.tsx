@@ -28,10 +28,10 @@ const Subscreen = styled.div.attrs<SubscreenAttrs>(({ $backgroundImage, $backgro
   }
 }))`
   position: absolute;
-  top: 100vh;
+  top: 100dvh;
   padding: 0;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   background-repeat: no-repeat;
   background-size: cover;
   overflow: hidden;
@@ -39,7 +39,7 @@ const Subscreen = styled.div.attrs<SubscreenAttrs>(({ $backgroundImage, $backgro
 
 const HeaderBase = styled.h2`
   position: absolute;
-  top: 47vh;
+  top: 47dvh;
   margin: 0;
   height: 3rem;
   color: #ffffff;
@@ -50,7 +50,7 @@ const HeaderBase = styled.h2`
 `;
 
 const StartHeader = styled(HeaderBase)`
-  top: calc(45vh - 6rem);
+  top: calc(45dvh - 6rem);
   left: calc(50% - 30rem);
   width: 60rem;
   height: 12rem;
@@ -67,7 +67,7 @@ const StartHeader = styled(HeaderBase)`
 const Header = styled(HeaderBase)`
   display: flex;  
   position: absolute;
-  top: 47vh;
+  top: 47dvh;
   left: calc(50% - 18rem + 2rem);
   width: 36rem;
 `;
@@ -141,7 +141,7 @@ const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
       const headerAttributeElement: HTMLSpanElement = headerAttributeRefs.current[i];
 
       timeline.to(subscreenElement, {
-        y: '-=100vh',
+        y: '-=100dvh',
         duration: animationDurations.XSLOW,
       });
 

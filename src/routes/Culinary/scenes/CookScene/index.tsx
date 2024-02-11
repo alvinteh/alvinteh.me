@@ -33,7 +33,7 @@ interface ExtraDishAttrs {
 
 const Header1 = styled(Header1Svg)`
   position: absolute;
-  top: 35vh;
+  top: 35dvh;
   left: 50%;
   margin-left: -15vw;
   width: 30vw;
@@ -46,7 +46,7 @@ const Header1 = styled(Header1Svg)`
 
 const Header2 = styled(Header2Svg)`
   position: absolute;
-  top: 35vh;
+  top: 35dvh;
   left: 50%;
   margin-left: -30vw;
   width: 60vw;
@@ -59,7 +59,7 @@ const Header2 = styled(Header2Svg)`
 
 const Header3 = styled(Header3Svg)`
   position: absolute;
-  top: 35vh;
+  top: 35dvh;
   left: 50%;
   margin-left: -15vw;
   width: 30vw;
@@ -72,25 +72,25 @@ const Header3 = styled(Header3Svg)`
 
 const Header4 = styled(Header4Svg)`
   position: absolute;
-  top: 45vh;
+  top: 45dvh;
   left: 50%;
   margin-left: -10vw;
   width: 20vw;
 
   @media ${screenSizes.tablet} {
-    top: 40vh;
+    top: 40dvh;
     margin-left: -14vw;
     width: 28vw;
   }
 
   @media ${screenSizes.desktopM} {
-    top: 35vh;
+    top: 35dvh;
     margin-left: -17vw;
     width: 34vw;
   }
 
   @media ${aspectRatios.a21x9}, ${screenSizes.desktopXL} {
-    top: 40vh;
+    top: 40dvh;
     width: 22vw;
     margin-left: -11vw;
   }
@@ -98,7 +98,7 @@ const Header4 = styled(Header4Svg)`
 
 const Dishes = styled.ul`
   position: absolute;
-  top: 38vh;
+  top: 38dvh;
   right: 1.5vw;
   margin: 0;
   padding: 5vw 2vw 1vw;
@@ -200,18 +200,18 @@ const DishImage = styled.div.attrs<DishImageAttrs>(({ $backgroundImage }) => ({
 }))`
   position: absolute;
   top: 50%;
-  left: calc(100% + 1.5vw - 42vw - 31vh);
-  margin-top: -34vh;
-  width: 62vh;
+  left: calc(100% + 1.5vw - 42vw - 31dvh);
+  margin-top: -34dvh;
+  width: 62dvh;
   aspect-ratio: 1;
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
 
   @media ${screenSizes.tablet} {
-    left: calc(100% + 1.5vw - 50vw - 18vh);
-    width: 36vh;
-    margin-top: -18vh;
+    left: calc(100% + 1.5vw - 50vw - 18dvh);
+    width: 36dvh;
+    margin-top: -18dvh;
   }
 `;
 
@@ -253,7 +253,7 @@ const ExtraDish = styled.li.attrs<ExtraDishAttrs>(({ $backgroundImage }) => ({
   }
 
   &:nth-child(1) {
-    top: 22vh;
+    top: 22dvh;
     left: 12vw;
     transform: rotate(-8deg);
 
@@ -263,28 +263,28 @@ const ExtraDish = styled.li.attrs<ExtraDishAttrs>(({ $backgroundImage }) => ({
   }
 
   &:nth-child(2) {
-    top: 11vh;
+    top: 11dvh;
     left: 28vw;
     transform: rotate(-1deg);
 
     @media ${screenSizes.tablet} {
-      top: 16vh;
+      top: 16dvh;
     }
   }
 
   &:nth-child(3) {
-    top: 18vh;
+    top: 18dvh;
     left: 44vw;
     transform: rotate(3.5deg);
 
     @media ${screenSizes.tablet} {
-      top: 20vh;
+      top: 20dvh;
       left: 52vw;
     }
   }
 
   &:nth-child(4) {
-    top: 55vh;
+    top: 55dvh;
     left: 18vw;
     transform: rotate(-11deg);
 
@@ -294,7 +294,7 @@ const ExtraDish = styled.li.attrs<ExtraDishAttrs>(({ $backgroundImage }) => ({
   }
 
   &:nth-child(5) {
-    top: 50vh;
+    top: 50dvh;
     left: 35vw;
     transform: rotate(-1deg);
 
@@ -304,7 +304,7 @@ const ExtraDish = styled.li.attrs<ExtraDishAttrs>(({ $backgroundImage }) => ({
   }
 
   &:nth-child(6) {
-    top: 54vh;
+    top: 54dvh;
     left: 52vw;
     transform: rotate(8deg);
   }
@@ -351,7 +351,7 @@ const FaqWrapper = styled.div`
   transform: translate3d(-50%, 100%, 0);
 
   @media ${screenSizes.tablet} {
-    top: 30vh;
+    top: 30dvh;
     padding: 17.5% 12.5% 10% 8.5%;
     height: 70%;
   }
@@ -504,7 +504,7 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
       const dishInfoElement: HTMLDivElement = dishInfoRefs.current[i];
 
       timeline.from(dishElement, {
-        transform: 'translate3d(0, 100vh, 0)',
+        transform: 'translate3d(0, 100dvh, 0)',
         ease: 'power1.out',
         duration: animationDurations.MEDIUM,
       });
@@ -518,7 +518,7 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
       timeline.addLabel(`scene-${sceneIndex}-dish-${i}`);
 
       timeline.to(dishElement, {
-        transform: 'translate3d(0, -100vh, 0)',
+        transform: 'translate3d(0, -100dvh, 0)',
         ease: 'power1.out',
         duration: animationDurations.MEDIUM,
       });
@@ -552,7 +552,7 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
       const extraDishElement: HTMLLIElement = extraDishRefs.current[i];
 
       timeline.from(extraDishElement, {
-        y: '105vh', // Leave additional allowance given the rotation
+        y: '105dvh', // Leave additional allowance given the rotation
         x: 'calc(50% - 7vw - 10px)',
         ease: 'power1.out',
         duration: animationDurations.FAST,
@@ -565,7 +565,7 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
       const extraDishElement: HTMLLIElement = extraDishRefs.current[i];
 
       timeline.to(extraDishElement, {
-        y: '105vh',
+        y: '105dvh',
         x: 'calc(50% - 7vw - 10px)',
         transform: 'rotate(0)',
         ease: 'power1.out',

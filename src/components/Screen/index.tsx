@@ -10,10 +10,10 @@ const ScreenElement = styled.div.attrs<ScreenElementAttrs>(({ $backgroundImage }
   }
 }))`
   position: absolute;
-  top: 100vh;
+  top: 100dvh;
   left: 0;
   right: 0;
-  height: 100vh;
+  height: 100dvh;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

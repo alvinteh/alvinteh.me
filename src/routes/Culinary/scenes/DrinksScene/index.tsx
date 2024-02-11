@@ -37,7 +37,7 @@ const DrinksScreen = styled(Screen)`
 
 const Header = styled.h3`
   position: absolute;
-  top: 35vh;
+  top: 35dvh;
   right: 5vw;
   width: 75%;
   max-width: 40rem;
@@ -48,7 +48,7 @@ const Header = styled.h3`
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
 
   @media ${screenSizes.tablet} {
-    top: 40vh;
+    top: 40dvh;
     font-size: 3rem;
   }
 
@@ -65,7 +65,7 @@ const Drinks = styled.ul`
 
 const Drink = styled.li`
   position: absolute;
-  bottom: 3vh;
+  bottom: 3dvh;
   right: 4vw; 
   width: 18vw;
   aspect-ratio: 0.778;
@@ -77,7 +77,7 @@ const Drink = styled.li`
 
   @media ${aspectRatios.a21x9} {
     width: 14vw;
-    bottom: 1vh;
+    bottom: 1dvh;
     right: 2vw;
   }
 `;
