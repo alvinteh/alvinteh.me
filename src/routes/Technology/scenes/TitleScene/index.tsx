@@ -106,8 +106,8 @@ const QuoteAuthor = styled.div`
   font-weight: 700;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
   text-transform: uppercase;
-  animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 5000}ms 1 backwards,
-  ${changeTextColorAnimation} 1200ms ease-in-out ${pageTransitionDuration + 5000}ms 1 backwards;
+  animation: ${revealAnimation} 1200ms ease-in-out ${pageTransitionDuration + 3400}ms 1 backwards,
+  ${changeTextColorAnimation} 1200ms ease-in-out ${pageTransitionDuration + 3400}ms 1 backwards;
 `;
 
 const TitleScene = ({ sceneIndex }: { sceneIndex: number }) => {
