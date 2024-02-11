@@ -1,105 +1,126 @@
 [
   {
+    "id": 0,
     "title": "Beauty & The Blade",
     "coverSrc": "0.jpg",
     "dataSrc": "0.md"
   },
   {
+    "id": 1,
     "title": "Colors",
     "coverSrc": "1.jpg",
     "dataSrc": "1.md"
   },
   {
+    "id": 2,
     "title": "Darkness and the Bride",
     "coverSrc": "2.jpg",
     "dataSrc": "2.md"
   },
   {
+    "id": 3,
     "title": "Dreams",
     "coverSrc": "3.jpg",
     "dataSrc": "3.md"
   },
   {
+    "id": 4,
     "title": "Flutter",
     "coverSrc": "4.jpg",
     "dataSrc": "4.md"
   },
   {
+    "id": 5,
     "title": "Forlorn (Mass version)",
     "coverSrc": "5.jpg",
     "dataSrc": "5.md"
   },
   {
+    "id": 6,
     "title": "Hunted",
     "coverSrc": "6.jpg",
     "dataSrc": "6.md"
   },
   {
+    "id": 7,
     "title": "In Ash",
     "coverSrc": "7.jpg",
     "dataSrc": "7.md"
   },
   {
+    "id": 8,
     "title": "Morning Cold",
     "coverSrc": "8.jpg",
     "dataSrc": "8.md"
   },
   {
+    "id": 9,
     "title": "Novei Sinctei",
     "coverSrc": "9.jpg",
     "dataSrc": "9.md"
   },
   {
+    "id": 10,
     "title": "Ochre Petals",
     "coverSrc": "10.jpg",
     "dataSrc": "10.md"
   },
   {
+    "id": 11,
     "title": "Rainbows",
     "coverSrc": "11.jpg",
     "dataSrc": "11.md"
   },
   {
+    "id": 12,
     "title": "Raindrops",
     "coverSrc": "12.jpg",
     "dataSrc": "12.md"
   },
   {
+    "id": 13,
     "title": "Reflections",
     "coverSrc": "13.jpg",
     "dataSrc": "13.md"
   },
   {
+    "id": 14,
     "title": "Reflections (The Other Side)",
     "coverSrc": "14.jpg",
     "dataSrc": "14.md"
   },
   {
+    "id": 15,
     "title": "Snowdrops",
     "coverSrc": "15.jpg",
     "dataSrc": "15.md"
   },
   {
+    "id": 16,
     "title": "Sparda",
     "coverSrc": "16.jpg",
     "dataSrc": "16.md"
   },
   {
+    "id": 17,
     "title": "Still",
     "coverSrc": "17.jpg",
     "dataSrc": "17.md"
   },
   {
+    "id": 18,
     "title": "The Dark",
     "coverSrc": "18.jpg",
     "dataSrc": "18.md"
   },
   {
+    "id": 19,
     "title": "The Shepherd",
     "coverSrc": "19.jpg",
     "dataSrc": "19.md"
   },
   {
+    "id": 20,
     "title": "Tradition",
     "coverSrc": "20.jpg",
     "dataSrc": "20.md"

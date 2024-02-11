@@ -5,7 +5,6 @@ import { useGSAP } from '@gsap/react';
 import MarkdownIt from 'markdown-it';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { v4 as uuid } from 'uuid';
 
 import PageContext from '../../../../components/Page/PageContext';
 import Screen from '../../../../components/Screen';
@@ -118,22 +117,38 @@ const Work = styled.li.attrs<WorkAttrs>(({ $backgroundImage }) => ({
   }
 `;
 
+// Note: we use this constant as we need to refer to styles in JS later
+const WorkLayoutSettings: Record<string, Record<string, number>> = {
+  columnGap: {
+    normal: 45,
+    collapsed: 15,
+  },
+  workWidth: {
+    normal: 165,
+    collapsed: 55,
+  },
+  workHeight: {
+    normal: 255,
+    collapsed: 85,
+  }
+};
+
 const Works = styled.ul.attrs<WorksAttrs>(({ $scrollPosition }) => ({
   style: {
-    transform: `translate3d(${$scrollPosition}%, 0, 0)`,
+    transform: `translate3d(${$scrollPosition}px, 0, 0)`,
   }
 }))<{ $isCollapsed: boolean }>`
   display: grid;
   margin: 0;
   padding: 0;
-  column-gap: ${(props) => { return props.$isCollapsed ? 15 : 45; }}px;
+  column-gap: ${(props) => { return WorkLayoutSettings.columnGap[props.$isCollapsed ? 'collapsed' : 'normal']; }}px;
   grid-auto-flow: column;
   list-style: none;
   transition: all ${animationDurations.MEDIUM}s ${cubicBezier};
 
   & > ${Work} {
-    width: ${(props) => { return props.$isCollapsed ? 55: 165; }}px;
-    height: ${(props) => { return props.$isCollapsed ? 85: 255; }}px;
+    width: ${(props) => { return WorkLayoutSettings.workWidth[props.$isCollapsed ? 'collapsed' : 'normal']; }}px;
+    height: ${(props) => { return WorkLayoutSettings.workHeight[props.$isCollapsed ? 'collapsed' : 'normal']; }}px;
   }
 `;
 
@@ -227,10 +242,11 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
   gsap.registerPlugin(SplitText);
 
   const handlePrevButtonClick = (event: React.MouseEvent): void => {
+    const worksElement: HTMLUListElement = worksRef.current;
     const scrollLimit = 0;
 
     if (worksScrollPosition < scrollLimit) {
-      const newScrollPosition: number = Math.min(worksScrollPosition + 100, scrollLimit);
+      const newScrollPosition: number = Math.min(worksScrollPosition + worksElement.clientWidth, scrollLimit);
 
       // Remove inline opacity set by GSAP
       nextButtonRef.current.style.removeProperty('opacity');
@@ -249,11 +265,10 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
 
   const handleNextButtonClick = (event: React.MouseEvent): void => {
     const worksElement: HTMLUListElement = worksRef.current;
-    const scrollLimit: number = Math.floor((worksElement.clientWidth - worksElement.scrollWidth) * 1000
-      / worksElement.clientWidth) / 10;
+    const scrollLimit: number = worksElement.clientWidth - worksElement.scrollWidth;
 
     if (worksScrollPosition > scrollLimit) {
-      const newScrollPosition: number = Math.max(worksScrollPosition - 100, scrollLimit);
+      const newScrollPosition: number = Math.max(worksScrollPosition - worksElement.clientWidth, scrollLimit);
 
       // Remove inline opacity set by GSAP
       prevButtonRef.current.style.removeProperty('opacity');
@@ -269,6 +284,47 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
   };
+
+  useEffect((): void => {
+    const workLayoutSettingsState: string = currentWork ? 'collapsed' : 'normal';
+    // Update scroll position if it is past the limit due to element resizing.
+    const worksElement: HTMLUListElement = worksRef.current;
+    // Note: we need to manually calculate the scroll width as the styles are not applied till
+    // after the transition is over
+    const scrollWidth: number = works.length * WorkLayoutSettings.workWidth[workLayoutSettingsState]
+      + (works.length - 1) * WorkLayoutSettings.columnGap[workLayoutSettingsState];
+    const scrollLimit: number = worksElement.clientWidth - scrollWidth;
+    let updatedWorksScrollPosition: number = worksScrollPosition;
+
+    if (worksScrollPosition <= scrollLimit) {
+      updatedWorksScrollPosition = scrollLimit;
+      setWorksScrollPosition(scrollLimit);
+      setIsNextButtonEnabled(false);
+    }
+
+    if (!currentWork) {
+      return;
+    }
+
+    // Update scroll position if current work is not visible
+    const currentWorkIndex: number = workRefs.current.findIndex((element: HTMLLIElement): boolean => {
+      return element.dataset.id === currentWork.id.toString();
+    });
+    const currentWorkPosition: number = currentWorkIndex * WorkLayoutSettings.workWidth[workLayoutSettingsState]
+    + currentWorkIndex * WorkLayoutSettings.columnGap[workLayoutSettingsState];
+
+    if (currentWorkPosition < -1 * updatedWorksScrollPosition) {
+      setWorksScrollPosition(-1 * currentWorkPosition);
+    }
+    else if (currentWorkPosition + WorkLayoutSettings.workWidth[workLayoutSettingsState]
+      < updatedWorksScrollPosition) {
+      setWorksScrollPosition(currentWorkPosition + WorkLayoutSettings.workWidth[workLayoutSettingsState]);
+    }
+
+  // We can ignore this linting error as we do *not* want to run this effect if scroll position changes
+  // (typically from interaction with the prev/next buttons)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [works, currentWork]);
 
   useEffect((): void => {
     setIsReaderActive(!!currentWork);
@@ -373,6 +429,12 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
       ease: 'power1.inOut',
       duration: animationDurations.MEDIUM,
       stagger: animationDurations.XFAST,
+      onComplete: (): void => {
+        for (const element of initialWorkElements) {
+          element.style.removeProperty('filter');
+          element.style.removeProperty('opacity');
+        }
+      }
     });
 
     timeline.from([prevButtonRef.current, nextButtonRef.current], {
@@ -393,12 +455,13 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
 
   const workElements: JSX.Element[] = useMemo((): JSX.Element[] => {
     return works.map((work: Work): JSX.Element => {
-      const state: string = currentWork ? (currentWork.dataSrc === work.dataSrc ? 'active' : 'dulled') : 'default';
+      const state: string = currentWork ? (currentWork.id === work.id ? 'active' : 'dulled') : 'default';
 
       return (
         <Work
           ref={setWorkRef}
-          key={uuid()}
+          key={work.id}
+          data-id={work.id}
           $backgroundImage={work.coverSrc}
           $state={state}
           onClick={(event: React.MouseEvent): void => {
