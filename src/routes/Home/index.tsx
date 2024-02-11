@@ -4,6 +4,7 @@ import styled, { keyframes } from 'styled-components';
 import { cubicBezier, FullPageWrapper, SiteHeader } from '../../components/static';
 import { useDispatch, useSelector } from '../../core/hooks';
 import { open } from '../../slices/nav';
+import { screenSizes } from '../../utils/ResponsiveUtils';
 
 import HeroBackground from './images/hero.jpg';
 
@@ -152,6 +153,10 @@ const SteamContainer = styled.div`
   height: 30%;
   container-type: size; 
   justify-content: center;
+
+  @media ${screenSizes.phone} {
+    display: none;
+  }
 `;
 
 const Steam = styled.span<{ $value: number }>`
@@ -187,6 +192,10 @@ const Hero = styled.div<{ $isNavOpen: boolean }>`
     pointer-events: none;
     transition: opacity ${cubicBezier} 800ms;
   }
+
+  @media ${screenSizes.phone} {
+    background-position: 75% bottom;
+  }
 `;
 
 const HeroText = styled.div`
@@ -195,6 +204,13 @@ const HeroText = styled.div`
   left: 50px;
   width: 46%;
   max-width: 60rem;
+
+  @media ${screenSizes.phone} {
+    top: 50%;
+    left: 20px;
+    right: 20px;
+    width: auto;
+  }
 `;
 
 const SiteTitle = styled.h2`
@@ -205,6 +221,10 @@ const SiteTitle = styled.h2`
   font-weight: 600;
   opacity: 0.85;
   text-transform: uppercase;
+
+  @media ${screenSizes.phone} {
+    font-size: 5rem;
+  }
 `;
 
 const SiteDescription = styled.p`
@@ -215,6 +235,11 @@ const SiteDescription = styled.p`
   font-style: italic;
   font-weight: 600;
   opacity: 0.8;
+
+  @media ${screenSizes.phone} {
+    color: #ffffff;
+    font-size: 1.8rem;
+  }
 `;
 
 const DiscoverButton = styled.a`
@@ -241,6 +266,10 @@ const NoticeText = styled.span`
   position: absolute;
   bottom: 20px;
   right: 20px;
+
+  @media ${screenSizes.phone} {
+    font-size: 0.8rem;
+  }
 `;
 
 const Home = () => {
