@@ -118,8 +118,34 @@ const ScrollPromptWrapper = styled.span<{ $isVisible: boolean }>`
   }
 `;
 
+const MobileNotice = styled.div`
+  display: block;
+  position: fixed;
+  bottom: 10px;
+  left: 20px;
+  right: 20px;
+  border-radius: 8px;
+  padding: 10px;
+  height: fit-content;
+  background: #ffffff;
+  color: #202020;
+  font-family: Lato, sans-serif;
+  font-size: 1rem;
+  line-height: 1.3rem;
+  text-align: center;
+`;
+
 const ScrollPrompt = () => {
-  const { isEnabled, pageObserverName } = useContext(ScrollPromptContext);
+  const { isEnabled, pageObserverName, isMobileReady } = useContext(ScrollPromptContext);
+
+  if (!isMobileReady) {
+    return (
+      <MobileNotice>
+        Sorry, this page is currently unavailable on mobile devices.
+        Please visit again on your tablet or computer.
+      </MobileNotice>
+    );
+  }
 
   gsap.registerPlugin(Observer);
 

@@ -8,7 +8,7 @@ import TitleScene from './scenes/TitleScene';
 
 const Culinary = () => {
   return (
-    <Page titleSuffix="Culinary" shouldHaveScrollPrompt={true}>
+    <Page titleSuffix="Culinary" shouldHaveScrollPrompt={true} isMobileReady={false}>
       <TitleScene sceneIndex={0} />
       <FineDiningScene sceneIndex={1} />
       <CasualDiningScene sceneIndex={2} />

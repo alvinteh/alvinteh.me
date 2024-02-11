@@ -26,10 +26,11 @@ const ParallaxPageWrapper = styled.div`
   overflow: hidden;
 `;
 
-const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
+const Page = ({ titleSuffix, shouldHaveScrollPrompt, isMobileReady, children }: {
   titleSuffix: string,
   shouldHaveScrollPrompt: boolean,
-  children: React.ReactNode
+  isMobileReady?: boolean,
+  children: React.ReactNode,
 }) => {
   const pageRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const [sceneRefs, setSceneRefs] = useState<React.MutableRefObject<HTMLDivElement>[]>([]);
@@ -42,6 +43,10 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
   gsap.registerPlugin(Observer);
 
   useGSAP((): void => {
+    if (!isMobileReady) {
+      return;
+    }
+
     const sceneCount: number = Children.count(children);
 
     // Skip processing if the scene refs/timelines have not been registered
@@ -258,6 +263,7 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, children }: {
           isEnabled: isScrollPromptEnabled,
           setIsEnabled: setIsScrollPromptEnabled,
           pageObserverName,
+          isMobileReady,
         }}>
         <SiteHeader><Link to="/" state={{ isForcedHomeNavigation: true }}>Alvin Teh</Link></SiteHeader>
         <ParallaxPageWrapper ref={pageRef}>
