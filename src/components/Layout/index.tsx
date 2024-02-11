@@ -166,7 +166,6 @@ const LinkDescription = styled.span`
 
   @media ${screenSizes.phone} {
     font-size: 1.1rem;
-    opacity: 1;
     filter: none;
     transform: translate3d(0, 0, 0);
   }
@@ -269,6 +268,12 @@ const NavItem = styled.li.attrs<NavItemAttrs>(({ $backgroundImage }) => ({
 
     @media ${screenSizes.phone} {
       transform: none;
+    }
+  }
+
+  & ${LinkDescription} {
+    @media ${screenSizes.phone} {
+      opacity: ${(props) => { return props.$state === NavItemStates.DEFAULT ? 1 : 0; }};
     }
   }
 `;
