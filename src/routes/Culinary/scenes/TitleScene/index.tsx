@@ -66,6 +66,10 @@ const QuoteText = styled.div`
   font-weight: 600;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
 
+  @media ${screenSizes.phone} {
+    font-size: 3rem;
+  }
+
   @media ${screenSizes.tablet} {
     font-size: 3rem;
   }
