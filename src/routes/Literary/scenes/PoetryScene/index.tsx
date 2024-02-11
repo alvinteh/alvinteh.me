@@ -2,6 +2,7 @@ import { gsap } from 'gsap';
 import { Observer } from 'gsap/Observer';
 import { SplitText } from 'gsap/SplitText';
 import { useGSAP } from '@gsap/react';
+import MarkdownIt from 'markdown-it';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
@@ -23,6 +24,12 @@ interface WorksAttrs {
 interface WorkAttrs {
   $backgroundImage: string;
 }
+
+const StyledPaddedPageWrapper = styled(PaddedPageWrapper)`
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+`;
 
 const Header = styled.h2`
   position: relative;
@@ -54,12 +61,12 @@ const Header = styled.h2`
 
 const WriteupWrapper = styled.div<{ $isVisible: boolean }>`
   display: grid;
-  margin: 0 0 4rem;
+  margin: 0 0 ${(props) => { return props.$isVisible ? 4 : 0; }}rem;
   max-width: 50rem;
   grid-template-rows: ${(props) => { return props.$isVisible ? 1 : 0; }}fr;
   opacity: ${(props) => { return props.$isVisible ? 1 : 0; }};
   transition: opacity ${animationDurations.FAST}s ${cubicBezier},
-    margin-bottom ${animationDurations.MEDIUM}s ${cubicBezier} ${animationDurations.FAST}s;
+    margin-bottom ${animationDurations.MEDIUM}s ${cubicBezier} ${animationDurations.FAST}s,
     grid-template-rows ${animationDurations.MEDIUM}s ${cubicBezier} ${animationDurations.FAST}s;
 `;
 
@@ -72,48 +79,32 @@ const Writeup = styled.p`
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
 `;
 
-const WorksSlider = styled.div`
+const WorksWrapper = styled.div`
   position: relative;
   max-width: 50rem;
 `;
 
-const WorksWrapper = styled.div`
+const WorksSlider = styled.div`
   border-top: solid 1px rgba(255, 255, 255, 0.5);
   border-bottom: solid 1px rgba(255, 255, 255, 0.5);
   padding: 25px 0;
-  height: 255px;
   overflow: hidden;
-`;
-
-const Works = styled.ul.attrs<WorksAttrs>(({ $scrollPosition }) => ({
-  style: {
-    transform: `translate3d(${$scrollPosition}px, 0, 0)`,
-  }
-}))<{ $isVisible: boolean }>`
-  display: grid;
-  margin: 0;
-  padding: 0;
-  column-gap: 45px;
-  grid-auto-flow: column;
-  list-style: none;
-  transition: transform ${animationDurations.MEDIUM}s ${cubicBezier};
 `;
 
 const Work = styled.li.attrs<WorkAttrs>(({ $backgroundImage }) => ({
   style: {
     backgroundImage: `url(${$backgroundImage})`,
   }
-}))`
+}))<{ $state: string }>`
   margin: 0;
   padding: 0;
-  width: 165px;
-  height: 255px;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0);
   cursor: pointer;
-  filter: brightness(0.9);
+  filter: brightness(${(props) => { return props.$state === 'active' ? 1 : 0.9 }});
+  opacity: ${(props) => { return props.$state === 'dulled' ? 0.5 : 1 }};
   overflow: hidden;
   text-indent: 100%;
   white-space: nowrap;
@@ -122,7 +113,52 @@ const Work = styled.li.attrs<WorkAttrs>(({ $backgroundImage }) => ({
   &:hover {
     filter: brightness(1) !important;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.7);
+    opacity: 1;
     transform: scale3d(1.05, 1.05, 1.05);
+  }
+`;
+
+const Works = styled.ul.attrs<WorksAttrs>(({ $scrollPosition }) => ({
+  style: {
+    transform: `translate3d(${$scrollPosition}%, 0, 0)`,
+  }
+}))<{ $isCollapsed: boolean }>`
+  display: grid;
+  margin: 0;
+  padding: 0;
+  column-gap: ${(props) => { return props.$isCollapsed ? 15 : 45; }}px;
+  grid-auto-flow: column;
+  list-style: none;
+  transition: all ${animationDurations.MEDIUM}s ${cubicBezier};
+
+  & > ${Work} {
+    width: ${(props) => { return props.$isCollapsed ? 55: 165; }}px;
+    height: ${(props) => { return props.$isCollapsed ? 85: 255; }}px;
+  }
+`;
+
+const ReaderWrapper = styled.div<{ $isActive: boolean}>`
+  display: grid;  
+  flex: 1;
+  grid-template-rows: ${(props) => { return props.$isActive ? 1 : 0; }}fr;
+  max-width: 50rem;
+  overflow: hidden;
+  transition: all ${animationDurations.FAST}s ${cubicBezier};
+`;
+
+const Reader = styled.div`  
+  box-sizing: border-box;
+  padding: 25px 20px;
+  height: 100%;
+  font-family: 'Crimson Text', serif;
+  font-size: 1.6rem;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+
+  p {
+    margin-bottom: 2rem;
   }
 `;
 
@@ -173,27 +209,28 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
   const [worksScrollPosition, setWorksScrollPosition] = useState<number>(0);
   const [isPrevButtonEnabled, setIsPrevButtonEnabled] = useState<boolean>(false);
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
-  const [isDetailViewActive, setIsDetailViewActive] = useState<boolean>(false);
+  const [isReaderActive, setIsReaderActive] = useState<boolean>(false);
+  const [currentWork, setCurrentWork] = useState<Work>();
 
   // Screen refs
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const headerRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
   const writeupWrapperRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const writeupRef = useRef<HTMLParagraphElement>() as React.MutableRefObject<HTMLParagraphElement>;
-  const worksWrapperRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+  const worksSliderRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const worksRef = useRef<HTMLUListElement>() as React.MutableRefObject<HTMLUListElement>;
   const workRefs = useRef<HTMLLIElement[]>([]);
   const prevButtonRef = useRef<HTMLAnchorElement>() as React.MutableRefObject<HTMLAnchorElement>;
   const nextButtonRef = useRef<HTMLAnchorElement>() as React.MutableRefObject<HTMLAnchorElement>;
+  const readerRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 
   gsap.registerPlugin(SplitText);
 
-  const handlePrevButtonClick = (): void => {
-    const worksElement: HTMLUListElement = worksRef.current;
+  const handlePrevButtonClick = (event: React.MouseEvent): void => {
     const scrollLimit = 0;
 
     if (worksScrollPosition < scrollLimit) {
-      const newScrollPosition: number = Math.min(worksScrollPosition + worksElement.clientWidth, scrollLimit);
+      const newScrollPosition: number = Math.min(worksScrollPosition + 100, scrollLimit);
 
       // Remove inline opacity set by GSAP
       nextButtonRef.current.style.removeProperty('opacity');
@@ -205,14 +242,18 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
         setIsPrevButtonEnabled(false);
       }
     }
+
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
   };
 
-  const handleNextButtonClick = (): void => {
+  const handleNextButtonClick = (event: React.MouseEvent): void => {
     const worksElement: HTMLUListElement = worksRef.current;
-    const scrollLimit: number = worksElement.clientWidth - worksElement.scrollWidth;
+    const scrollLimit: number = Math.floor((worksElement.clientWidth - worksElement.scrollWidth) * 1000
+      / worksElement.clientWidth) / 10;
 
     if (worksScrollPosition > scrollLimit) {
-      const newScrollPosition: number = Math.max(worksScrollPosition - worksElement.clientWidth, scrollLimit);
+      const newScrollPosition: number = Math.max(worksScrollPosition - 100, scrollLimit);
 
       // Remove inline opacity set by GSAP
       prevButtonRef.current.style.removeProperty('opacity');
@@ -224,22 +265,32 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
         setIsNextButtonEnabled(false);
       }
     }
+
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
   };
 
-  const handleWorkClick = (work: Work): void => {
-    // DONE: Hide <Writeup>
-    // DONE: Shift <WorksWrapper> up
+  useEffect((): void => {
+    setIsReaderActive(!!currentWork);
 
-    // Hide <Works>
-    // Expand <WorkView>
+    if (!currentWork) {
+      readerRef.current.innerHTML = '';
+      return;
+    }
 
-    setIsDetailViewActive(true);
-
-    // TO-DO: Load and render markdown
-    console.log(work);
-
-    // TO-DO: Reset changes when leaving detail view or scene (setIsDetailViewActive = false)
-  };
+    void (async (): Promise<void> => {
+      try {
+        const workMd: string = await (await fetch(`/data/works/docs/${currentWork.dataSrc}`)).text();
+        const md = new MarkdownIt();
+        const renderedWorkMd: string = md.render(workMd);
+  
+        readerRef.current.innerHTML = renderedWorkMd;
+      }
+      catch (e) {
+        readerRef.current.innerHTML = 'Sorry, an error occured retrieving this work.';
+      }
+    })();
+  }, [worksScrollPosition, currentWork]);
 
   useEffect((): void => {
     const observer: Observer | undefined = Observer.getById(pageObserverName);
@@ -248,13 +299,13 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
       return;
     }
 
-    if (isDetailViewActive) {
+    if (isReaderActive) {
       observer.disable();
     }
     else {
       observer.enable();
     }
-  }, [pageObserverName, isDetailViewActive]);
+  }, [pageObserverName, isReaderActive]);
 
   // Screen animation
   useGSAP((): void => {
@@ -287,17 +338,21 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
       stagger: animationDurations.XXFAST,
     });
 
-    timeline.from(worksWrapperRef.current, {
+    timeline.from(worksSliderRef.current, {
       opacity: 0,
       ease: 'power1.inOut',
       duration: animationDurations.FAST,
     });
 
-    timeline.from(worksWrapperRef.current, {
+    timeline.from(worksSliderRef.current, {
       padding: 0,
       height: 0,
       ease: 'power1.inOut',
       duration: animationDurations.MEDIUM,
+      onComplete: (): void => {
+        // Remove inline style added by GSAP
+        worksSliderRef.current.style.removeProperty('height');
+      }
     });
 
     const workElements: HTMLLIElement[] = workRefs.current;
@@ -338,24 +393,32 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
 
   const workElements: JSX.Element[] = useMemo((): JSX.Element[] => {
     return works.map((work: Work): JSX.Element => {
+      const state: string = currentWork ? (currentWork.dataSrc === work.dataSrc ? 'active' : 'dulled') : 'default';
+
       return (
         <Work
           ref={setWorkRef}
           key={uuid()}
           $backgroundImage={work.coverSrc}
-          onClick={(): void => { handleWorkClick(work); }}
+          $state={state}
+          onClick={(event: React.MouseEvent): void => {
+            setCurrentWork(work);
+
+            event.stopPropagation();
+            event.nativeEvent.stopImmediatePropagation();
+          }}
         >
           {work.title}
         </Work>
       );
     })
-  }, [works]);
+  }, [currentWork, works]);
 
   return (
     <Screen innerRef={screenRef} backgroundImage={SceneBackground}>
-      <PaddedPageWrapper>
+      <StyledPaddedPageWrapper>
         <Header ref={headerRef}>Painting Life with Words</Header>
-        <WriteupWrapper ref={writeupWrapperRef} $isVisible={!isDetailViewActive}>
+        <WriteupWrapper ref={writeupWrapperRef} $isVisible={!isReaderActive}>
           <Writeup ref={writeupRef}>
           As someone predisposed towards rumination, I often indulge in intellectual musings and pen my thoughts for later
           reflection. Literature is my preferred medium of expression, and poetry is my song.
@@ -364,16 +427,31 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
           Below is a curated list of my writing.
           </Writeup>
         </WriteupWrapper>
-        <WorksSlider>
-          <WorksWrapper ref={worksWrapperRef}>
-            <Works ref={worksRef} $scrollPosition={worksScrollPosition} $isVisible={!isDetailViewActive}>
+        <WorksWrapper>
+          <WorksSlider ref={worksSliderRef} onClick={(): void => { setCurrentWork(undefined); }}>
+            <Works ref={worksRef} $scrollPosition={worksScrollPosition} $isCollapsed={isReaderActive} >
               {workElements}
             </Works>
-            <PrevButton ref={prevButtonRef} $isEnabled={isPrevButtonEnabled} onClick={handlePrevButtonClick}>Prev</PrevButton>
-            <NextButton ref={nextButtonRef} $isEnabled={isNextButtonEnabled} onClick={handleNextButtonClick}>Next</NextButton>
-          </WorksWrapper>
-        </WorksSlider>
-      </PaddedPageWrapper>
+            <PrevButton
+              ref={prevButtonRef}
+              $isEnabled={isPrevButtonEnabled}
+              onClick={handlePrevButtonClick}
+            >
+              Prev
+            </PrevButton>
+            <NextButton
+              ref={nextButtonRef}
+              $isEnabled={isNextButtonEnabled}
+              onClick={handleNextButtonClick}
+            >
+              Next
+            </NextButton>
+          </WorksSlider>
+        </WorksWrapper>
+        <ReaderWrapper $isActive={isReaderActive}>
+          <Reader ref={readerRef} />
+        </ReaderWrapper>
+      </StyledPaddedPageWrapper>
     </Screen>
   );
 };
