@@ -45,6 +45,10 @@ const Quote = styled.blockquote`
     top: 25vh;
   }
 
+  @media ${screenSizes.phone} {
+    top: 10vh;
+  }
+
   @media ${screenSizes.desktopM} {
     top: 25vh;
   }
@@ -57,7 +61,7 @@ const QuoteText = styled.div`
   font-weight: 600;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
 
-  @media ${screenSizes.tablet} {
+  @media ${screenSizes.phone}, ${screenSizes.tablet} {
     font-size: 3rem;
   }
 
