@@ -163,6 +163,13 @@ const LinkDescription = styled.span`
   opacity: 0;
   transform: translate3d(0, 20px, 0);
   transition: transform 1ms 1200ms linear, opacity 400ms 100ms linear, filter 400ms 100ms linear;
+
+  @media ${screenSizes.phone} {
+    font-size: 1.1rem;
+    opacity: 1;
+    filter: none;
+    transform: translate3d(0, 0, 0);
+  }
 `;
 
 const Link = styled(LinkRR)`
@@ -178,9 +185,7 @@ const Link = styled(LinkRR)`
   z-index: 1;
 
   @media ${screenSizes.phone} {
-    padding-top: 0;
-    top: 50%;
-    line-height: 100%;
+    padding-top: 15%;
   }
 `;
 
@@ -261,6 +266,10 @@ const NavItem = styled.li.attrs<NavItemAttrs>(({ $backgroundImage }) => ({
     color: rgba(255, 255, 255, ${(props) => { return props.$state === NavItemStates.DEFAULT ? 1 : 0; }});
     transform: ${(props) => { return props.$state === NavItemStates.DULLED ? 'rotate(90deg)' : 'none'; }};
     transition: filter 400ms, color 400ms;
+
+    @media ${screenSizes.phone} {
+      transform: none;
+    }
   }
 `;
 
@@ -318,6 +327,7 @@ const Main = styled.main.attrs<MainAttrs>(({ $isPageOpen, $currentPageIndex }) =
 
   @media ${screenSizes.phone} {
     width: 100%;
+    transform: none !important;
   }
 `;
 
