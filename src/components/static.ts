@@ -56,6 +56,10 @@ const PaddedPageWrapper = styled.div`
   padding: 75px 40px 50px;
   min-height: 100vh;
   animation: ${fadeInAnimation} 1ms ${cubicBezier} ${pageTransitionDuration}ms 1 backwards;
+
+  @media ${screenSizes.phone} {
+    padding: 70px 20px 30px;
+  }
 `;
 
 const PageTitle = styled.h1`

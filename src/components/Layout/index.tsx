@@ -315,6 +315,10 @@ const Main = styled.main.attrs<MainAttrs>(({ $isPageOpen, $currentPageIndex }) =
   position: relative;
   width: 84%;
   min-height: 100vh;
+
+  @media ${screenSizes.phone} {
+    width: 100%;
+  }
 `;
 
 const StyledSiteHeader = styled(SiteHeader)<{ $isVisible: boolean }>`

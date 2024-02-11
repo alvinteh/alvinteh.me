@@ -56,6 +56,11 @@ const HeroTitle = styled.h1`
   text-align: center;
   text-transform: uppercase;
 
+  @media ${screenSizes.phone} {
+    width: 100vw;
+    font-size: 4.3rem;
+  }
+
   @media ${screenSizes.desktopM} {
     font-size: 16rem;
   }
@@ -106,6 +111,14 @@ const Writeup = styled.div`
   animation: ${fadeInAnimation} 1600ms ease-in-out ${pageTransitionDuration + 2000}ms 1 backwards,
     ${moveUpAnimation} 1600ms ease-in-out ${pageTransitionDuration + 2000}ms 1 backwards;
   
+  @media ${screenSizes.phone} {
+    top: 48%;
+    left: 20px;
+    right: 20px;
+    width: calc(100% - 40px);
+    font-size: 1.4rem;
+  }
+
   @media ${screenSizes.desktopM} {
     font-size: 2.4rem;
   }
@@ -130,6 +143,10 @@ const Activities = styled.ul`
   z-index: 99;
   animation: ${fadeInAnimation} 1200ms ease-in-out ${pageTransitionDuration + 3600}ms 1 backwards,
     ${moveUpAnimation} 1200ms ease-in-out ${pageTransitionDuration + 3600}ms 1 backwards;
+
+  @media ${screenSizes.phone} {
+    bottom: 12%;
+  }
 
   @media ${screenSizes.desktopS} {
     bottom: 15%;
@@ -189,6 +206,10 @@ const Link = styled(LinkRR)`
     &::after {
       transform: scale3d(1, 1, 1);
     }
+  }
+
+  @media ${screenSizes.phone} {
+    font-size: 1.3rem;
   }
 `;
 
