@@ -96,6 +96,10 @@ const MiscLink = styled.a`
   &:hover {
     color: #808080;
   }
+
+  @media ${screenSizes.phone} {
+    font-size: 0.7rem;
+  }
 `;
 
 const MenuLink = styled(MiscLink)<{ $isNavOpen: boolean, $isPageOpen: boolean }>`
@@ -103,6 +107,11 @@ const MenuLink = styled(MiscLink)<{ $isNavOpen: boolean, $isPageOpen: boolean }>
   left: 50px;
   color: rgba(255, 255, 255, ${(props) => { return (props.$isNavOpen ? 0 : 1); }});
   transition: all ${cubicBezier} 200ms;
+
+  @media ${screenSizes.phone} {
+    top: 15px;
+    left: 20px;
+  }
 
   &::after {
     display: block;
@@ -126,6 +135,11 @@ const MenuLink = styled(MiscLink)<{ $isNavOpen: boolean, $isPageOpen: boolean }>
 const ConnectLink = styled(MiscLink)`
   top: 25px;
   right: 50px;
+
+  @media ${screenSizes.phone} {
+    top: 15px;
+    right: 20px;
+  }
 `;
 
 const LinkText = styled.span`
@@ -162,6 +176,12 @@ const Link = styled(LinkRR)`
   height: 100%;
   cursor: pointer;
   z-index: 1;
+
+  @media ${screenSizes.phone} {
+    padding-top: 0;
+    top: 50%;
+    line-height: 100%;
+  }
 `;
 
 // Note: background images should be at least 768/1037/3226px (cropped/hovered/expanded) * 2160px
@@ -223,6 +243,19 @@ const NavItem = styled.li.attrs<NavItemAttrs>(({ $backgroundImage }) => ({
     }
   }
 
+  @media ${screenSizes.phone} {
+    flex: ${(props) => {
+      if (props.$state === NavItemStates.CURRENT) {
+        return 21;
+      }
+      if (props.$state === NavItemStates.DULLED) {
+        return 0;
+      }
+      
+      return  1;
+    }};
+  }
+
   & ${LinkText} {
     filter: blur(${(props) => { return props.$state === NavItemStates.DEFAULT ? 0 : '1rem'; }});
     color: rgba(255, 255, 255, ${(props) => { return props.$state === NavItemStates.DEFAULT ? 1 : 0; }});
@@ -237,6 +270,10 @@ const NavList = styled.ul<{ $isPageOpen: boolean }>`
   width: 100%;
   height: 100%;
   list-style: none;
+
+  @media ${screenSizes.phone} {
+    flex-direction: column;
+  }
 
   &:hover > ${NavItem}:not(:hover) {
     &::after {

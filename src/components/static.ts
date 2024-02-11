@@ -100,6 +100,12 @@ const SiteHeader = styled.h2`
   transition: all ${animationDurations.FAST}s ${cubicBezier};
   animation: ${fadeInAnimation} ${animationDurations.FAST}s ${cubicBezier} ${pageTransitionDuration}ms 1 backwards;
 
+  @media ${screenSizes.phone} {
+    width: 100px;
+    height: 56px;
+    left: calc(50% - 50px);
+  }
+
   &:hover {
     filter: drop-shadow(3px 3px 6px rgb(255 255 255 / 0.6));
   }
