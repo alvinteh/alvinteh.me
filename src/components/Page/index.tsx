@@ -15,15 +15,23 @@ import {
 } from '../../utils/AnimationUtils';
 import { flattenLabels, getSortedLabels } from '../../utils/GSAPUtils';
 import { setPageTitle } from '../../utils/PageUtils';
+import { screenSizes } from '../../utils/ResponsiveUtils';
 import ScrollPromptContext from '../ScrollPrompt/ScrollPromptContext';
 import ScrollPrompt from '../ScrollPrompt';
 import { SiteHeader } from '../static';
 import PageContext from './PageContext';
 
-const ParallaxPageWrapper = styled.div`
+
+const ParallaxPageWrapper = styled.div<{ $isMobileReady: boolean }>`
   position: relative;
   height: 100vh;
   overflow: hidden;
+
+  &>*:not(:first-child):not(:last-child) {
+    @media ${screenSizes.phone} {
+      display: ${(props) => { return props.$isMobileReady ? 'block' : 'none'; }};
+    }
+  }
 `;
 
 const Page = ({ titleSuffix, shouldHaveScrollPrompt, isMobileReady, children }: {
@@ -43,10 +51,6 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, isMobileReady, children }: 
   gsap.registerPlugin(Observer);
 
   useGSAP((): void => {
-    if (!isMobileReady) {
-      return;
-    }
-
     const sceneCount: number = Children.count(children);
 
     // Skip processing if the scene refs/timelines have not been registered
@@ -266,7 +270,7 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, isMobileReady, children }: 
           isMobileReady,
         }}>
         <SiteHeader><Link to="/" state={{ isForcedHomeNavigation: true }}>Alvin Teh</Link></SiteHeader>
-        <ParallaxPageWrapper ref={pageRef}>
+        <ParallaxPageWrapper ref={pageRef} $isMobileReady={!!isMobileReady}>
           {children}
           {shouldHaveScrollPrompt && <ScrollPrompt />}
         </ParallaxPageWrapper>
