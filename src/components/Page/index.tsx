@@ -14,13 +14,13 @@ import {
   pageTimelineId,
 } from '../../utils/AnimationUtils';
 import { flattenLabels, getSortedLabels } from '../../utils/GSAPUtils';
-import { setPageTitle } from '../../utils/PageUtils';
+import { setPageMeta, setPageTitle } from '../../utils/PageUtils';
 import { screenSizes } from '../../utils/ResponsiveUtils';
 import ScrollPromptContext from '../ScrollPrompt/ScrollPromptContext';
 import ScrollPrompt from '../ScrollPrompt';
 import { SiteHeader } from '../static';
 import PageContext from './PageContext';
-
+import { PageMeta } from './types';
 
 const ParallaxPageWrapper = styled.div<{ $isMobileReady: boolean }>`
   position: relative;
@@ -34,8 +34,8 @@ const ParallaxPageWrapper = styled.div<{ $isMobileReady: boolean }>`
   }
 `;
 
-const Page = ({ titleSuffix, shouldHaveScrollPrompt, isMobileReady, children }: {
-  titleSuffix: string,
+const Page = ({ meta, shouldHaveScrollPrompt, isMobileReady, children }: {
+  meta: PageMeta,
   shouldHaveScrollPrompt: boolean,
   isMobileReady?: boolean,
   children: React.ReactNode,
@@ -169,7 +169,7 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, isMobileReady, children }: 
 
         if (currentSceneIndex !== targetSceneIndex) {
           const targetSceneTitle = sceneTitles[targetSceneIndex];
-          setPageTitle(targetSceneTitle ? `${targetSceneTitle} | ${titleSuffix}` : titleSuffix);
+          setPageTitle(targetSceneTitle ? `${targetSceneTitle} | ${meta.title}` : meta.title);
         }
       };
       
@@ -223,7 +223,8 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, isMobileReady, children }: 
     });
 
     setPageObserverName(pageObserverName);
-    setPageTitle(titleSuffix);
+    setPageTitle(meta.title);
+    setPageMeta({ description: meta.description, image: meta.image });
   }, [children, sceneRefs, sceneTimelines]);
  
   const registerScene = useCallback((
@@ -262,7 +263,7 @@ const Page = ({ titleSuffix, shouldHaveScrollPrompt, isMobileReady, children }: 
   }, [isDialogToggled, pageObserverName]);
 
   return (
-    <PageContext.Provider value={{ titleSuffix, pageObserverName, registerScene }}>
+    <PageContext.Provider value={{ pageObserverName, registerScene }}>
       <ScrollPromptContext.Provider value={{
           isEnabled: isScrollPromptEnabled,
           setIsEnabled: setIsScrollPromptEnabled,

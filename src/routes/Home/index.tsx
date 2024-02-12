@@ -1,9 +1,11 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
 import { cubicBezier, FullPageWrapper, SiteHeader } from '../../components/static';
 import { useDispatch, useSelector } from '../../core/hooks';
 import { open } from '../../slices/nav';
+import { setPageMeta, setPageTitle } from '../../utils/PageUtils';
 import { screenSizes } from '../../utils/ResponsiveUtils';
 
 import HeroBackground from './images/hero.jpg';
@@ -275,6 +277,15 @@ const NoticeText = styled.span`
 const Home = () => {
   const isNavOpen: boolean = useSelector((state) => { return state.nav.isOpen; });
   const dispatch = useDispatch();
+
+  useEffect((): void => {
+    setPageMeta({
+      description: 'Alvin Teh: Passionate architect, photographer, cook, writer, traveler, guitarist and gamer',
+      image: '/images/og.jpg'
+    });
+
+    setPageTitle('');
+  }, []);
 
   const handleDiscoverButtonClick = (): void => {
     dispatch(open());
