@@ -437,8 +437,11 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
       }
     });
 
-    timeline.from([prevButtonRef.current, nextButtonRef.current], {
+    timeline.fromTo([prevButtonRef.current, nextButtonRef.current], {
       opacity: 0,
+    },
+    {
+      opacity: 1,
       ease: 'power1.inOut',
       duration: animationDurations.FAST,
     });
