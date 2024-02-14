@@ -4,6 +4,7 @@ import { createHtmlPlugin } from 'vite-plugin-html';
 import svgr from 'vite-plugin-svgr';
 
 import AssetPreloaderScriptCreator from './src/utils/server/AssetPreloaderScriptCreator';
+import getAssetListPlugin from './src/vite-plugins/getAssetListPlugin';
 
 export default defineConfig({
   build: {
@@ -12,15 +13,16 @@ export default defineConfig({
   plugins: [
     react(),
     svgr({ svgrOptions: { ref: true }}),
+    getAssetListPlugin('assets', 'index'),
     createHtmlPlugin({
       minify: true,
       inject: {
         data: {
-          prePreloaderScript: AssetPreloaderScriptCreator.getPrePreloaderScript(),
+          preloaderInitScript: AssetPreloaderScriptCreator.getPreloaderInitScript(),
           preloaderLibScript: AssetPreloaderScriptCreator.getPreloaderLibScript(),
-          postPreloaderScript: AssetPreloaderScriptCreator.getPostPreloaderScript(),
+          preloaderRunScript: AssetPreloaderScriptCreator.getPreloaderRunScript(),
         }
       }
-    })
+    }),
   ],
 });
