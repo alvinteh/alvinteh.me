@@ -69,11 +69,6 @@ const Subscreen = styled.div.attrs<SubscreenAttrs>(({ $backgroundImage, $backgro
   color: ${(props) => { return props.$style === 'dark' ? '#000000' : '#ffffff'; }};
   font-family: "Crimson Text", serif;
   overflow: hidden;
-  
-
-  &:first-child {
-    
-  }
 
   &>${Header} {
     text-shadow: 1px 1px 3px rgba(${(props) => {
