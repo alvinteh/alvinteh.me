@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import PageContext from '../../../../components/Page/PageContext';
 import Screen from '../../../../components/Screen';
 import { animationDurations } from '../../../../utils/AnimationUtils';
+import { screenSizes } from '../../../../utils/ResponsiveUtils';
 
 import ScreenBackground from './images/screen-background.jpg';
 import Subscreen1Background from './images/subscreen-1.jpg';
@@ -47,14 +48,24 @@ const HeaderBase = styled.h2`
   font-size: 3rem;
   line-height: 3rem;
   text-align: center;
+
+  @media ${screenSizes.phone} {
+    font-size: 1.6rem;
+    line-height: 1.6rem;
+  }
 `;
 
 const StartHeader = styled(HeaderBase)`
-  top: calc(45dvh - 6rem);
-  left: calc(50% - 30rem);
+  top: 50%;
+  left: 50%;
   width: 60rem;
   height: 12rem;
   text-align: center;
+  transform: translate3d(-50%, -50%, 0);
+
+  @media ${screenSizes.phone} {
+    width: 95%;
+  }
 
   & > span {
     display: block;
@@ -70,12 +81,22 @@ const Header = styled(HeaderBase)`
   top: 47dvh;
   left: calc(50% - 18rem + 2rem);
   width: 36rem;
+
+  @media ${screenSizes.phone} {
+    width: 95%;
+    left: 2.5%;
+  }
 `;
 
 const HeaderStart = styled.div`
   width: 19rem;
   height: 3rem;
   text-align: right;
+
+  @media ${screenSizes.phone} {
+    width: 50%;
+    height: 1.6rem;
+  }
 `;
 
 const HeaderAttributes = styled.div`
@@ -84,6 +105,10 @@ const HeaderAttributes = styled.div`
   flex-direction: column;
   width: 17rem;
   text-align: left;
+
+  @media ${screenSizes.phone} {
+    width: 50%;
+  }  
 `;
 
 const HeaderAttribute = styled.span`
@@ -100,6 +125,11 @@ const EndHeader = styled(HeaderBase)`
   margin-top: -5rem;
   left: calc(50% - 30rem);
   width: 60rem;
+
+  @media ${screenSizes.phone} {
+    width: 95%;
+    left: 2.5%;
+  }
 `;
 
 const WorldScene = ({ sceneIndex }: { sceneIndex: number }) => {
