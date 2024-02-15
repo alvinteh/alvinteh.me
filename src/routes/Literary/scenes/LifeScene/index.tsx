@@ -84,6 +84,10 @@ const Info = styled.div`
   font-size: 1.4rem;
   text-align: right;
   text-transform: lowercase;
+
+  @media ${screenSizes.phone} {
+    bottom: 60px;
+  }
 `;
 
 const Title = styled.h4`
