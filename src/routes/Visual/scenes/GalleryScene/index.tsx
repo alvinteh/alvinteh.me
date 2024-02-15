@@ -7,6 +7,7 @@ import PageContext from '../../../../components/Page/PageContext';
 import Screen from '../../../../components/Screen';
 import { Overlay } from '../../../../components/static';
 import { animationDurations } from '../../../../utils/AnimationUtils';
+import { screenSizes } from '../../../../utils/ResponsiveUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
 import Gallery from './components/Gallery';
 import rawImages from './data/image-data.json';
@@ -26,6 +27,12 @@ const Header = styled.h2`
   pointer-events: none;
   text-align: center;
   user-select: none;
+
+  @media ${screenSizes.phone} {
+    font-size: 1.8rem;
+    line-height: 1.8rem;
+    height: 1.8rem;
+  }
 `;
 
 const GalleryWrapper = styled.div`
@@ -52,7 +59,10 @@ const GalleryScene = ({ sceneIndex }: SceneProps) => {
   const [isGalleryInteractive, setIsGalleryInteractive] = useState<boolean>(false);
 
   const itemHeight: number = ((): number => {
-    if (window.innerWidth <= 1440) {
+    if (window.innerWidth <= 576) {
+      return 90;
+    }
+    else if (window.innerWidth <= 1440) {
       return 180;
     }
     else if (window.innerWidth <= 2560) {

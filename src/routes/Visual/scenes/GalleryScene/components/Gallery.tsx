@@ -54,7 +54,19 @@ const ImageElement = styled.div.attrs<ImageElementAttrs>(({ $backgroundImage }) 
   background-size: cover;
 `;
 
-const GalleryImage = ({ id, innerRef, image, height, padding, initialX, initialY, isClickable, onClick }: {  
+const GalleryImage = ({
+  id,
+  innerRef,
+  image,
+  height,
+  padding,
+  initialX,
+  initialY,
+  isClickable,
+  onClick,
+  onTouchStart,
+  onTouchEnd,
+}: {  
   id: string,
   innerRef: React.RefObject<HTMLDivElement>,
   image: Image,
@@ -64,13 +76,25 @@ const GalleryImage = ({ id, innerRef, image, height, padding, initialX, initialY
   initialY: number,
   isClickable: boolean,
   onClick: (id: string) => void,
+  onTouchStart: () => void,
+  onTouchEnd: (id: string) => void,
 }) => {
+
+  const handleTouchEnd = (): void => {
+    onTouchEnd(id);
+  };
+
+  const handleTouchStart = (): void => {
+    onTouchStart();
+  };
+
+  const handleClick = (): void => {
+    onClick(id);
+  };
+
   const style: React.CSSProperties = {
     pointerEvents: isClickable ? 'auto' : 'none',
     transform: `translate3d(${initialX}px, ${initialY}px, 0)`,
-  };
-  const handleClick = (): void => {
-    onClick(id);
   };
 
   return (
@@ -82,6 +106,8 @@ const GalleryImage = ({ id, innerRef, image, height, padding, initialX, initialY
       $height={height}
       style={style}
       onClick={handleClick}
+      onTouchStart={(handleTouchStart)}
+      onTouchEnd={handleTouchEnd}
     >
       <ImageElement $backgroundImage={image.src} />
     </ImageWrapper>
@@ -101,6 +127,7 @@ const Gallery = ({ images, itemHeight, isInteractive }: {
   const [activeGalleryImage, setActiveGalleryImage] = useState<GalleryImage>();
   const [activeAlbumImages, setActiveAlbumImages] = useState<Image[]>([]);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [isAfterDrag, setIsAfterDrag] = useState<boolean>(false);
   const [draggable, setDraggable] = useState<Draggable>();
   const { isDialogToggled } = useContext(LayoutContext);
 
@@ -248,7 +275,28 @@ const Gallery = ({ images, itemHeight, isInteractive }: {
 
   const handleDragEnd = (): void => {
     setIsDragging(false);
+    setIsAfterDrag(true);
   };
+
+  const handleGalleryImageTouchStart = (): void => {
+    // Do nothing
+  };
+
+  const handleGalleryImageTouchEnd = useCallback((id: string): void => {
+    if (!isInteractive) {
+      return;
+    }
+
+    if (isAfterDrag) {
+      setIsAfterDrag(false);
+      return;
+    }
+
+    const galleryImage: GalleryImage = galleryImages[id];
+
+    setActiveGalleryImage(galleryImage);
+    setActiveAlbumImages(albums[galleryImage.image.albumName]);
+  }, [isInteractive, albums, galleryImages, isAfterDrag]);
 
   const handleGalleryImageClick = useCallback((id: string): void => {
     if (!isInteractive) {
@@ -396,6 +444,8 @@ const Gallery = ({ images, itemHeight, isInteractive }: {
       initialY={galleryImage.y}
       isClickable={!isDragging}
       onClick={handleGalleryImageClick}
+      onTouchStart={handleGalleryImageTouchStart}
+      onTouchEnd={handleGalleryImageTouchEnd}
     />);
   }
 
