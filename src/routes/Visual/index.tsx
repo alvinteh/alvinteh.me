@@ -13,7 +13,7 @@ const Visual = () => {
   };
 
   return (
-    <Page meta={meta} shouldHaveScrollPrompt={true} isMobileReady={false}>
+    <Page meta={meta} shouldHaveScrollPrompt={true} isMobileReady={true}>
       <TitleScene sceneIndex={0} />
       <WorldScene sceneIndex={1} />
       <GalleryScene sceneIndex={2} />
