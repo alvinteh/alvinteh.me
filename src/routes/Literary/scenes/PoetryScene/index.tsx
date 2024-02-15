@@ -51,6 +51,11 @@ const Header = styled.h2`
     }
   }
 
+  @media ${screenSizes.phone} {
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+  }
+
   @media ${screenSizes.desktopM} {
     font-size: 3.25rem;
     line-height: 3.25rem;
@@ -67,6 +72,10 @@ const WriteupWrapper = styled.div<{ $isVisible: boolean }>`
   transition: opacity ${animationDurations.FAST}s ${cubicBezier},
     margin-bottom ${animationDurations.MEDIUM}s ${cubicBezier} ${animationDurations.FAST}s,
     grid-template-rows ${animationDurations.MEDIUM}s ${cubicBezier} ${animationDurations.FAST}s;
+
+  @media ${screenSizes.phone} {
+    margin-bottom: ${(props) => { return props.$isVisible ? 2 : 0; }}rem;
+  }
 `;
 
 const Writeup = styled.p`
@@ -76,6 +85,11 @@ const Writeup = styled.p`
   line-height: 1.8rem;
   overflow: hidden;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+
+  @media ${screenSizes.phone} {
+    font-size: 1.1rem;
+    line-height: 1.3rem;
+  }
 `;
 
 const WorksWrapper = styled.div`
@@ -118,19 +132,37 @@ const Work = styled.li.attrs<WorkAttrs>(({ $backgroundImage }) => ({
 `;
 
 // Note: we use this constant as we need to refer to styles in JS later
-const WorkLayoutSettings: Record<string, Record<string, number>> = {
+const WorkLayoutSettings: Record<string, Record<string, Record<string, number>>> = {
   columnGap: {
-    normal: 45,
-    collapsed: 15,
+    desktop: {
+      normal: 45,
+      collapsed: 15,
+    },
+    mobile: {
+      normal: 15,
+      collapsed: 15,
+    },
   },
   workWidth: {
-    normal: 165,
-    collapsed: 55,
+    desktop: {
+      normal: 165,
+      collapsed: 55,
+    },
+    mobile: {
+      normal: 110,
+      collapsed: 55,
+    },
   },
   workHeight: {
-    normal: 255,
-    collapsed: 85,
-  }
+    desktop: {
+      normal: 255,
+      collapsed: 85,
+    },
+    mobile: {
+      normal: 170,
+      collapsed: 85,
+    },
+  },
 };
 
 const Works = styled.ul.attrs<WorksAttrs>(({ $scrollPosition }) => ({
@@ -141,14 +173,23 @@ const Works = styled.ul.attrs<WorksAttrs>(({ $scrollPosition }) => ({
   display: grid;
   margin: 0;
   padding: 0;
-  column-gap: ${(props) => { return WorkLayoutSettings.columnGap[props.$isCollapsed ? 'collapsed' : 'normal']; }}px;
+  column-gap: ${(props) => { return WorkLayoutSettings.columnGap.desktop[props.$isCollapsed ? 'collapsed' : 'normal']; }}px;
   grid-auto-flow: column;
   list-style: none;
   transition: all ${animationDurations.MEDIUM}s ${cubicBezier};
 
+  @media ${screenSizes.phone} {
+    column-gap: ${(props) => { return WorkLayoutSettings.columnGap.mobile[props.$isCollapsed ? 'collapsed' : 'normal']; }}px;
+  }
+
   & > ${Work} {
-    width: ${(props) => { return WorkLayoutSettings.workWidth[props.$isCollapsed ? 'collapsed' : 'normal']; }}px;
-    height: ${(props) => { return WorkLayoutSettings.workHeight[props.$isCollapsed ? 'collapsed' : 'normal']; }}px;
+    width: ${(props) => { return WorkLayoutSettings.workWidth.desktop[props.$isCollapsed ? 'collapsed' : 'normal']; }}px;
+    height: ${(props) => { return WorkLayoutSettings.workHeight.desktop[props.$isCollapsed ? 'collapsed' : 'normal']; }}px;
+
+    @media ${screenSizes.phone} {
+      width: ${(props) => { return WorkLayoutSettings.workWidth.mobile[props.$isCollapsed ? 'collapsed' : 'normal']; }}px;
+      height: ${(props) => { return WorkLayoutSettings.workHeight.mobile[props.$isCollapsed ? 'collapsed' : 'normal']; }}px;
+    }
   }
 `;
 
@@ -171,6 +212,11 @@ const Reader = styled.div`
   scrollbar-gutter: stable;
   scrollbar-width: thin;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+
+  @media ${screenSizes.phone} {
+    padding: 20px 0;
+    font-size: 1.4rem;
+  }
 
   p {
     margin-bottom: 2rem;
@@ -201,6 +247,10 @@ const PrevButton = styled(ButtonBase)`
   &:hover {
    border-right-color: rgba(255, 255, 255, 1); 
   }
+
+  @media ${screenSizes.phone} {
+    left: -15px;
+  }
 `;
 
 const NextButton = styled(ButtonBase)`
@@ -209,6 +259,10 @@ const NextButton = styled(ButtonBase)`
 
   &:hover {
     border-left-color: rgba(255, 255, 255, 1); 
+  }
+
+  @media ${screenSizes.phone} {
+    right: -15px;
   }
 `;
 
@@ -287,12 +341,13 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
 
   useEffect((): void => {
     const workLayoutSettingsState: string = currentWork ? 'collapsed' : 'normal';
+    const device: string = window.innerWidth > 576 ? 'desktop' : 'mobile'; 
     // Update scroll position if it is past the limit due to element resizing.
     const worksElement: HTMLUListElement = worksRef.current;
     // Note: we need to manually calculate the scroll width as the styles are not applied till
     // after the transition is over
-    const scrollWidth: number = works.length * WorkLayoutSettings.workWidth[workLayoutSettingsState]
-      + (works.length - 1) * WorkLayoutSettings.columnGap[workLayoutSettingsState];
+    const scrollWidth: number = works.length * WorkLayoutSettings.workWidth[device][workLayoutSettingsState]
+      + (works.length - 1) * WorkLayoutSettings.columnGap[device][workLayoutSettingsState];
     const scrollLimit: number = worksElement.clientWidth - scrollWidth;
     let updatedWorksScrollPosition: number = worksScrollPosition;
 
@@ -310,15 +365,15 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
     const currentWorkIndex: number = workRefs.current.findIndex((element: HTMLLIElement): boolean => {
       return element.dataset.id === currentWork.id.toString();
     });
-    const currentWorkPosition: number = currentWorkIndex * WorkLayoutSettings.workWidth[workLayoutSettingsState]
-    + currentWorkIndex * WorkLayoutSettings.columnGap[workLayoutSettingsState];
+    const currentWorkPosition: number = currentWorkIndex * WorkLayoutSettings.workWidth[device][workLayoutSettingsState]
+    + currentWorkIndex * WorkLayoutSettings.columnGap[device][workLayoutSettingsState];
 
     if (currentWorkPosition < -1 * updatedWorksScrollPosition) {
       setWorksScrollPosition(-1 * currentWorkPosition);
     }
-    else if (currentWorkPosition + WorkLayoutSettings.workWidth[workLayoutSettingsState]
+    else if (currentWorkPosition + WorkLayoutSettings.workWidth[device][workLayoutSettingsState]
       < updatedWorksScrollPosition) {
-      setWorksScrollPosition(currentWorkPosition + WorkLayoutSettings.workWidth[workLayoutSettingsState]);
+      setWorksScrollPosition(currentWorkPosition + WorkLayoutSettings.workWidth[device][workLayoutSettingsState]);
     }
 
   // We can ignore this linting error as we do *not* want to run this effect if scroll position changes
