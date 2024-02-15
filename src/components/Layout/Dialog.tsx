@@ -81,6 +81,11 @@ const DialogCloseLink = styled.a.attrs<DialogXPositionAttrs>(({ $x }) => ({
   &:hover {
     color: rgba(128, 128, 128, 1);
   }
+
+  @media ${screenSizes.phone} {
+    top: 15px;
+    left: 20px;
+  }
 `;
 
 const Dialog = ({ children }: { children: React.ReactNode }) => {
