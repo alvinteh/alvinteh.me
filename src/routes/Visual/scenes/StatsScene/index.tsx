@@ -19,6 +19,10 @@ const StyledScreen = styled(Screen)`
   mask-size: cover;
   opacity: 0;
 
+  @media ${screenSizes.phone} {
+    padding-top: 15dvh;
+  }
+
   @media ${screenSizes.desktopM} {
     padding-top: 30dvh;
   }
@@ -35,9 +39,22 @@ const Header = styled.h1`
   font-size: 3rem;
   text-align: right;
   text-transform: uppercase;
+
+  @media ${screenSizes.phone} {
+    margin-bottom: 2rem;
+    padding-right: 0;
+    font-size: 2rem;
+    line-height: 2rem;
+  }
 `;
 
-const StatsWrapper = styled.div``;
+const StatsWrapper = styled.div`
+  @media ${screenSizes.phone} {
+    float: right;
+    margin-right: 2.5%;
+    width: 95%;
+  }
+`;
 
 const Stats = styled.ul`
   display: flex;
@@ -50,6 +67,12 @@ const Stats = styled.ul`
   list-style: none;
   text-transform: uppercase;
 
+  @media ${screenSizes.phone} {
+    width: 100%;
+    padding-right: 0;
+    justify-content: space-between;
+  }
+
   @media ${screenSizes.desktopM} {
     width: 64rem;
   }
@@ -60,6 +83,10 @@ const Stat = styled.li`
   padding: 0;
   width: 10rem;
   text-align: center;
+
+  @media ${screenSizes.phone} {
+    margin-bottom: 1.5rem;
+  }
 
   @media ${screenSizes.desktopM} {
     width: 16rem;
@@ -99,6 +126,12 @@ const FaqWrapper = styled.div`
     width: 35rem;
   }
 
+  @media ${screenSizes.phone} {
+    top: 15dvh;
+    margin-right: 2.5%;
+    width: 95%;
+  }
+
   @media ${screenSizes.desktopM} {
     top: 30dvh;
     width: 55rem;
@@ -111,16 +144,28 @@ const FaqWrapper = styled.div`
 
 const Faqs = styled(Accordion)`
   margin-right: 5vw !important;
+
+  @media ${screenSizes.phone} {
+    margin-right: 0 !important;
+  }
 `;
 
 const FaqHeader = styled(AccordionItemHeader)`
   border-bottom-color: #ffffff;
   text-transform: uppercase;
+
+  @media ${screenSizes.phone} {
+    font-size: 1.1rem;
+  }
 `;
 
 const FaqContent = styled(AccordionItemContent)`
   font-size: 1.2rem;
   font-weight: 400;
+
+  @media ${screenSizes.phone} {
+    font-size: 1.1rem;
+  }
 `;
 
 const StatsScene = ({ sceneIndex }: SceneProps) => {
