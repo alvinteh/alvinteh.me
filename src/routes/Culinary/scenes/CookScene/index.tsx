@@ -35,12 +35,15 @@ const Header1 = styled(Header1Svg)`
   position: absolute;
   top: 35dvh;
   left: 50%;
-  margin-left: -15vw;
   width: 30vw;
+  transform: translate3d(-50%, 0, 0);
+
+  @media ${screenSizes.phone} {
+    width: 47.5%;
+  }
 
   @media ${aspectRatios.a21x9}, ${screenSizes.desktopXL} {
     width: 20vw;
-    margin-left: -10vw;
   }
 `;
 
@@ -48,12 +51,15 @@ const Header2 = styled(Header2Svg)`
   position: absolute;
   top: 35dvh;
   left: 50%;
-  margin-left: -30vw;
   width: 60vw;
+  transform: translate3d(-50%, 0, 0);
+
+  @media ${screenSizes.phone} {
+    width: 95%;
+  }
 
   @media ${aspectRatios.a21x9}, ${screenSizes.desktopXL} {
     width: 40vw;
-    margin-left: -20vw;
   }
 `;
 
@@ -61,12 +67,15 @@ const Header3 = styled(Header3Svg)`
   position: absolute;
   top: 35dvh;
   left: 50%;
-  margin-left: -15vw;
   width: 30vw;
+  transform: translate3d(-50%, 0, 0);
+
+  @media ${screenSizes.phone} {
+    width: 47.5%;
+  }
 
   @media ${aspectRatios.a21x9}, ${screenSizes.desktopXL} {
     width: 20vw;
-    margin-left: -10vw;
   }
 `;
 
@@ -74,25 +83,26 @@ const Header4 = styled(Header4Svg)`
   position: absolute;
   top: 45dvh;
   left: 50%;
-  margin-left: -10vw;
   width: 20vw;
+  transform: translate3d(-50%, 0, 0);
 
   @media ${screenSizes.tablet} {
     top: 40dvh;
-    margin-left: -14vw;
     width: 28vw;
+  }
+
+  @media ${screenSizes.phone} {
+    width: 50%;
   }
 
   @media ${screenSizes.desktopM} {
     top: 35dvh;
-    margin-left: -17vw;
     width: 34vw;
   }
 
   @media ${aspectRatios.a21x9}, ${screenSizes.desktopXL} {
     top: 40dvh;
     width: 22vw;
-    margin-left: -11vw;
   }
 `;
 
@@ -109,6 +119,17 @@ const Dishes = styled.ul`
 
   @media ${screenSizes.tablet} {
     padding-top: 6.5vw;
+  }
+
+  @media ${screenSizes.phone} {
+    box-sizing: border-box;
+    top: auto;
+    bottom: 80px;
+    left: 50%;
+    right: auto;
+    width: 200px;
+    padding: 50px 10px 20px;
+    transform: translate3d(-50%, 0, 0);
   }
 
   @media ${screenSizes.desktopS} {
@@ -146,6 +167,10 @@ const Dish = styled.li`
 
   &:nth-child(5) {
     margin-left: 1rem;
+  }
+
+  @media ${screenSizes.phone} {
+    height: 1.5rem;
   }
 `;
 
@@ -213,6 +238,13 @@ const DishImage = styled.div.attrs<DishImageAttrs>(({ $backgroundImage }) => ({
     width: 36dvh;
     margin-top: -18dvh;
   }
+
+  @media ${screenSizes.phone} {
+    top: calc(-100% - 40vw + 5vw);
+    left: calc(50% - 40vw);
+    margin-top: 0;
+    width: 80vw;
+  }
 `;
 
 const ExtraDishes = styled.ul`
@@ -245,6 +277,11 @@ const ExtraDish = styled.li.attrs<ExtraDishAttrs>(({ $backgroundImage }) => ({
   @media ${screenSizes.tablet} {
     width: 20vw;
     height: 20vw;
+  }
+
+  @media ${screenSizes.phone} {
+    width: 31vw;
+    height: 31vw;
   }
 
   @media ${aspectRatios.a21x9} {
@@ -325,6 +362,11 @@ const ExtraDishName = styled.div`
     margin-top: 20vw;
   }
 
+  @media ${screenSizes.phone} {
+    margin-top: 31vw;
+    font-size: 0.9rem;
+  }
+
   @media ${screenSizes.desktopM} {
     font-size: 1.2rem;
   }
@@ -356,10 +398,17 @@ const FaqWrapper = styled.div`
     height: 70%;
   }
 
+  @media ${screenSizes.phone} {
+    top: auto;
+    width: 100%;
+    padding: 26% 7% 20px 5%;
+    height: 85%;
+  }
+
   @media ${screenSizes.desktopM} {
     padding: 10% 8% 8% 5%;
     max-width: 50%;
-    height: 75%;    
+    height: 75%;
   }
 
   @media ${screenSizes.desktopXL} {
@@ -383,6 +432,12 @@ const FaqHeader = styled(AccordionItemHeader)`
   min-height: 1.4rem;
   transform: rotate(-3.3deg);
 
+  @media ${screenSizes.phone} {
+    font-size: 1.1rem;
+    line-height: 1.2rem;
+    min-height: 1.2rem;
+  }
+
   @media ${screenSizes.desktopM} {
     font-size: 1.4rem;
     line-height: 1.5rem;
@@ -403,6 +458,11 @@ const FaqContent = styled(AccordionItemContent)`
   line-height: 1.25rem;
   transform: translate3d(0, 1rem, 0) rotate(-3.3deg);
   transform-origin: 0 0;
+
+  @media ${screenSizes.phone} {
+    font-size: 1rem;
+    line-height: 1.1rem;
+  }
 
   @media ${screenSizes.desktopM} {
     font-size: 1.4rem;
@@ -457,7 +517,8 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
 
     const timeline = gsap.timeline({});
 
-    const isPortrait = window.innerHeight > window.innerWidth;
+    const isPortrait: boolean = window.innerHeight > window.innerWidth;
+    const isMobile: boolean = window.innerWidth <= 576;
     
     for (const path of header1Ref.current.children) {
       timeline.fromTo(path, {
@@ -494,8 +555,8 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
     });
 
     timeline.from(dishesRef.current, {
-      transform: 'translate3d(30vw, 0, 0)',
-      ease: 'power.out',
+      transform: `translate3d(${isMobile ? 50 : 30}vw, 0, 0)`,
+      ease: 'power1.out',
       duration: animationDurations.FAST,
     });
 
@@ -525,8 +586,8 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
     }
 
     timeline.to(dishesRef.current, {
-      transform: 'translate3d(30vw, 0, 0)',
-      ease: 'power.out',
+      transform: `translate3d(${isMobile ? 50 : 30}vw, 0, 0)`,
+      ease: 'power1.out',
       duration: animationDurations.MEDIUM,
     });
 
@@ -589,7 +650,8 @@ const CookScene = ({ sceneIndex }: SceneProps) => {
     });
     
     timeline.to(header4Ref.current, {
-      transform: `translate3d(0, -${isPortrait ? 20 : (window.innerWidth >= 2560 ? 35 : 40)}vh, 0)`,
+      transform: `translate3d(-50%, -${isPortrait ? (isMobile ? 35 : 20) :
+        (window.innerWidth >= 2560 ? 35 : 40)}vh, 0)`,
       ease: 'power1.out',
       duration: animationDurations.MEDIUM,
     });
