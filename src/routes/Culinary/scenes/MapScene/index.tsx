@@ -57,11 +57,19 @@ const Subscreen1Header = styled(SubscreenHeader)`
 const Subscreen1HeaderS1 = styled.span`
   display: block;
   font-size: 3rem;
+
+  @media ${screenSizes.phone} {
+    font-size: 2rem;
+  }
 `;
 
 const Subscreen1HeaderS2 = styled.span`
   display: block;
   font-size: 5rem;
+
+  @media ${screenSizes.phone} {
+    font-size: 3rem;
+  }
 `;
 
 const Subscreen3Header = styled(SubscreenHeader)`
@@ -71,16 +79,28 @@ const Subscreen3Header = styled(SubscreenHeader)`
 const Subscreen3HeaderS1 = styled.span`
   display: block;
   font-size: 3rem;
+
+  @media ${screenSizes.phone} {
+    font-size: 2rem;
+  }
 `;
 
 const Subscreen3HeaderS2 = styled.span`
   display: block;
   font-size: 4rem;
+
+  @media ${screenSizes.phone} {
+    font-size: 3rem;
+  }
 `;
 
 const FlexWrapper = styled.div`
   display: flex;
   min-height: 100%;
+
+  @media ${screenSizes.phone} {
+    flex-direction: column;
+  }
 `;
 
 const ContentPanel = styled.div`
@@ -89,20 +109,40 @@ const ContentPanel = styled.div`
   width: clamp(18rem, 25%, 30rem);
   min-height: 100%;
   background: #202020;
+
+  @media ${screenSizes.phone} {
+    padding: 70px 20px 30px;
+    width: 100%;
+    height: 35dvh;
+    min-height: auto;
+  }
 `;
 
 const MapPanel = styled.div`
   flex-grow: 1;
   width: 75%;
   min-height: 100%;
+
+  @media ${screenSizes.phone} {
+    flex-grow: 1;
+    width: 100%;
+    height: 65dvh;
+    min-height: auto;
+  }
 `;
 
 const MapSubscreenHeader = styled.h3`
+  margin-bottom: 4rem;
   color: #ffffff;
   font-family: 'Barlow Condensed', serif;
   font-size: 1.75rem;
   font-weight: 600;
   text-transform: uppercase;
+
+  @media ${screenSizes.phone} {
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+  }
 
   @media ${screenSizes.desktopM} {
     font-size: 2.5rem;

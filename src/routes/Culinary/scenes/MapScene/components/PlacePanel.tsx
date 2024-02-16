@@ -7,13 +7,19 @@ import styled from 'styled-components';
 import Select from '../../../../../components/Select';
 import { Option } from '../../../../../components/Select/types';
 import cuisineMarkerStyleMap, { MarkerStyle } from '../data/map-icon-data';
+import { screenSizes } from '../../../../../utils/ResponsiveUtils';
 import { Place } from '../types';
 import PlaceMapContext from './PlaceMapContext';
 
 const PlaceFilters = styled.div`
   display: flex;
-  margin: 4rem 0 0.5rem;
+  margin: 0 0 0.5rem;
   padding: 0.3rem;
+  height: 1rem;
+
+  @media ${screenSizes.phone} {
+    padding: 0.2rem;
+  }
 `;
 
 const StyledSelect = styled(Select)`
@@ -43,6 +49,11 @@ const Places = styled.div`
   border-bottom: solid 1px #ffffff;
   padding: 1rem 0;
   height: 55dvh;
+
+  @media ${screenSizes.phone} {
+    padding: 0.1rem 0;
+    height: calc(30dvh - 100px - 2.1rem);
+  }
 `;
 
 const Place = styled.div<{ $isActive: boolean }>`
@@ -57,6 +68,11 @@ const Place = styled.div<{ $isActive: boolean }>`
 
   &:hover {
     background: #404040;
+  }
+
+  @media ${screenSizes.phone} {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
   }
 `;
 
@@ -76,6 +92,10 @@ const PlaceName = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  @media ${screenSizes.phone} {
+    font-size: 1rem;
+  }
 `;
 
 const PlaceCuisine = styled.span`
