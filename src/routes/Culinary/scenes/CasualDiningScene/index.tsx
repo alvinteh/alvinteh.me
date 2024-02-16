@@ -66,6 +66,11 @@ const HeaderS1 = styled.span`
   font-weight: 900;
   line-height: 8rem;
   text-transform: uppercase;
+
+  @media ${screenSizes.phone} {
+    font-size: 5rem;
+    line-height: 5rem;
+  }
 `;
 
 const HeaderS2 = styled.span`
@@ -74,6 +79,11 @@ const HeaderS2 = styled.span`
   font-size: 2.5rem;
   font-weight: 400;
   line-height: 2.5rem;
+
+  @media ${screenSizes.phone} {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+  }
 `;
 
 const HeaderS3 = styled.span`
@@ -81,6 +91,11 @@ const HeaderS3 = styled.span`
   font-size: 4rem;
   font-weight: 600;
   line-height: 4rem;
+
+  @media ${screenSizes.phone} {
+    font-size: 3rem;
+    line-height: 3rem;
+  }
 `;
 
 const Dishes = styled.ul`
@@ -96,6 +111,10 @@ const Dishes = styled.ul`
   align-items: center;
   list-style: none;
   transform: translate3d(-50%, -50%, 0);
+
+  @media ${screenSizes.phone} {
+    width: 95vw;
+  }
 `;
 
 const Dish = styled.li.attrs<DishAttrs>(({ $zIndex }) => ({
@@ -114,6 +133,11 @@ const Dish = styled.li.attrs<DishAttrs>(({ $zIndex }) => ({
   @media ${screenSizes.tablet} {
     width: 24vw;
     height: 24vw;
+  }
+
+  @media ${screenSizes.phone} {
+    width: 31vw;
+    height: 31vw;
   }
 
   @media ${aspectRatios.a21x9} {
@@ -155,6 +179,10 @@ const DishName = styled.p`
   @media ${screenSizes.tablet} {
     font-size: 1.1rem;
   }
+
+  @media ${screenSizes.phone} {
+    font-size: 1rem;
+  }
 `;
 
 const DishRestaurant = styled.h4`
@@ -167,6 +195,10 @@ const DishRestaurant = styled.h4`
 
   @media ${screenSizes.tablet} {
     font-size: 0.75rem;
+  }
+
+  @media ${screenSizes.phone} {
+    display: none;
   }
 `;
 
@@ -183,6 +215,11 @@ const EndHeader = styled.h3`
   line-height: 8rem;
   text-transform: uppercase;
   transform: translate3d(-50%, -50%, 0);
+
+  @media ${screenSizes.phone} {
+    font-size: 6rem;
+    line-height: 6rem;
+  }
 `;
 
 const dishData: Record<string, Dish[]> = {
