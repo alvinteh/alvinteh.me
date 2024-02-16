@@ -35,9 +35,14 @@ const Header = styled.h3`
   font-weight: 600;
   opacity: 1;
   text-align: center;
+  transform: translate3d(0, -50%, 0);
 
   & > span {
     display: block;
+  }
+
+  @media ${screenSizes.phone} {
+    font-size: 2rem;
   }
 `;
 
@@ -45,7 +50,7 @@ interface DishAttrs {
   $backgroundImage: string;
 }
 
-const Dish = styled.li.attrs<DishAttrs>(({ $backgroundImage }) => ({
+const Dish = styled.div.attrs<DishAttrs>(({ $backgroundImage }) => ({
   style: {
     backgroundImage: `url(${$backgroundImage})`,
   }
@@ -71,6 +76,10 @@ const DishInfo = styled.div`
   text-align: center;
   text-transform: lowercase;
   opacity: 1;
+
+  @media ${screenSizes.phone} {
+    font-size: 1.2rem;
+  }
 
   @media ${screenSizes.desktopM} {
     margin-top: 50px;
@@ -168,7 +177,7 @@ const FineDiningScene = ({ sceneIndex }: SceneProps) => {
   // Screen refs
   const screenRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
   const exploreTextRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
-  const dishRefs = useRef<HTMLLIElement[]>([]);
+  const dishRefs = useRef<HTMLDivElement[]>([]);
   const dishInfoRefs = useRef<HTMLDivElement[]>([]);
   const closureTextRef = useRef<HTMLHeadingElement>() as React.MutableRefObject<HTMLHeadingElement>;
 
@@ -208,10 +217,10 @@ const FineDiningScene = ({ sceneIndex }: SceneProps) => {
 
     timeline.addLabel(`scene-${sceneIndex}-intro`);
 
-    timeline.to(exploreTextLineElements, { transform: 'translate3d(0, -40dvh, 0)', duration: animationDurations.MEDIUM });
+    timeline.to(exploreTextLineElements, { y: '-=35dvh', duration: animationDurations.MEDIUM });
 
     for (let i = 0; i < dishes.length; i++) {
-      const dishElement: HTMLLIElement = dishRefs.current[i];
+      const dishElement: HTMLDivElement = dishRefs.current[i];
       const dishInfoElement: HTMLDivElement = dishInfoRefs.current[i];
 
       timeline
@@ -246,7 +255,7 @@ const FineDiningScene = ({ sceneIndex }: SceneProps) => {
     registerScene(sceneIndex, screenRef, timeline, 'Fine Dining Experiences');
   }, [dishes]);
 
-  const setDishRef = (element: HTMLLIElement): HTMLLIElement => {
+  const setDishRef = (element: HTMLDivElement): HTMLDivElement => {
     dishRefs.current[dishRefs.current.length] = element;
     return element;
   };
