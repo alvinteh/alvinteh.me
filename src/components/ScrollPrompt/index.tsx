@@ -3,7 +3,6 @@ import { Observer } from 'gsap/Observer';
 import { useCallback, useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
 
-import { screenSizes } from '../../utils/ResponsiveUtils';
 import ScrollPromptContext from './ScrollPromptContext';
 
 const scrollPromptLeftAnimation = keyframes`
@@ -69,7 +68,7 @@ const ScrollPromptText = styled.span`
   user-select: none;
 `;
 
-const ScrollPromptWrapper = styled.span<{ $isVisible: boolean, $isMobileReady: boolean }>`
+const ScrollPromptWrapper = styled.span<{ $isVisible: boolean }>`
   display: block;
   position: fixed;
   bottom: 10px;
@@ -118,35 +117,10 @@ const ScrollPromptWrapper = styled.span<{ $isVisible: boolean, $isMobileReady: b
       opacity: 1;
     }
   }
-
-  @media ${screenSizes.phone} {
-    display: ${(props) => { return props.$isMobileReady ? 'block': 'none'; }};
-  }
-`;
-
-const MobileNotice = styled.div<{ $isMobileReady: boolean }>`
-  display: none;
-
-  @media ${screenSizes.phone} {
-    display: ${(props) => { return props.$isMobileReady ? 'none': 'block'; }};
-    position: fixed;
-    bottom: 10px;
-    left: 20px;
-    right: 20px;
-    border-radius: 8px;
-    padding: 10px;
-    height: fit-content;
-    background: #ffffff;
-    color: #202020;
-    font-family: Lato, sans-serif;
-    font-size: 1rem;
-    line-height: 1.3rem;
-    text-align: center;
-  }
 `;
 
 const ScrollPrompt = () => {
-  const { isEnabled, pageObserverName, isMobileReady } = useContext(ScrollPromptContext);
+  const { isEnabled, pageObserverName } = useContext(ScrollPromptContext);
 
   gsap.registerPlugin(Observer);
 
@@ -157,14 +131,9 @@ const ScrollPrompt = () => {
 
   return (
     <div>
-      <MobileNotice $isMobileReady={!!isMobileReady}>
-        Sorry, this page is currently unavailable on mobile devices.
-        Please visit again on your tablet or computer.
-      </MobileNotice>
       <ScrollPromptWrapper
         onClick={handleClick}
         $isVisible={isEnabled}
-        $isMobileReady={!!isMobileReady}
       >
         <ScrollPromptText>Scroll Down</ScrollPromptText>
       </ScrollPromptWrapper>

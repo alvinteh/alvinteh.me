@@ -12,7 +12,7 @@ const Literary = () => {
   };
 
   return (
-    <Page meta={meta} shouldHaveScrollPrompt={true} isMobileReady={true}>
+    <Page meta={meta} shouldHaveScrollPrompt={true}>
       <TitleScene sceneIndex={0} />
       <LifeScene sceneIndex={1} />
       <PoetryScene sceneIndex={2} />

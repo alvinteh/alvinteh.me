@@ -4,7 +4,6 @@ interface ScrollPromptContext {
   isEnabled: boolean;
   setIsEnabled: (isEnabled: boolean) => void;
   pageObserverName: string;
-  isMobileReady?: boolean;
 }
 
 const ScrollPromptContext = createContext<ScrollPromptContext>({
@@ -13,7 +12,6 @@ const ScrollPromptContext = createContext<ScrollPromptContext>({
   // eslint-disable-next-line  @typescript-eslint/no-empty-function
   setIsEnabled: (): void => {},
   pageObserverName: '',
-  isMobileReady: false,
 });
 
 export type { ScrollPromptContext };

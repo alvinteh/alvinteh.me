@@ -15,7 +15,7 @@ const Culinary = () => {
   };
 
   return (
-    <Page meta={meta} shouldHaveScrollPrompt={true} isMobileReady={false}>
+    <Page meta={meta} shouldHaveScrollPrompt={true}>
       <TitleScene sceneIndex={0} />
       <FineDiningScene sceneIndex={1} />
       <CasualDiningScene sceneIndex={2} />

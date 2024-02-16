@@ -15,29 +15,21 @@ import {
 } from '../../utils/AnimationUtils';
 import { flattenLabels, getSortedLabels } from '../../utils/GSAPUtils';
 import { setPageMeta, setPageTitle } from '../../utils/PageUtils';
-import { screenSizes } from '../../utils/ResponsiveUtils';
 import ScrollPromptContext from '../ScrollPrompt/ScrollPromptContext';
 import ScrollPrompt from '../ScrollPrompt';
 import { SiteHeader } from '../static';
 import PageContext from './PageContext';
 import { PageMeta } from './types';
 
-const ParallaxPageWrapper = styled.div<{ $isMobileReady: boolean }>`
+const ParallaxPageWrapper = styled.div`
   position: relative;
   height: 100dvh;
   overflow: hidden;
-
-  &>*:not(:first-child):not(:last-child) {
-    @media ${screenSizes.phone} {
-      display: ${(props) => { return props.$isMobileReady ? 'block' : 'none'; }};
-    }
-  }
 `;
 
-const Page = ({ meta, shouldHaveScrollPrompt, isMobileReady, children }: {
+const Page = ({ meta, shouldHaveScrollPrompt, children }: {
   meta: PageMeta,
   shouldHaveScrollPrompt: boolean,
-  isMobileReady?: boolean,
   children: React.ReactNode,
 }) => {
   const pageRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
@@ -268,10 +260,9 @@ const Page = ({ meta, shouldHaveScrollPrompt, isMobileReady, children }: {
           isEnabled: isScrollPromptEnabled,
           setIsEnabled: setIsScrollPromptEnabled,
           pageObserverName,
-          isMobileReady,
         }}>
         <SiteHeader><Link to="/" state={{ isForcedHomeNavigation: true }}>Alvin Teh</Link></SiteHeader>
-        <ParallaxPageWrapper ref={pageRef} $isMobileReady={!!isMobileReady}>
+        <ParallaxPageWrapper ref={pageRef}>
           {children}
           {shouldHaveScrollPrompt && <ScrollPrompt />}
         </ParallaxPageWrapper>

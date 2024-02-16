@@ -11,7 +11,7 @@ const Technology = () => {
   };
 
   return (
-    <Page meta={meta} shouldHaveScrollPrompt={true} isMobileReady={true}>
+    <Page meta={meta} shouldHaveScrollPrompt={true}>
       <TitleScene sceneIndex={0} />
       <BuilderScene sceneIndex={1} />
     </Page>
