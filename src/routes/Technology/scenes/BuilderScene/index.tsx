@@ -112,6 +112,14 @@ const HeaderBase = styled.h2`
   text-transform: uppercase;
   transform: translate3d(0, -50%, 0);
 
+  @media ${screenSizes.phone} {
+    left: 2.5%;
+    width: 95%;
+    height: 1.8rem;
+    font-size: 1.8rem;
+    line-height: 1.8rem;
+  }
+
   @media ${screenSizes.desktopM} {
     font-size: 3rem;
     line-height: 3rem;
@@ -130,8 +138,16 @@ const SplitHeader = styled(HeaderBase)`
   width: 44rem;
 
   @media ${screenSizes.tablet} {
-    left: 0;
-    width: 100%;
+    left: 2.5%;
+    width: 95%;
+  }
+
+  @media ${screenSizes.phone} {
+    left: 2.5%;
+    width: 95%;
+    height: 1.2rem;
+    font-size: 1.2rem;
+    line-height: 1.2rem;
   }
 
   @media ${screenSizes.desktopM} {
@@ -189,6 +205,10 @@ const Items = styled.ul`
     grid-template-columns: repeat(5, 1fr);
   }
 
+  @media ${screenSizes.phone} {
+    width: 95%;
+  }
+
   @media ${screenSizes.desktopM} {
     column-gap: 20px;
     row-gap: 20px;
@@ -239,6 +259,11 @@ const Technology = styled(Item)`
     }
   }
 
+  @media ${screenSizes.phone} {
+    width: calc(19dvw - 8px);
+    height: 50px;
+  }
+
   @media ${screenSizes.desktopM} {
     max-width: 180px;
     height: 100px;
@@ -267,6 +292,11 @@ const Organization = styled(Item)`
     &:nth-child(n+11):nth-child(-n+15) {
       padding-bottom: 6rem;
     }
+  }
+
+  @media ${screenSizes.phone} {
+    width: calc(19dvw - 8px);
+    height: 50px;    
   }
 
   @media ${screenSizes.desktopM} {
@@ -299,6 +329,13 @@ const ProfileLinks = styled.ul`
   text-align: center;
   text-transform: uppercase;
 
+  @media ${screenSizes.phone} {
+    display: block;
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    height: auto;
+  }
+
   @media ${screenSizes.desktopM} {
     left: 20%;
     width: 60%;
@@ -312,6 +349,11 @@ const ProfileLink = styled.li`
   display: inline-block;
   margin: 0 3rem 0 0;
   padding: 0;
+
+  @media ${screenSizes.phone} {
+    display: block;
+    margin: 0 0 1rem 0;
+  }
 
   @media ${screenSizes.desktopM} {
     margin-right: 8rem;
@@ -355,6 +397,10 @@ const WriteupShowLink = styled.a`
   text-align: center;
   text-transform: uppercase;
 
+  @media ${screenSizes.phone} {
+    margin-top: 15rem;
+  }
+
   &:hover {
     color: #80f5f5;
   }
@@ -376,6 +422,10 @@ const WriteupPaddedBackground = styled(PaddedPageWrapper)`
   background-repeat: no-repeat;
   background-size: cover;
   height: 100dvh;
+
+  @media ${screenSizes.phone} {
+    overflow-y: auto;
+  }
 `;
 
 const WriteupHeader = styled.h1`
@@ -387,6 +437,13 @@ const WriteupHeader = styled.h1`
   overflow: hidden;
   text-transform: uppercase;
   white-space: nowrap;
+
+  @media ${screenSizes.phone} {
+    margin-top: 5dvh;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    line-height: 2rem;
+  }
 
   @media ${screenSizes.desktopM} {
     font-size: 4rem;
@@ -400,6 +457,11 @@ const WriteupContent = styled.div`
   font-family: 'Crimson Text', serif;
   font-size: 1.25rem;
   line-height: 1.5rem;
+
+  @media ${screenSizes.phone} {
+    font-size: 1.1rem;
+    line-height: 1.25rem;
+  }
   
   @media ${screenSizes.desktopM} {
     font-size: 1.75rem;
