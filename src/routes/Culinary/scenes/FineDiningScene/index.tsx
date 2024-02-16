@@ -31,7 +31,7 @@ const Header = styled.h3`
   right: 0;
   color: #404040;
   font-family: 'Crimson Text', serif;
-  font-size: 3rem;
+  font-size: 1.5rem;
   font-weight: 600;
   opacity: 1;
   text-align: center;
@@ -43,6 +43,10 @@ const Header = styled.h3`
 
   @media ${screenSizes.phone} {
     font-size: 2rem;
+  }
+
+  @media ${screenSizes.desktopM} {
+    font-size: 3rem;
   }
 `;
 
@@ -72,7 +76,7 @@ const DishInfo = styled.div`
   top: 100%;
   margin: 10px auto 0;
   font-family: 'Crimson Text', serif;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   text-align: center;
   text-transform: lowercase;
   opacity: 1;
@@ -83,6 +87,7 @@ const DishInfo = styled.div`
 
   @media ${screenSizes.desktopM} {
     margin-top: 50px;
+    font-size: 1.4rem;
   }
 `;
 
@@ -217,7 +222,7 @@ const FineDiningScene = ({ sceneIndex }: SceneProps) => {
 
     timeline.addLabel(`scene-${sceneIndex}-intro`);
 
-    timeline.to(exploreTextLineElements, { y: '-=35dvh', duration: animationDurations.MEDIUM });
+    timeline.to(exploreTextLineElements, { y: '-=30dvh', duration: animationDurations.MEDIUM });
 
     for (let i = 0; i < dishes.length; i++) {
       const dishElement: HTMLDivElement = dishRefs.current[i];
