@@ -80,6 +80,7 @@ const ScrollPromptWrapper = styled.span<{ $isVisible: boolean, $isMobileReady: b
   opacity: ${(props) => { return props.$isVisible ? 1 : 0; }};
   cursor: pointer;
   mix-blend-mode: difference;
+  pointer-events: ${(props) => { return props.$isVisible ? 'auto' : 'none'; }};
   transition: opacity 200ms ease-in-out;
 
   &::before, &&::after {
