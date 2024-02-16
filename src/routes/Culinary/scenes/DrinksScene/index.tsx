@@ -52,6 +52,11 @@ const Header = styled.h3`
     font-size: 3rem;
   }
 
+  @media ${screenSizes.phone} {
+    top: 25dvh;
+    font-size: 2.5rem;
+  }
+
   @media ${screenSizes.desktopM} {
     width: 55%;
   }
@@ -73,6 +78,11 @@ const Drink = styled.li`
   @media ${screenSizes.tablet} {
     right: 2vw;
     width: 30vw;
+  }
+
+  @media ${screenSizes.phone} {
+    right: 2vw;
+    width: 55vw;
   }
 
   @media ${aspectRatios.a21x9} {
@@ -102,6 +112,12 @@ const DrinkInfo = styled.div`
   color: #ffffff;
   font-size: 1.4rem;
   text-align: right;
+
+  @media ${screenSizes.phone} {
+    bottom: 100%;
+    right: 2.5vw;
+    width: 95vw;
+  }
 `;
 
 const DrinkName = styled.span`
@@ -202,14 +218,14 @@ const DrinksScene = ({ sceneIndex }: SceneProps) => {
       const drinkInfoElement: HTMLDivElement = drinkInfoRefs.current[i];
 
       timeline
-      .from(drinkElement, { transform: 'translate3d(35vw, 0, 0)', duration: animationDurations.FAST, })
+      .from(drinkElement, { x: '55vw', duration: animationDurations.FAST, })
       .from(drinkInfoElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)',
         duration: animationDurations.FAST, })
       
       timeline.addLabel(`scene-${sceneIndex}-drink-${i}`);
       
       timeline
-      .to(drinkElement, { transform: 'translate3d(35vw, 0, 0)', duration: animationDurations.FAST, })
+      .to(drinkElement, { x: '55vw', duration: animationDurations.FAST, })
       .to(drinkInfoElement, { filter: 'blur(2rem)', opacity: 0, transform: 'scale(0.95)',
         duration: animationDurations.FAST, }, '<');
     }
