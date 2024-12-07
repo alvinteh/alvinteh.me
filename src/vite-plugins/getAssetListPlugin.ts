@@ -7,6 +7,7 @@ export default (exportVariableName: string, exportChunkName: string) => ({
         const allAssetFileNames: string[] = [];
 
         Object.values(bundle).forEach((asset) => {
+            // eslint-disable-next-line @typescript-eslint/no-deprecated
             if (asset.name === exportChunkName && asset.type === 'chunk') {
               chunkToModify = asset;
             }

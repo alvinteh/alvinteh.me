@@ -397,6 +397,7 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
   
         readerRef.current.innerHTML = renderedWorkMd;
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       catch (e) {
         readerRef.current.innerHTML = 'Sorry, an error occured retrieving this work.';
       }
@@ -511,8 +512,8 @@ const PoetryScene = ({ sceneIndex }: { sceneIndex: number }) => {
     return element;
   };
 
-  const workElements: JSX.Element[] = useMemo((): JSX.Element[] => {
-    return works.map((work: Work): JSX.Element => {
+  const workElements: React.JSX.Element[] = useMemo((): React.JSX.Element[] => {
+    return works.map((work: Work): React.JSX.Element => {
       const state: string = currentWork ? (currentWork.id === work.id ? 'active' : 'dulled') : 'default';
 
       return (

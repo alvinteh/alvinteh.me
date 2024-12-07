@@ -505,7 +505,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const handleMenuLinkClick = (): void => {    
     if (isPageOpen) {
       // Redirect to home page
-      navigate('/', { state: { isFromInternalNav: true }});
+      void navigate('/', { state: { isFromInternalNav: true }});
     }
     else {
       // Update nav menu state
@@ -581,7 +581,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     // We can ignore the linting issue as React Router has state typed as any; we have assertations as a failsafe
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     else if (location.state?.isForcedHomeNavigation === true) {
-      navigate('/', { replace: true });
+      void navigate('/', { replace: true });
       dispatch(close());
       resetAnimations();
     }

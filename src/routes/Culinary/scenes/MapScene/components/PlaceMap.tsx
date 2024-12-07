@@ -8,7 +8,7 @@ import PlaceMarker from './PlaceMarker';
 const MAP_CENTER = { lat: 40.8497563, lng: 14.2633002 };
 
 const PlaceMap = memo(function PlaceMap({ places }: { places: Place[] }) {
-  const placeMarkerElements: JSX.Element[] = places.map((place: Place): JSX.Element => {
+  const placeMarkerElements: React.JSX.Element[] = places.map((place: Place): React.JSX.Element => {
     return <PlaceMarker key={place.id} place={place} />;
   });
 
