@@ -811,17 +811,15 @@ const BuilderScene = ({ sceneIndex }: SceneProps) => {
               <a href="https://www.cisco.com/" target="_blank" rel="external noreferrer">Cisco</a>,&nbsp;
               <a href="https://www.techinasia.com" target="_blank" rel="external noreferrer">Tech in Asia</a>,&nbsp;
               <a href="https://www.publicissapient.com" target="_blank" rel="external noreferrer">Publicis Sapient</a>,&nbsp;
-              <a href="https://www.temasek.com.sg" target="_blank" rel="external noreferrer">Temasek</a> and&nbsp;
-              <a href="https://aws.amazon.com" rel="external noreferrer">Amazon Web Services</a>.
+              <a href="https://www.temasek.com.sg" target="_blank" rel="external noreferrer">Temasek</a>, &nbsp;
+              <a href="https://aws.amazon.com" rel="external noreferrer">Amazon Web Services</a>, and&nbsp;
+              <a href="https://www.thoughtworks.com/" rel="external noreferrer">Thoughtworks</a>.
               <br />
               <br />
               My diverse exposure across a range of environments from startups to corporates, and in-house to consultancy
               to solution providers also allows me to approach problems more holistically. Be it architecting internet
               scale systems, leading product design activities, managing the delivery of multi-million dollar programs,
               establishing processes or collaborating on opportunities, I am at home.
-              <br />
-              <br />
-              I am currently exploring my next move, reach out if you think I would add value to your organization!
             </WriteupContent>
             <WriteupHideLink onClick={handleWriteupHideLinkClick}>Back</WriteupHideLink>
           </WriteupPaddedBackground>
