@@ -23,6 +23,15 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    '@typescript-eslint/restrict-template-expressions': [
+      'error',
+      {
+        allowBoolean: false,
+        allowNullish: false,
+        allowNumber: true,
+        allowRegExp: false,
+      },
+    ]
   },
   settings: {
     react: {
