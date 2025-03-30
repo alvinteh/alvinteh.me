@@ -11,7 +11,8 @@ import { animationDurations } from '../../../../utils/AnimationUtils';
 import { getRandomElements, randomize } from '../../../../utils/ArrayUtils';
 import { aspectRatios, screenSizes } from '../../../../utils/ResponsiveUtils';
 import { SceneProps } from '../../../../utils/SceneUtils';
-import { Continents, Dish } from '../../common';
+import { Continents } from '../../common';
+import type { Dish } from '../../common';
 
 import SceneBackground from './images/screen-casualdining.jpg'
 import Dish1Background from './images/casualdining-dish-1.jpg';

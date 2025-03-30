@@ -8,7 +8,7 @@ import Select from '../../../../../components/Select';
 import { Option } from '../../../../../components/Select/types';
 import cuisineMarkerStyleMap, { MarkerStyle } from '../data/map-icon-data';
 import { screenSizes } from '../../../../../utils/ResponsiveUtils';
-import { Place } from '../types';
+import type { Place } from '../types';
 import PlaceMapContext from './PlaceMapContext';
 
 const PlaceFilters = styled.div`

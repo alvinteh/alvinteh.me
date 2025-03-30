@@ -12,7 +12,7 @@ import { getElementTranslation, setElementTranslation } from '../../../../../uti
 import { Image } from '../types';
 import { galleryItemPadding } from './common';
 import FullImageViewer from './FullImageViewer';
-import { GalleryImage, ImageElementAttrs } from './types';
+import type { GalleryImage, ImageElementAttrs } from './types';
 
 interface GalleryLayoutElement {
   element: HTMLDivElement;

@@ -12,7 +12,7 @@ import { animationDurations } from '../../../../utils/AnimationUtils';
 import { screenSizes } from '../../../../utils/ResponsiveUtils';
 import { cubicBezier, PaddedPageWrapper } from '../../../../components/static';
 import rawWorks from './data/work-data.json';
-import { Work } from './types';
+import type { Work } from './types';
 
 import SceneBackground from './images/scene-background.jpg';
 
