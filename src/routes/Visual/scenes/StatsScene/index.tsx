@@ -240,18 +240,18 @@ const StatsScene = ({ sceneIndex }: SceneProps) => {
 
   return (
     <StyledScreen innerRef={screenRef} backgroundImage={SceneBackground}>
-      {/* Stats last updated on 2024-01-05, excludes shots from Luang Prabang trip onwards */}
+      {/* Stats last updated on 2025-03-30, excludes shots from Luang Prabang trip onwards */}
       <StatsWrapper ref={statsWrapperRef}>
         <Header>Photos by the numbers</Header>
         <Stats>
           <Stat>
             {/* Obtained from records on Countries Been app */}
-            <StatValue ref={countriesVisitedRef}>60</StatValue>
+            <StatValue ref={countriesVisitedRef}>64</StatValue>
             <StatType>Countries Visited</StatType>
           </Stat>
           <Stat>
             {/* Obtained from records on Countries Been app */}
-            <StatValue ref={citiesVisitedRef}>169</StatValue>
+            <StatValue ref={citiesVisitedRef}>188</StatValue>
             <StatType>Cities Visited</StatType>
           </Stat>
           <Stat>
@@ -319,7 +319,7 @@ const StatsScene = ({ sceneIndex }: SceneProps) => {
             </FaqHeader>
             <FaqContent>
               In no particular order, Iceland, Eastern Europe (from the Baltic Sea to the Black Sea), Nepal, Bhutan,
-              Morocco, Türkiye, the Galapagos Islands, Greece and Hawaii. I am also likely to make another trip to New
+              Morocco, Türkiye, Lofoten, the Galapagos Islandsm and Greece. I am also likely to make another trip to New
               Zealand (my previous trip was marred by poor weather and other mishaps).
             </FaqContent>
           </AccordionItem>
