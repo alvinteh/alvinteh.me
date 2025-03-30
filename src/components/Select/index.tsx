@@ -27,7 +27,7 @@ const Select = ({ name, defaultOptionLabel, defaultOptionValue, options, classNa
   });
 
   return (
-    <StyledSelect name={name} className={className ?? ''} onChange={onChange ? onChange : undefined}>
+    <StyledSelect name={name} className={className ?? ''} onChange={onChange ?? undefined}>
       <option value={defaultOptionValue ?? ''}>{defaultOptionLabel}</option>
       {optionElements}
     </StyledSelect>
