@@ -5,7 +5,8 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "types": ["node", "vite/client"]
   },
   "include": ["src/utils/server", "src/vite-plugins", "vite.config.ts"]
 }
